@@ -9,23 +9,23 @@ import (
 	"net/http"
 )
 
-type UserHandlers struct {
-	service service.UserInterface
+type OrderHandlers struct {
+	service service.OrderInterface
 }
 
-func NewUserHandlers(service service.UserInterface) *UserHandlers {
-	return &UserHandlers{service: service}
+func NewOrderHandlers(service service.OrderInterface) *OrderHandlers {
+	return &OrderHandlers{service: service}
 }
 
 // Create
 // @Tags Create
 // @Accept  json
 // @Produce  json
-// @Param data body model.UserRequest true "body data"
+// @Param data body model.OrderRequest true "body data"
 // @Success 200 {object} interface{}
-// @Router /api/v1/user/create [post]
-func (h *UserHandlers) Create(r *ginext.Request) (*ginext.Response, error) {
-	req := model.UserRequest{}
+// @Router /api/v1/order/create [post]
+func (h *OrderHandlers) Create(r *ginext.Request) (*ginext.Response, error) {
+	req := model.OrderRequest{}
 	r.MustBind(&req)
 
 	if err := common.CheckRequireValid(req); err != nil {
@@ -44,11 +44,11 @@ func (h *UserHandlers) Create(r *ginext.Request) (*ginext.Response, error) {
 // @Accept  json
 // @Produce  json
 // @Param id path string true "id"
-// @Param data body model.UserRequest true "body data"
+// @Param data body model.OrderRequest true "body data"
 // @Success 200 {object} interface{}
-// @Router /api/v1/user/update/:id [put]
-func (h *UserHandlers) Update(r *ginext.Request) (*ginext.Response, error) {
-	req := model.UserRequest{}
+// @Router /api/v1/order/update/:id [put]
+func (h *OrderHandlers) Update(r *ginext.Request) (*ginext.Response, error) {
+	req := model.OrderRequest{}
 	r.MustBind(&req)
 
 	if err := common.CheckRequireValid(req); err != nil {
@@ -68,8 +68,8 @@ func (h *UserHandlers) Update(r *ginext.Request) (*ginext.Response, error) {
 // @Produce  json
 // @Param id path string true "id"
 // @Success 200 {object} interface{}
-// @Router /api/v1/user/delete/:id [delete]
-func (h *UserHandlers) Delete(r *ginext.Request) (*ginext.Response, error) {
+// @Router /api/v1/order/delete/:id [delete]
+func (h *OrderHandlers) Delete(r *ginext.Request) (*ginext.Response, error) {
 	id := utils.ParseIDFromUri(r.GinCtx)
 	if id == nil {
 		return nil, ginext.NewError(http.StatusForbidden, "Wrong ID")
@@ -87,8 +87,8 @@ func (h *UserHandlers) Delete(r *ginext.Request) (*ginext.Response, error) {
 // @Produce  json
 // @Param id path string true "id"
 // @Success 200 {object} interface{}
-// @Router /api/v1/user/get-one/:id [get]
-func (h *UserHandlers) GetOne(r *ginext.Request) (*ginext.Response, error) {
+// @Router /api/v1/order/get-one/:id [get]
+func (h *OrderHandlers) GetOne(r *ginext.Request) (*ginext.Response, error) {
 
 	id := utils.ParseIDFromUri(r.GinCtx)
 	if id == nil {

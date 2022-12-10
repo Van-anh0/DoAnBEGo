@@ -1,27 +1,29 @@
 package conf
 
-import "github.com/caarlos0/env/v6"
+import (
+	"github.com/caarlos0/env/v6"
+)
 
 // AppConfig presents app conf
 type AppConfig struct {
-	Port string `env:"PORT" envDefault:"8001"`
+	Port    string `env:"PORT" envDefault:"8000"`
+	EnvName string `env:"ENV_NAME" envDefault:"dev"`
+
 	//DB CONFIG
-	LogFormat string `env:"LOG_FORMAT" envDefault:"127.0.0.1"`
-	DBHost    string `env:"DB_HOST" envDefault:"localhost"`
-	DBPort    string `env:"DB_PORT" envDefault:"5432"`
-	DBUser    string `env:"DB_USER" envDefault:"postgres"`
-	DBPass    string `env:"DB_PASS" envDefault:"postgres"`
-	DBName    string `env:"DB_NAME" envDefault:"postgres"`
-	DBSchema  string `env:"DB_SCHEMA" envDefault:"public"`
-	EnableDB  string `env:"ENABLE_DB" envDefault:"true"`
-	// ENV
-	EnvName        string `env:"ENV_NAME" envDefault:"dev"`
-	MqttBrokerHost string `env:"MQTT_BROKER" envDefault:"broker.emqx.io"`
-	MqttBrokerPort string `env:"MQTT_BROKER" envDefault:"1883"`
-	MqttClientID   string `env:"MQTT_CLIENT_ID" envDefault:"go_mqtt_client"`
-	MqttUsername   string `env:"MQTT_USERNAME" envDefault:"emqx"`
-	MqttPassword   string `env:"MQTT_PASSWORD" envDefault:"public"`
-	MqttTopic      string `env:"MQTT_TOPIC" envDefault:"topic/test"`
+	DBHost        string   `env:"DB_HOST" envDefault:"localhost"`
+	DBPort        string   `env:"DB_PORT" envDefault:"3306"`
+	DBUser        string   `env:"DB_USER" envDefault:"root"`
+	DBPass        string   `env:"DB_PASS" envDefault:""`
+	DBName        string   `env:"DB_NAME" envDefault:"doan"`
+	DBSchema      string   `env:"DB_SCHEMA" envDefault:"public"`
+	Env           string   `env:"ENV" envDefault:"stg"`
+	DebugPort     int      `env:"DEBUG_PORT" envDefault:"7070"`
+	ReadTimeout   int      `env:"READ_TIMEOUT" envDefault:"15"`
+	EnableProfile bool     `env:"ENABLE_PROFILE" envDefault:"true"` // enable profile listener
+	EnableDB      bool     `env:"ENABLE_DB" envDefault:"false"`
+	TrustedProxy  []string `env:"TRUSTED_PROXY" envSeparator:"," envDefault:"127.0.0.1,10.0.0.0/8,192.168.0.0/16"`
+	Debug         bool     `env:"DEBUG" envDefault:"false"`
+	DB            *Config
 }
 
 var config AppConfig

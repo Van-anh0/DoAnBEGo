@@ -1,52 +1,58 @@
 package service
 
-//
-//type UserService struct {
-//	repo repo.PGInterface
-//}
-//
-//type UserInterface interface {
-//	Create(ctx context.Context, ob model.UserRequest) (rs *model.User, err error)
-//	Update(ctx context.Context, ob model.UserRequest) (rs *model.User, err error)
-//	Delete(ctx context.Context, id string) (err error)
-//	GetOne(ctx context.Context, id string) (rs *model.User, err error)
-//}
-//
-//func NewUserService(repo repo.PGInterface) UserInterface {
-//	return &UserService{repo: repo}
-//}
-//
-//func (s *UserService) Create(ctx context.Context, req model.UserRequest) (rs *model.User, err error) {
-//
-//	ob := &model.User{}
-//	jfCommon.Sync(req, ob)
-//
-//	if err := s.repo.CreateUser(ctx, ob); err != nil {
-//		return nil, err
-//	}
-//	return ob, nil
-//}
-//
-//func (s *UserService) Update(ctx context.Context, req model.UserRequest) (rs *model.User, err error) {
-//
-//	ob := &model.User{}
-//	jfCommon.Sync(req, ob)
-//
-//	if err := s.repo.UpdateUser(ctx, ob); err != nil {
-//		return nil, err
-//	}
-//	return ob, nil
-//}
-//
-//func (s *UserService) Delete(ctx context.Context, id string) (err error) {
-//	return s.repo.DeleteUser(ctx, id)
-//}
-//
-//func (s *UserService) GetOne(ctx context.Context, id string) (rs *model.User, err error) {
-//
-//	ob, err := s.repo.GetOneUser(ctx, id)
-//	if err != nil {
-//		return nil, err
-//	}
-//	return ob, nil
-//}
+import (
+	"context"
+	"doan/pkg/model"
+	"doan/pkg/repo"
+	"github.com/praslar/lib/common"
+)
+
+type UserService struct {
+	repo repo.PGInterface
+}
+
+type UserInterface interface {
+	Create(ctx context.Context, ob model.UserRequest) (rs *model.User, err error)
+	Update(ctx context.Context, ob model.UserRequest) (rs *model.User, err error)
+	Delete(ctx context.Context, id string) (err error)
+	GetOne(ctx context.Context, id string) (rs *model.User, err error)
+}
+
+func NewUserService(repo repo.PGInterface) UserInterface {
+	return &UserService{repo: repo}
+}
+
+func (s *UserService) Create(ctx context.Context, req model.UserRequest) (rs *model.User, err error) {
+
+	ob := &model.User{}
+	common.Sync(req, ob)
+
+	if err := s.repo.CreateUser(ctx, ob); err != nil {
+		return nil, err
+	}
+	return ob, nil
+}
+
+func (s *UserService) Update(ctx context.Context, req model.UserRequest) (rs *model.User, err error) {
+
+	ob := &model.User{}
+	common.Sync(req, ob)
+
+	if err := s.repo.UpdateUser(ctx, ob); err != nil {
+		return nil, err
+	}
+	return ob, nil
+}
+
+func (s *UserService) Delete(ctx context.Context, id string) (err error) {
+	return s.repo.DeleteUser(ctx, id)
+}
+
+func (s *UserService) GetOne(ctx context.Context, id string) (rs *model.User, err error) {
+
+	ob, err := s.repo.GetOneUser(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	return ob, nil
+}

@@ -6,29 +6,29 @@ import (
 	"doan/pkg/utils"
 )
 
-func (r *RepoPG) CreateUser(ctx context.Context, ob *model.User) error {
+func (r *RepoPG) CreateRoom(ctx context.Context, ob *model.Room) error {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 	return tx.Create(ob).Error
 }
 
-func (r *RepoPG) UpdateUser(ctx context.Context, ob *model.User) error {
+func (r *RepoPG) UpdateRoom(ctx context.Context, ob *model.Room) error {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 	return tx.Where("id = ?", ob.ID).Save(ob).Error
 }
 
-func (r *RepoPG) DeleteUser(ctx context.Context, id string) error {
+func (r *RepoPG) DeleteRoom(ctx context.Context, id string) error {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
-	return tx.Where("id = ?", id).Delete(&model.User{}).Error
+	return tx.Where("id = ?", id).Delete(&model.Room{}).Error
 }
 
-func (r *RepoPG) GetOneUser(ctx context.Context, id string) (*model.User, error) {
+func (r *RepoPG) GetOneRoom(ctx context.Context, id string) (*model.Room, error) {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 
-	rs := model.User{}
+	rs := model.Room{}
 	if err := tx.Where("id = ?", id).Find(&rs).Error; err != nil {
 		return nil, r.ReturnErrorInGetFunc(ctx, err, utils.GetCurrentCaller(r, 0))
 	}
