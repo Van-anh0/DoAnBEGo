@@ -1,0 +1,8 @@
+.env
+instances.yml
+create-certs.yml
+.idea
+*.exe
+postgres_data
+lastupdate.tmp
+.vs
