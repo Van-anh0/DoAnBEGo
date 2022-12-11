@@ -58,13 +58,13 @@ func NewService() *Service {
 	v1Api := s.Router.Group("/api/v1")
 
 	// User
-	v1Api.PUT("/user/create", ginext.WrapHandler(user.Create))
+	v1Api.POST("/user/create", ginext.WrapHandler(user.Create))
 	v1Api.PUT("/user/update/:id", ginext.WrapHandler(user.Update))
 	v1Api.DELETE("/user/delete/:id", ginext.WrapHandler(user.Delete))
 	v1Api.GET("/user/get-one/:id", ginext.WrapHandler(user.GetOne))
 
 	// Movie Theater
-	v1Api.PUT("/movie-theater/create", ginext.WrapHandler(movieTheater.Create))
+	v1Api.POST("/movie-theater/create", ginext.WrapHandler(movieTheater.Create))
 	v1Api.PUT("/movie-theater/update/:id", ginext.WrapHandler(movieTheater.Update))
 	v1Api.DELETE("/movie-theater/delete/:id", ginext.WrapHandler(movieTheater.Delete))
 	v1Api.GET("/movie-theater/get-one/:id", ginext.WrapHandler(movieTheater.GetOne))
