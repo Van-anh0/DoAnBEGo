@@ -6,7 +6,7 @@ import (
 
 // AppConfig presents app conf
 type AppConfig struct {
-	Port    string `env:"PORT" envDefault:"8000"`
+	Port    string `env:"PORT" envDefault:"5000"`
 	EnvName string `env:"ENV_NAME" envDefault:"dev"`
 
 	//DB CONFIG
