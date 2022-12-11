@@ -15,7 +15,6 @@ type UriParse struct {
 	ID []string `json:"id" uri:"id"`
 }
 
-// MsMetadata describes the structure.
 type BaseModel struct {
 	ID        uuid.UUID       `gorm:"primary_key;type:uuid;default:uuid_generate_v4()" json:"id"`
 	CreatorID *uuid.UUID      `json:"creator_id,omitempty"`
