@@ -4,13 +4,13 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"gorm.io/gorm/logger"
 	"time"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
 )
 
@@ -22,7 +22,7 @@ var (
 
 // Config presents configuration that's necessary to work with database
 type Config struct {
-	Driver          string `env:"DB_DRIVER" envDefault:"postgres"`
+	Driver          string `env:"DB_DRIVER" envDefault:"mysql"`
 	DSN             string `env:"DB_DSN"`
 	MaxOpenConns    int    `env:"DB_MAX_OPEN_CONNS" envDefault:"25"`
 	MaxIdleConns    int    `env:"DB_MAX_IDLE_CONNS" envDefault:"25"`
@@ -30,8 +30,8 @@ type Config struct {
 
 	Host   string `env:"DB_HOST" envDefault:"localhost"`
 	Port   string `env:"DB_PORT" envDefault:"3306"`
-	User   string `env:"DB_USER" envDefault:"root"`
-	Pass   string `env:"DB_PASS" envDefault:""`
+	User   string `env:"DB_USER" envDefault:"doan"`
+	Pass   string `env:"DB_PASS" envDefault:"doan"`
 	Name   string `env:"DB_NAME" envDefault:"doan"`
 	Schema string `env:"DB_SCHEMA" envDefault:"public"`
 }
@@ -73,7 +73,8 @@ func Open(config *Config) (*gorm.DB, error) {
 		dialector = postgres.Open(config.GetDSN())
 		naming.TablePrefix = config.Schema + "."
 	case "mysql":
-		dialector = mysql.Open(config.GetDSN())
+		dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", config.User, config.Pass, config.Host, config.Port, config.Name)
+		dialector = mysql.Open(dsn)
 	default:
 		return nil, fmt.Errorf("unsupported driver %s", config.Driver)
 	}

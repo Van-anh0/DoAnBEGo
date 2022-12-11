@@ -56,8 +56,7 @@ func (app *BaseApp) Initialize() error {
 		return err
 	}
 
-	he := app.Config.ReadTimeout
-	app.HttpServer.ReadTimeout = time.Duration(he) * time.Second
+	app.HttpServer.ReadTimeout = time.Duration(app.Config.ReadTimeout) * time.Second
 
 	// wait to gin 1.8 to support this
 	//_ = app.Router.SetTrustedProxies(app.Config.TrustedProxy)
@@ -176,7 +175,7 @@ func (app *BaseApp) Start(ctx context.Context) error {
 		}
 	}
 
-	if app.listener, err = net.Listen("tcp4", fmt.Sprintf("0.0.0.0:%d", app.Config.Port)); err != nil {
+	if app.listener, err = net.Listen("tcp4", fmt.Sprintf("0.0.0.0:%s", app.Config.Port)); err != nil {
 		return errors.New("failed to listen: " + err.Error())
 	}
 
