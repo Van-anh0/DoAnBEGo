@@ -16,10 +16,18 @@ type UriParse struct {
 }
 
 type BaseModel struct {
-	ID        uuid.UUID       `gorm:"primary_key;type:uuid;default:uuid_generate_v4()" json:"id"`
-	CreatorID *uuid.UUID      `json:"creator_id,omitempty"`
-	UpdaterID *uuid.UUID      `json:"updater_id,omitempty"`
-	CreatedAt time.Time       `gorm:"column:created_at;default:CURRENT_TIMESTAMP" json:"created_at"`
-	UpdatedAt time.Time       `gorm:"column:updated_at;default:CURRENT_TIMESTAMP" json:"updated_at"`
+	ID        string          `gorm:"primary_key;type:char(36);not null" json:"id"`
+	CreatorID *string         `gorm:"type:char(36);" json:"creator_id,omitempty"`
+	UpdaterID *string         `gorm:"type:char(36);" json:"updater_id,omitempty"`
+	CreatedAt time.Time       `gorm:"column:created_at" json:"created_at"`
+	UpdatedAt time.Time       `gorm:"column:updated_at" json:"updated_at"`
 	DeletedAt *gorm.DeletedAt `json:"deleted_at,omitempty"`
+}
+
+// This functions are called before creating Base
+func (u *BaseModel) BeforeCreate(tx *gorm.DB) error {
+	u.ID = uuid.New().String()
+	u.CreatedAt = time.Now()
+	u.UpdatedAt = time.Now()
+	return nil
 }
