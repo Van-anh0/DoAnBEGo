@@ -5,8 +5,8 @@ type Movie struct {
 	Type        string  `gorm:"type:varchar(250);column:type" json:"type"`
 	Cast        string  `gorm:"type:varchar(250);cast" json:"cast"`
 	Name        string  `gorm:"type:varchar(250); name;index" json:"name"`
-	Description string  `gorm:"type:varchar;description" json:"description"`
-	Duration    float64 `gorm:"duration" json:"duration"`
+	Description string  `gorm:"type:varchar(500);description" json:"description"`
+	Duration    float64 `gorm:"duration;type:double" json:"duration"`
 	ReleaseDate string  `gorm:"type:varchar(100);release_date" json:"release_date"`
 	Country     string  `gorm:"type:varchar(100);country" json:"country"`
 	Language    string  `gorm:"type:varchar(250);language" json:"language"`

@@ -17,12 +17,12 @@ func NewMigrationHandler(db *gorm.DB) *MigrationHandler {
 }
 
 func (h *MigrationHandler) BaseMigrate(ctx *gin.Context, tx *gorm.DB) error {
-	log := logger.WithCtx(ctx, "BaseMigrate")
-	if err := tx.Exec(`
-			CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-		`).Error; err != nil {
-		log.Errorf(err.Error())
-	}
+	//log := logger.WithCtx(ctx, "BaseMigrate")
+	//if err := tx.Exec(`
+	//		CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+	//	`).Error; err != nil {
+	//	log.Errorf(err.Error())
+	//}
 
 	models := []interface{}{
 		&model.User{},
@@ -55,15 +55,15 @@ func (h *MigrationHandler) BaseMigrate(ctx *gin.Context, tx *gorm.DB) error {
 func (h *MigrationHandler) Migrate(ctx *gin.Context) {
 	log := logger.WithCtx(ctx, "Migrate")
 	migrate := gormigrate.New(h.db, gormigrate.DefaultOptions, []*gormigrate.Migration{
-		//{
-		//	ID: "20221128213038",
-		//	Migrate: func(tx *gorm.DB) error {
-		//		if err := h.db.AutoMigrate(&model.User{}); err != nil {
-		//			return err
-		//		}
-		//		return nil
-		//	},
-		//},
+		{
+			ID: "20221212085554",
+			Migrate: func(tx *gorm.DB) error {
+				if err := h.BaseMigrate(ctx, tx); err != nil {
+					return err
+				}
+				return nil
+			},
+		},
 	})
 	err := migrate.Migrate()
 	if err != nil {
