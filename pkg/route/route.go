@@ -9,6 +9,7 @@ import (
 	"github.com/praslar/cloud0/ginext"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+	"net/http"
 )
 
 type extraSetting struct {
@@ -51,6 +52,27 @@ func NewService() *Service {
 	movieTheaterService := service2.NewMovieTheaterService(repoPG)
 	movieTheater := handlers.NewMovieTheaterHandlers(movieTheaterService)
 
+	movieService := service2.NewMovieService(repoPG)
+	movie := handlers.NewMovieHandlers(movieService)
+
+	roomService := service2.NewRoomService(repoPG)
+	room := handlers.NewRoomHandlers(roomService)
+
+	seatService := service2.NewSeatService(repoPG)
+	seat := handlers.NewSeatHandlers(seatService)
+
+	showtimeService := service2.NewShowtimeService(repoPG)
+	showtime := handlers.NewShowtimeHandlers(showtimeService)
+
+	orderService := service2.NewOrderService(repoPG)
+	order := handlers.NewOrderHandlers(orderService)
+
+	ticketService := service2.NewTicketService(repoPG)
+	ticket := handlers.NewTicketHandlers(ticketService)
+
+	metadataService := service2.NewMetadataService(repoPG)
+	metadata := handlers.NewMetadataHandlers(metadataService)
+
 	if conf.GetEnv().EnvName == "dev" {
 		s.Router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	}
@@ -69,9 +91,54 @@ func NewService() *Service {
 	v1Api.DELETE("/movie-theater/delete/:id", ginext.WrapHandler(movieTheater.Delete))
 	v1Api.GET("/movie-theater/get-one/:id", ginext.WrapHandler(movieTheater.GetOne))
 
+	// Movie
+	v1Api.POST("/movie/create", ginext.WrapHandler(movie.Create))
+	v1Api.PUT("/movie/update/:id", ginext.WrapHandler(movie.Update))
+	v1Api.DELETE("/movie/delete/:id", ginext.WrapHandler(movie.Delete))
+	v1Api.GET("/movie/get-one/:id", ginext.WrapHandler(movie.GetOne))
+
+	// Room
+	v1Api.POST("/room/create", ginext.WrapHandler(room.Create))
+	v1Api.PUT("/room/update/:id", ginext.WrapHandler(room.Update))
+	v1Api.DELETE("/room/delete/:id", ginext.WrapHandler(room.Delete))
+	v1Api.GET("/room/get-one/:id", ginext.WrapHandler(room.GetOne))
+
+	// Seat
+	v1Api.POST("/seat/create", ginext.WrapHandler(seat.Create))
+	v1Api.PUT("/seat/update/:id", ginext.WrapHandler(seat.Update))
+	v1Api.DELETE("/seat/delete/:id", ginext.WrapHandler(seat.Delete))
+	v1Api.GET("/seat/get-one/:id", ginext.WrapHandler(seat.GetOne))
+
+	// Showtime
+	v1Api.POST("/showtime/create", ginext.WrapHandler(showtime.Create))
+	v1Api.PUT("/showtime/update/:id", ginext.WrapHandler(showtime.Update))
+	v1Api.DELETE("/showtime/delete/:id", ginext.WrapHandler(showtime.Delete))
+	v1Api.GET("/showtime/get-one/:id", ginext.WrapHandler(showtime.GetOne))
+
+	// Metadata
+	v1Api.POST("/metadata/create", ginext.WrapHandler(metadata.Create))
+	v1Api.PUT("/metadata/update/:id", ginext.WrapHandler(metadata.Update))
+	v1Api.DELETE("/metadata/delete/:id", ginext.WrapHandler(metadata.Delete))
+	v1Api.GET("/metadata/get-one/:id", ginext.WrapHandler(metadata.GetOne))
+
+	// Order
+	v1Api.POST("/order/create", ginext.WrapHandler(order.Create))
+	v1Api.PUT("/order/update/:id", ginext.WrapHandler(order.Update))
+	v1Api.DELETE("/order/delete/:id", ginext.WrapHandler(order.Delete))
+	v1Api.GET("/order/get-one/:id", ginext.WrapHandler(order.GetOne))
+
+	// Ticket
+	v1Api.POST("/ticket/create", ginext.WrapHandler(ticket.Create))
+	v1Api.PUT("/ticket/update/:id", ginext.WrapHandler(ticket.Update))
+	v1Api.DELETE("/ticket/delete/:id", ginext.WrapHandler(ticket.Delete))
+	v1Api.GET("/ticket/get-one/:id", ginext.WrapHandler(ticket.GetOne))
+
 	// Migrate
 	migrateHandler := handlers.NewMigrationHandler(db)
 	v1Api.POST("/internal/migrate", migrateHandler.Migrate)
 
 	return s
+}
+func enableCors(w *http.ResponseWriter) {
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
 }

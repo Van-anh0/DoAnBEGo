@@ -52,4 +52,16 @@ type PGInterface interface {
 	UpdateShowtime(ctx context.Context, user *model.Showtime) error
 	DeleteShowtime(ctx context.Context, id string) error
 	GetOneShowtime(ctx context.Context, id string) (*model.Showtime, error)
+
+	// movie
+	CreateMovie(ctx context.Context, user *model.Movie) error
+	UpdateMovie(ctx context.Context, user *model.Movie) error
+	DeleteMovie(ctx context.Context, id string) error
+	GetOneMovie(ctx context.Context, id string) (*model.Movie, error)
+
+	// metadata
+	CreateMetadata(ctx context.Context, user *model.Metadata) error
+	UpdateMetadata(ctx context.Context, user *model.Metadata) error
+	DeleteMetadata(ctx context.Context, id string) error
+	GetOneMetadata(ctx context.Context, id string) (*model.Metadata, error)
 }

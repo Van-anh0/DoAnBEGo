@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/gin-contrib/cors"
 	"net"
 	"net/http"
 	"os"
@@ -67,6 +68,17 @@ func (app *BaseApp) Initialize() error {
 		ginext.RequestIDMiddleware,
 		ginext.AccessLogMiddleware(app.Config.Env),
 		ginext.CreateErrorHandler(app.Config.Debug),
+		cors.New(cors.Config{
+			AllowOrigins:     []string{"http://localhost:3000"},
+			AllowMethods:     []string{"PUT", "PATCH", "GET", "POST", "DELETE"},
+			AllowHeaders:     []string{"Origin"},
+			ExposeHeaders:    []string{"Content-Length"},
+			AllowCredentials: true,
+			AllowOriginFunc: func(origin string) bool {
+				return origin == "http://localhost:3000"
+			},
+			MaxAge: 12 * time.Hour,
+		}),
 	)
 
 	// register routes
