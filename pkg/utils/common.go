@@ -41,6 +41,18 @@ func ParseIDFromUri(c *gin.Context) *uuid.UUID {
 		return &id
 	}
 }
+func GetIdFromUri(c *gin.Context) *string {
+	tID := model.UriParse{}
+	if err := c.ShouldBindUri(&tID); err != nil {
+		_ = c.Error(err)
+		return nil
+	}
+	if len(tID.ID) == 0 {
+		_ = c.Error(fmt.Errorf("error: Empty when parse ID from URI"))
+		return nil
+	}
+	return &tID.ID[0]
+}
 
 func ParseUUID(in string) uuid.UUID {
 	id, err := uuid.Parse(in)

@@ -17,7 +17,18 @@ func (Showtime) TableName() string {
 }
 
 type ShowtimeRequest struct {
+	ID             *string    `json:"id"`
+	StartTime      *time.Time `json:"start_time"`
+	EndTime        *time.Time `json:"end_time"`
+	RoomID         *string    `json:"room_id"`
+	MovieTheaterID *string    `json:"movie_theater_id"`
+}
+
+type ShowtimeParams struct {
+	BaseParam
 }
 
 type ShowtimeResponse struct {
+	Data []Showtime             `json:"data"`
+	Meta map[string]interface{} `json:"meta"`
 }

@@ -16,6 +16,7 @@ type TicketInterface interface {
 	Update(ctx context.Context, ob model.TicketRequest) (rs *model.Ticket, err error)
 	Delete(ctx context.Context, id string) (err error)
 	GetOne(ctx context.Context, id string) (rs *model.Ticket, err error)
+	GetList(ctx context.Context, req model.TicketParams) (rs *model.TicketResponse, err error)
 }
 
 func NewTicketService(repo repo.PGInterface) TicketInterface {
@@ -51,6 +52,15 @@ func (s *TicketService) Delete(ctx context.Context, id string) (err error) {
 func (s *TicketService) GetOne(ctx context.Context, id string) (rs *model.Ticket, err error) {
 
 	ob, err := s.repo.GetOneTicket(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	return ob, nil
+}
+
+func (s *TicketService) GetList(ctx context.Context, req model.TicketParams) (rs *model.TicketResponse, err error) {
+
+	ob, err := s.repo.GetListTicket(ctx, req)
 	if err != nil {
 		return nil, err
 	}

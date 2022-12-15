@@ -16,6 +16,7 @@ type SeatInterface interface {
 	Update(ctx context.Context, ob model.SeatRequest) (rs *model.Seat, err error)
 	Delete(ctx context.Context, id string) (err error)
 	GetOne(ctx context.Context, id string) (rs *model.Seat, err error)
+	GetList(ctx context.Context, req model.SeatParams) (rs *model.SeatResponse, err error)
 }
 
 func NewSeatService(repo repo.PGInterface) SeatInterface {
@@ -51,6 +52,15 @@ func (s *SeatService) Delete(ctx context.Context, id string) (err error) {
 func (s *SeatService) GetOne(ctx context.Context, id string) (rs *model.Seat, err error) {
 
 	ob, err := s.repo.GetOneSeat(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	return ob, nil
+}
+
+func (s *SeatService) GetList(ctx context.Context, req model.SeatParams) (rs *model.SeatResponse, err error) {
+
+	ob, err := s.repo.GetListSeat(ctx, req)
 	if err != nil {
 		return nil, err
 	}

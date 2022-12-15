@@ -16,7 +16,20 @@ func (Order) TableName() string {
 }
 
 type OrderRequest struct {
+	ID            *string  `json:"id"`
+	TotalPrice    *float64 `json:"total_price"`
+	Status        *string  `json:"status"`
+	PaymentMethod *string  `json:"payment_method"`
+	UserID        *string  `json:"user_id"`
+	MovieId       *string  `json:"movie_id"`
+	SlotId        *string  `json:"slot_id"`
+}
+
+type OrderParams struct {
+	BaseParam
 }
 
 type OrderResponse struct {
+	Data []Order                `json:"data"`
+	Meta map[string]interface{} `json:"meta"`
 }

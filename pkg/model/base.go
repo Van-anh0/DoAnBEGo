@@ -24,6 +24,19 @@ type BaseModel struct {
 	DeletedAt *gorm.DeletedAt `json:"deleted_at,omitempty"`
 }
 
+type BaseParam struct {
+	Search   string   `json:"search" form:"search"`
+	Sort     string   `json:"sort" form:"sort"`
+	Filter   []Object `json:"filter" form:"filter"`
+	Page     int      `json:"page" form:"page"`
+	PageSize int      `json:"page_size" form:"page_size"`
+}
+
+type Object struct {
+	Key   string `json:"key"`
+	Value string `json:"value"`
+}
+
 // This functions are called before creating Base
 func (u *BaseModel) BeforeCreate(tx *gorm.DB) error {
 	u.ID = uuid.New().String()

@@ -19,7 +19,24 @@ func (User) TableName() string {
 }
 
 type UserRequest struct {
+	ID       *string `json:"id"`
+	Name     *string `json:"name"`
+	Avatar   *string `json:"avatar"`
+	Email    *string `json:"email"`
+	Password *string `json:"password"`
+	Gender   *string `json:"gender"`
+	Phone    *string `json:"phone"`
+	Role     *int    `json:"role"`
+	Address  *string `json:"address"`
+	IdCard   *string `json:"id_card"`
+	IsActive *bool   `json:"is_active"`
+}
+
+type UserParams struct {
+	BaseParam
 }
 
 type UserResponse struct {
+	Data []User                 `json:"data"`
+	Meta map[string]interface{} `json:"meta"`
 }

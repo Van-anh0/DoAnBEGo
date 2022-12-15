@@ -22,7 +22,27 @@ func (Movie) TableName() string {
 }
 
 type MovieRequest struct {
+	ID          *string  `json:"id"`
+	Type        *string  `json:"type"`
+	Cast        *string  `json:"cast"`
+	Name        *string  `json:"name"`
+	Description *string  `json:"description"`
+	Duration    *float64 `json:"duration"`
+	ReleaseDate *string  `json:"release_date"`
+	Country     *string  `json:"country"`
+	Language    *string  `json:"language"`
+	Rated       *string  `json:"rated"`
+	Director    *string  `json:"director"`
+	Status      *string  `json:"status"`
+	Poster      *string  `json:"poster"`
+	Trailer     *string  `json:"trailer"`
+}
+
+type MovieParams struct {
+	BaseParam
 }
 
 type MovieResponse struct {
+	Data []Movie                `json:"data"`
+	Meta map[string]interface{} `json:"meta"`
 }

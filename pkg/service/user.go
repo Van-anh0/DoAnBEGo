@@ -16,6 +16,7 @@ type UserInterface interface {
 	Update(ctx context.Context, ob model.UserRequest) (rs *model.User, err error)
 	Delete(ctx context.Context, id string) (err error)
 	GetOne(ctx context.Context, id string) (rs *model.User, err error)
+	GetList(ctx context.Context, req model.UserParams) (rs *model.UserResponse, err error)
 }
 
 func NewUserService(repo repo.PGInterface) UserInterface {
@@ -51,6 +52,15 @@ func (s *UserService) Delete(ctx context.Context, id string) (err error) {
 func (s *UserService) GetOne(ctx context.Context, id string) (rs *model.User, err error) {
 
 	ob, err := s.repo.GetOneUser(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	return ob, nil
+}
+
+func (s *UserService) GetList(ctx context.Context, req model.UserParams) (rs *model.UserResponse, err error) {
+
+	ob, err := s.repo.GetListUser(ctx, req)
 	if err != nil {
 		return nil, err
 	}

@@ -41,10 +41,10 @@ func NewService() *Service {
 	_ = env.Parse(s.setting)
 
 	db := s.GetDB()
-	repoPG := repo.NewPGRepo(db)
 	if s.setting.DbDebugEnable {
 		db = db.Debug()
 	}
+	repoPG := repo.NewPGRepo(db)
 
 	userService := service2.NewUserService(repoPG)
 	user := handlers.NewUserHandlers(userService)
@@ -84,54 +84,63 @@ func NewService() *Service {
 	v1Api.PUT("/user/update/:id", ginext.WrapHandler(user.Update))
 	v1Api.DELETE("/user/delete/:id", ginext.WrapHandler(user.Delete))
 	v1Api.GET("/user/get-one/:id", ginext.WrapHandler(user.GetOne))
+	v1Api.GET("/user/get-list", ginext.WrapHandler(user.GetList))
 
 	// Movie Theater
 	v1Api.POST("/movie-theater/create", ginext.WrapHandler(movieTheater.Create))
 	v1Api.PUT("/movie-theater/update/:id", ginext.WrapHandler(movieTheater.Update))
 	v1Api.DELETE("/movie-theater/delete/:id", ginext.WrapHandler(movieTheater.Delete))
 	v1Api.GET("/movie-theater/get-one/:id", ginext.WrapHandler(movieTheater.GetOne))
+	v1Api.GET("/movie-theater/get-list", ginext.WrapHandler(movieTheater.GetList))
 
 	// Movie
 	v1Api.POST("/movie/create", ginext.WrapHandler(movie.Create))
 	v1Api.PUT("/movie/update/:id", ginext.WrapHandler(movie.Update))
 	v1Api.DELETE("/movie/delete/:id", ginext.WrapHandler(movie.Delete))
 	v1Api.GET("/movie/get-one/:id", ginext.WrapHandler(movie.GetOne))
+	v1Api.GET("/movie/get-list", ginext.WrapHandler(movie.GetList))
 
 	// Room
 	v1Api.POST("/room/create", ginext.WrapHandler(room.Create))
 	v1Api.PUT("/room/update/:id", ginext.WrapHandler(room.Update))
 	v1Api.DELETE("/room/delete/:id", ginext.WrapHandler(room.Delete))
 	v1Api.GET("/room/get-one/:id", ginext.WrapHandler(room.GetOne))
+	v1Api.GET("/room/get-list", ginext.WrapHandler(room.GetList))
 
 	// Seat
 	v1Api.POST("/seat/create", ginext.WrapHandler(seat.Create))
 	v1Api.PUT("/seat/update/:id", ginext.WrapHandler(seat.Update))
 	v1Api.DELETE("/seat/delete/:id", ginext.WrapHandler(seat.Delete))
 	v1Api.GET("/seat/get-one/:id", ginext.WrapHandler(seat.GetOne))
+	v1Api.GET("/seat/get-list", ginext.WrapHandler(seat.GetList))
 
 	// Showtime
 	v1Api.POST("/showtime/create", ginext.WrapHandler(showtime.Create))
 	v1Api.PUT("/showtime/update/:id", ginext.WrapHandler(showtime.Update))
 	v1Api.DELETE("/showtime/delete/:id", ginext.WrapHandler(showtime.Delete))
 	v1Api.GET("/showtime/get-one/:id", ginext.WrapHandler(showtime.GetOne))
+	v1Api.GET("/showtime/get-list", ginext.WrapHandler(showtime.GetList))
 
 	// Metadata
 	v1Api.POST("/metadata/create", ginext.WrapHandler(metadata.Create))
 	v1Api.PUT("/metadata/update/:id", ginext.WrapHandler(metadata.Update))
 	v1Api.DELETE("/metadata/delete/:id", ginext.WrapHandler(metadata.Delete))
 	v1Api.GET("/metadata/get-one/:id", ginext.WrapHandler(metadata.GetOne))
+	v1Api.GET("/metadata/get-list", ginext.WrapHandler(metadata.GetList))
 
 	// Order
 	v1Api.POST("/order/create", ginext.WrapHandler(order.Create))
 	v1Api.PUT("/order/update/:id", ginext.WrapHandler(order.Update))
 	v1Api.DELETE("/order/delete/:id", ginext.WrapHandler(order.Delete))
 	v1Api.GET("/order/get-one/:id", ginext.WrapHandler(order.GetOne))
+	v1Api.GET("/order/get-list", ginext.WrapHandler(order.GetList))
 
 	// Ticket
 	v1Api.POST("/ticket/create", ginext.WrapHandler(ticket.Create))
 	v1Api.PUT("/ticket/update/:id", ginext.WrapHandler(ticket.Update))
 	v1Api.DELETE("/ticket/delete/:id", ginext.WrapHandler(ticket.Delete))
 	v1Api.GET("/ticket/get-one/:id", ginext.WrapHandler(ticket.GetOne))
+	v1Api.GET("/ticket/get-list", ginext.WrapHandler(ticket.GetList))
 
 	// Migrate
 	migrateHandler := handlers.NewMigrationHandler(db)
