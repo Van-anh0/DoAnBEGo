@@ -20,3 +20,9 @@ type Movie struct {
 func (Movie) TableName() string {
 	return "movie"
 }
+
+type MovieRequest struct {
+}
+
+type MovieResponse struct {
+}

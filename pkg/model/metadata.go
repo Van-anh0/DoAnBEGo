@@ -11,3 +11,9 @@ type Metadata struct {
 func (Metadata) TableName() string {
 	return "metadata"
 }
+
+type MetadataRequest struct {
+}
+
+type MetadataResponse struct {
+}
