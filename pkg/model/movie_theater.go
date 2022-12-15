@@ -13,7 +13,18 @@ func (MovieTheater) TableName() string {
 }
 
 type MovieTheaterRequest struct {
+	ID      *string `json:"id"`
+	Name    *string `json:"name"`
+	Address *string `json:"address"`
+	Phone   *string `json:"phone"`
+	Status  *string `json:"status"`
+}
+
+type MovieTheaterParams struct {
+	BaseParam
 }
 
 type MovieTheaterResponse struct {
+	Data []MovieTheater         `json:"data"`
+	Meta map[string]interface{} `json:"meta"`
 }

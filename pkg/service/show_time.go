@@ -16,6 +16,7 @@ type ShowtimeInterface interface {
 	Update(ctx context.Context, ob model.ShowtimeRequest) (rs *model.Showtime, err error)
 	Delete(ctx context.Context, id string) (err error)
 	GetOne(ctx context.Context, id string) (rs *model.Showtime, err error)
+	GetList(ctx context.Context, req model.ShowtimeParams) (rs *model.ShowtimeResponse, err error)
 }
 
 func NewShowtimeService(repo repo.PGInterface) ShowtimeInterface {
@@ -51,6 +52,15 @@ func (s *ShowtimeService) Delete(ctx context.Context, id string) (err error) {
 func (s *ShowtimeService) GetOne(ctx context.Context, id string) (rs *model.Showtime, err error) {
 
 	ob, err := s.repo.GetOneShowtime(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	return ob, nil
+}
+
+func (s *ShowtimeService) GetList(ctx context.Context, req model.ShowtimeParams) (rs *model.ShowtimeResponse, err error) {
+
+	ob, err := s.repo.GetListShowtime(ctx, req)
 	if err != nil {
 		return nil, err
 	}

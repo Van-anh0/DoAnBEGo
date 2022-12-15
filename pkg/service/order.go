@@ -16,6 +16,7 @@ type OrderInterface interface {
 	Update(ctx context.Context, ob model.OrderRequest) (rs *model.Order, err error)
 	Delete(ctx context.Context, id string) (err error)
 	GetOne(ctx context.Context, id string) (rs *model.Order, err error)
+	GetList(ctx context.Context, req model.OrderParams) (rs *model.OrderResponse, err error)
 }
 
 func NewOrderService(repo repo.PGInterface) OrderInterface {
@@ -51,6 +52,15 @@ func (s *OrderService) Delete(ctx context.Context, id string) (err error) {
 func (s *OrderService) GetOne(ctx context.Context, id string) (rs *model.Order, err error) {
 
 	ob, err := s.repo.GetOneOrder(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	return ob, nil
+}
+
+func (s *OrderService) GetList(ctx context.Context, req model.OrderParams) (rs *model.OrderResponse, err error) {
+
+	ob, err := s.repo.GetListOrder(ctx, req)
 	if err != nil {
 		return nil, err
 	}

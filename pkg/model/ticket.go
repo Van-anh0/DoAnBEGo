@@ -11,7 +11,16 @@ func (Ticket) TableName() string {
 }
 
 type TicketRequest struct {
+	ID      *string `json:"id"`
+	OrderId *string `json:"order_id"`
+	SeatId  *string `json:"seat_id"`
+}
+
+type TicketParams struct {
+	BaseParam
 }
 
 type TicketResponse struct {
+	Data []Ticket               `json:"data"`
+	Meta map[string]interface{} `json:"meta"`
 }

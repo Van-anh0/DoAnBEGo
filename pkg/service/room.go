@@ -16,6 +16,7 @@ type RoomInterface interface {
 	Update(ctx context.Context, ob model.RoomRequest) (rs *model.Room, err error)
 	Delete(ctx context.Context, id string) (err error)
 	GetOne(ctx context.Context, id string) (rs *model.Room, err error)
+	GetList(ctx context.Context, req model.RoomParams) (rs *model.RoomResponse, err error)
 }
 
 func NewRoomService(repo repo.PGInterface) RoomInterface {
@@ -51,6 +52,15 @@ func (s *RoomService) Delete(ctx context.Context, id string) (err error) {
 func (s *RoomService) GetOne(ctx context.Context, id string) (rs *model.Room, err error) {
 
 	ob, err := s.repo.GetOneRoom(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	return ob, nil
+}
+
+func (s *RoomService) GetList(ctx context.Context, req model.RoomParams) (rs *model.RoomResponse, err error) {
+
+	ob, err := s.repo.GetListRoom(ctx, req)
 	if err != nil {
 		return nil, err
 	}

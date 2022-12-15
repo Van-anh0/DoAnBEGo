@@ -5,6 +5,7 @@ import (
 	"doan/pkg/service"
 	"doan/pkg/utils"
 	"github.com/praslar/cloud0/ginext"
+	"github.com/praslar/cloud0/logger"
 	"github.com/praslar/lib/common"
 	"net/http"
 )
@@ -100,4 +101,30 @@ func (h *MovieHandlers) GetOne(r *ginext.Request) (*ginext.Response, error) {
 		return nil, err
 	}
 	return ginext.NewResponseData(http.StatusOK, data), nil
+}
+
+// GetList
+// @Tags GetList
+// @Accept  json
+// @Produce  json
+// @Param data body model.BlacklistParam true "body data"
+// @Success 200 {object} interface{}
+// @Router /api/v1/movie/get-list [get]
+func (h *MovieHandlers) GetList(r *ginext.Request) (*ginext.Response, error) {
+	log := logger.WithCtx(r.GinCtx, utils.GetCurrentCaller(h, 0))
+
+	req := model.MovieParams{}
+	if err := r.GinCtx.BindQuery(&req); err != nil {
+		log.WithError(err).Error("error_400: error parse")
+		return nil, ginext.NewError(http.StatusBadRequest, "Yêu cầu không hợp lệ")
+	}
+
+	data, err := h.service.GetList(r.Context(), req)
+	if err != nil {
+		return nil, err
+	}
+	return &ginext.Response{Code: http.StatusOK, GeneralBody: &ginext.GeneralBody{
+		Data: data.Data,
+		Meta: data.Meta,
+	}}, nil
 }

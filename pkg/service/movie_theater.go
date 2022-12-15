@@ -16,6 +16,7 @@ type MovieTheaterInterface interface {
 	Update(ctx context.Context, ob model.MovieTheaterRequest) (rs *model.MovieTheater, err error)
 	Delete(ctx context.Context, id string) (err error)
 	GetOne(ctx context.Context, id string) (rs *model.MovieTheater, err error)
+	GetList(ctx context.Context, req model.MovieTheaterParams) (rs *model.MovieTheaterResponse, err error)
 }
 
 func NewMovieTheaterService(repo repo.PGInterface) MovieTheaterInterface {
@@ -51,6 +52,15 @@ func (s *MovieTheaterService) Delete(ctx context.Context, id string) (err error)
 func (s *MovieTheaterService) GetOne(ctx context.Context, id string) (rs *model.MovieTheater, err error) {
 
 	ob, err := s.repo.GetOneMovieTheater(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	return ob, nil
+}
+
+func (s *MovieTheaterService) GetList(ctx context.Context, req model.MovieTheaterParams) (rs *model.MovieTheaterResponse, err error) {
+
+	ob, err := s.repo.GetListMovieTheater(ctx, req)
 	if err != nil {
 		return nil, err
 	}

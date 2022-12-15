@@ -16,6 +16,7 @@ type MetadataInterface interface {
 	Update(ctx context.Context, ob model.MetadataRequest) (rs *model.Metadata, err error)
 	Delete(ctx context.Context, id string) (err error)
 	GetOne(ctx context.Context, id string) (rs *model.Metadata, err error)
+	GetList(ctx context.Context, req model.MetadataParams) (rs *model.MetadataResponse, err error)
 }
 
 func NewMetadataService(repo repo.PGInterface) MetadataInterface {
@@ -51,6 +52,15 @@ func (s *MetadataService) Delete(ctx context.Context, id string) (err error) {
 func (s *MetadataService) GetOne(ctx context.Context, id string) (rs *model.Metadata, err error) {
 
 	ob, err := s.repo.GetOneMetadata(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	return ob, nil
+}
+
+func (s *MetadataService) GetList(ctx context.Context, req model.MetadataParams) (rs *model.MetadataResponse, err error) {
+
+	ob, err := s.repo.GetListMetadata(ctx, req)
 	if err != nil {
 		return nil, err
 	}

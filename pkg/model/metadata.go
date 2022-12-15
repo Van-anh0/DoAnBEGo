@@ -13,7 +13,18 @@ func (Metadata) TableName() string {
 }
 
 type MetadataRequest struct {
+	ID       *string  `json:"id"`
+	Key      *string  `json:"key"`
+	Type     *string  `json:"type"`
+	Name     *string  `json:"name"`
+	Priority *float64 `json:"priority"`
+}
+
+type MetadataParams struct {
+	BaseParam
 }
 
 type MetadataResponse struct {
+	Data []Metadata             `json:"data"`
+	Meta map[string]interface{} `json:"meta"`
 }

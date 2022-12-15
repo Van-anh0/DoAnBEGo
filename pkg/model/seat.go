@@ -13,7 +13,18 @@ func (Seat) TableName() string {
 }
 
 type SeatRequest struct {
+	ID     *string  `json:"id"`
+	Status *string  `json:"status"`
+	Type   *string  `json:"type"`
+	Price  *float64 `json:"price"`
+	RoomID *string  `json:"room_id"`
+}
+
+type SeatParams struct {
+	BaseParam
 }
 
 type SeatResponse struct {
+	Data []Seat                 `json:"data"`
+	Meta map[string]interface{} `json:"meta"`
 }

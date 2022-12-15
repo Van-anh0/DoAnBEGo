@@ -13,7 +13,18 @@ func (Room) TableName() string {
 }
 
 type RoomRequest struct {
+	ID             *string `json:"id"`
+	Name           *string `json:"name"`
+	Type           *string `json:"type"`
+	MovieTheaterID *string `json:"movie_theater_id"`
+	Status         *string `json:"status"`
+}
+
+type RoomParams struct {
+	BaseParam
 }
 
 type RoomResponse struct {
+	Data []Room                 `json:"data"`
+	Meta map[string]interface{} `json:"meta"`
 }
