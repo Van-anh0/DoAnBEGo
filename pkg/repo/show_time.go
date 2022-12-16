@@ -4,6 +4,7 @@ import (
 	"context"
 	"doan/pkg/model"
 	"doan/pkg/utils"
+	"strings"
 )
 
 func (r *RepoPG) CreateShowtime(ctx context.Context, ob *model.Showtime) error {
@@ -52,15 +53,22 @@ func (r *RepoPG) GetListShowtime(ctx context.Context, req model.ShowtimeParams) 
 		tx = tx.Where("unaccent(name) ilike %?%", req.Search)
 	}
 
-	if len(req.Filter) > 0 {
-		for i := 0; i < len(req.Filter); i++ {
-			tx = tx.Where("? = ?", req.Filter[i].Key, req.Filter[i].Value)
+	if req.Filter != "" {
+		filter := strings.Split(req.Filter, ",")
+		for i := 0; i < len(filter); i += 2 {
+			if i+1 < len(filter) {
+				tx = tx.Where(filter[i]+" = ?", filter[i+1])
+			}
 		}
 	}
 
 	switch req.Sort {
 	case utils.SORT_CREATED_AT_OLDEST:
 		tx = tx.Order("created_at")
+	case "-start_time":
+		tx = tx.Order("start_time desc")
+	case "start_time":
+		tx = tx.Order("start_time")
 	default:
 		tx = tx.Order("created_at desc")
 	}

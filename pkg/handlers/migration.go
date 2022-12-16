@@ -64,6 +64,35 @@ func (h *MigrationHandler) Migrate(ctx *gin.Context) {
 				return nil
 			},
 		},
+		{
+			ID: "20221216000202",
+			Migrate: func(tx *gorm.DB) error {
+				if err := h.db.AutoMigrate(&model.Order{}, &model.Ticket{}); err != nil {
+					return err
+				}
+				return nil
+			},
+		},
+		{
+			ID: "20221216091924",
+			Migrate: func(tx *gorm.DB) error {
+				if err := h.db.AutoMigrate(&model.Showtime{}); err != nil {
+					return err
+				}
+				return nil
+			},
+		},
+		{
+			ID: "20221216110030",
+			Migrate: func(tx *gorm.DB) error {
+				if err := tx.Exec(`
+					ALTER TABLE orders DROP COLUMN slot_id;
+				`).Error; err != nil {
+					log.Warn(err)
+				}
+				return nil
+			},
+		},
 	})
 	err := migrate.Migrate()
 	if err != nil {

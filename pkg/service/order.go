@@ -4,7 +4,9 @@ import (
 	"context"
 	"doan/pkg/model"
 	"doan/pkg/repo"
+	"github.com/praslar/cloud0/ginext"
 	"github.com/praslar/lib/common"
+	"net/http"
 )
 
 type OrderService struct {
@@ -28,9 +30,25 @@ func (s *OrderService) Create(ctx context.Context, req model.OrderRequest) (rs *
 	ob := &model.Order{}
 	common.Sync(req, ob)
 
+	// check length ticket is not empty
+	if ob.Ticket == nil || len(ob.Ticket) == 0 {
+		return nil, ginext.NewError(http.StatusBadRequest, "Ticket is empty")
+	}
+
 	if err := s.repo.CreateOrder(ctx, ob); err != nil {
 		return nil, err
 	}
+	return ob, nil
+
+	for _, v := range ob.Ticket {
+		v.OrderId = ob.ID
+	}
+
+	// create list ticket
+	if err = s.repo.CreateMultiTicket(ctx, &ob.Ticket); err != nil {
+		return nil, err
+	}
+
 	return ob, nil
 }
 

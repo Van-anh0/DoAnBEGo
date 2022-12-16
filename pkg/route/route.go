@@ -120,6 +120,7 @@ func NewService() *Service {
 	v1Api.DELETE("/showtime/delete/:id", ginext.WrapHandler(showtime.Delete))
 	v1Api.GET("/showtime/get-one/:id", ginext.WrapHandler(showtime.GetOne))
 	v1Api.GET("/showtime/get-list", ginext.WrapHandler(showtime.GetList))
+	v1Api.GET("/showtime/get-list-group", ginext.WrapHandler(showtime.GetListGroup))
 
 	// Metadata
 	v1Api.POST("/metadata/create", ginext.WrapHandler(metadata.Create))

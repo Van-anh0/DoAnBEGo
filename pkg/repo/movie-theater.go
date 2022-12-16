@@ -4,6 +4,7 @@ import (
 	"context"
 	"doan/pkg/model"
 	"doan/pkg/utils"
+	"strings"
 )
 
 func (r *RepoPG) CreateMovieTheater(ctx context.Context, ob *model.MovieTheater) error {
@@ -52,9 +53,12 @@ func (r *RepoPG) GetListMovieTheater(ctx context.Context, req model.MovieTheater
 		tx = tx.Where("unaccent(name) ilike %?%", req.Search)
 	}
 
-	if len(req.Filter) > 0 {
-		for i := 0; i < len(req.Filter); i++ {
-			tx = tx.Where("? = ?", req.Filter[i].Key, req.Filter[i].Value)
+	if req.Filter != "" {
+		filter := strings.Split(req.Filter, ",")
+		for i := 0; i < len(filter); i += 2 {
+			if i+1 < len(filter) {
+				tx = tx.Where(filter[i]+" = ?", filter[i+1])
+			}
 		}
 	}
 

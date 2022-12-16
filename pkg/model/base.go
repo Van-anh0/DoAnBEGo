@@ -25,11 +25,11 @@ type BaseModel struct {
 }
 
 type BaseParam struct {
-	Search   string   `json:"search" form:"search"`
-	Sort     string   `json:"sort" form:"sort"`
-	Filter   []Object `json:"filter" form:"filter"`
-	Page     int      `json:"page" form:"page"`
-	PageSize int      `json:"page_size" form:"page_size"`
+	Search   string `json:"search" form:"search"`
+	Sort     string `json:"sort" form:"sort"`
+	Filter   string `json:"filter" form:"filter"`
+	Page     int    `json:"page" form:"page"`
+	PageSize int    `json:"page_size" form:"page_size"`
 }
 
 type Object struct {

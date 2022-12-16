@@ -52,6 +52,7 @@ type PGInterface interface {
 	DeleteTicket(ctx context.Context, id string) error
 	GetOneTicket(ctx context.Context, id string) (*model.Ticket, error)
 	GetListTicket(ctx context.Context, req model.TicketParams) (*model.TicketResponse, error)
+	CreateMultiTicket(ctx context.Context, ob *[]model.Ticket) error
 
 	// showtime
 	CreateShowtime(ctx context.Context, user *model.Showtime) error

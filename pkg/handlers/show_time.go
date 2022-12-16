@@ -139,3 +139,29 @@ func (h *ShowtimeHandlers) GetList(r *ginext.Request) (*ginext.Response, error) 
 		Meta: data.Meta,
 	}}, nil
 }
+
+// GetListGroup
+// @Tags GetListGroup
+// @Accept  json
+// @Produce  json
+// @Param data body model.BlacklistParam true "body data"
+// @Success 200 {object} interface{}
+// @Router /api/v1/showtime/get-list-group [get]
+func (h *ShowtimeHandlers) GetListGroup(r *ginext.Request) (*ginext.Response, error) {
+	log := logger.WithCtx(r.GinCtx, utils.GetCurrentCaller(h, 0))
+
+	req := model.ShowtimeParams{}
+	if err := r.GinCtx.BindQuery(&req); err != nil {
+		log.WithError(err).Error("error_400: error parse")
+		return nil, ginext.NewError(http.StatusBadRequest, "Yêu cầu không hợp lệ")
+	}
+
+	data, err := h.service.GetListGroupByDay(r.Context(), req)
+	if err != nil {
+		return nil, err
+	}
+	return &ginext.Response{Code: http.StatusOK, GeneralBody: &ginext.GeneralBody{
+		Data: data.Data,
+		Meta: data.Meta,
+	}}, nil
+}
