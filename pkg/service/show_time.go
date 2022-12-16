@@ -17,6 +17,7 @@ type ShowtimeInterface interface {
 	Delete(ctx context.Context, id string) (err error)
 	GetOne(ctx context.Context, id string) (rs *model.Showtime, err error)
 	GetList(ctx context.Context, req model.ShowtimeParams) (rs *model.ShowtimeResponse, err error)
+	GetListGroupByDay(ctx context.Context, req model.ShowtimeParams) (rs *model.ShowtimeGroupResponse, err error)
 }
 
 func NewShowtimeService(repo repo.PGInterface) ShowtimeInterface {
@@ -64,5 +65,31 @@ func (s *ShowtimeService) GetList(ctx context.Context, req model.ShowtimeParams)
 	if err != nil {
 		return nil, err
 	}
+
+	// change list to object group by day
+	var listShowtime = make(map[string][]model.Showtime)
+	for _, v := range ob.Data {
+		listShowtime[v.Day.String()] = append(listShowtime[v.Day.String()], v)
+	}
 	return ob, nil
+}
+
+func (s *ShowtimeService) GetListGroupByDay(ctx context.Context, req model.ShowtimeParams) (rs *model.ShowtimeGroupResponse, err error) {
+
+	ob, err := s.repo.GetListShowtime(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	// change list to object group by day
+	var listShowtime = make(map[string][]model.Showtime)
+	for _, v := range ob.Data {
+		listShowtime[v.Day.String()] = append(listShowtime[v.Day.String()], v)
+	}
+
+	var listShowtimeGroup model.ShowtimeGroupResponse
+	listShowtimeGroup.Data = listShowtime
+	//listShowtimeGroup.Meta = ob.Meta
+
+	return &listShowtimeGroup, nil
 }

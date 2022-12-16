@@ -4,6 +4,7 @@ import (
 	"context"
 	"doan/pkg/model"
 	"doan/pkg/utils"
+	"strings"
 )
 
 func (r *RepoPG) CreateTicket(ctx context.Context, ob *model.Ticket) error {
@@ -52,9 +53,12 @@ func (r *RepoPG) GetListTicket(ctx context.Context, req model.TicketParams) (*mo
 		tx = tx.Where("unaccent(name) ilike %?%", req.Search)
 	}
 
-	if len(req.Filter) > 0 {
-		for i := 0; i < len(req.Filter); i++ {
-			tx = tx.Where("? = ?", req.Filter[i].Key, req.Filter[i].Value)
+	if req.Filter != "" {
+		filter := strings.Split(req.Filter, ",")
+		for i := 0; i < len(filter); i += 2 {
+			if i+1 < len(filter) {
+				tx = tx.Where(filter[i]+" = ?", filter[i+1])
+			}
 		}
 	}
 
@@ -73,4 +77,11 @@ func (r *RepoPG) GetListTicket(ctx context.Context, req model.TicketParams) (*mo
 	}
 
 	return &rs, nil
+}
+
+// createMultiTicket is a function to create multiple tickets
+func (r *RepoPG) CreateMultiTicket(ctx context.Context, ob *[]model.Ticket) error {
+	tx, cancel := r.DBWithTimeout(ctx)
+	defer cancel()
+	return tx.Create(ob).Error
 }
