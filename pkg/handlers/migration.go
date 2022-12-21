@@ -74,6 +74,15 @@ func (h *MigrationHandler) Migrate(ctx *gin.Context) {
 			},
 		},
 		{
+			ID: "20221221143528",
+			Migrate: func(tx *gorm.DB) error {
+				if err := h.db.AutoMigrate(&model.Seat{}, &model.Showtime{}); err != nil {
+					return err
+				}
+				return nil
+			},
+		},
+		{
 			ID: "20221216091924",
 			Migrate: func(tx *gorm.DB) error {
 				if err := h.db.AutoMigrate(&model.Showtime{}); err != nil {
