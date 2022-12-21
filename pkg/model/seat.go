@@ -6,6 +6,7 @@ type Seat struct {
 	Type   string  `json:"type" gorm:"type;type:varchar(100);not null"`
 	Price  float64 `json:"price" gorm:"price;not null;default:0"`
 	RoomID string  `json:"room_id" gorm:"room_id;char(36);not null"`
+	Name   string  `json:"name" gorm:"name;type:varchar(100);not null"`
 }
 
 func (Seat) TableName() string {
@@ -18,6 +19,7 @@ type SeatRequest struct {
 	Type   *string  `json:"type"`
 	Price  *float64 `json:"price"`
 	RoomID *string  `json:"room_id"`
+	Name   *string  `json:"name"`
 }
 
 type SeatParams struct {
