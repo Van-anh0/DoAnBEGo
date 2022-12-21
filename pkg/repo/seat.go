@@ -64,6 +64,10 @@ func (r *RepoPG) GetListSeat(ctx context.Context, req model.SeatParams) (*model.
 	switch req.Sort {
 	case utils.SORT_CREATED_AT_OLDEST:
 		tx = tx.Order("created_at")
+	case "name":
+		tx = tx.Order("name")
+	case "-name":
+		tx = tx.Order("name desc")
 	default:
 		tx = tx.Order("created_at desc")
 	}
