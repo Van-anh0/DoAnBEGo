@@ -2,10 +2,9 @@ package model
 
 type Ticket struct {
 	BaseModel
-	OrderId    string  `json:"order_id" gorm:"not null;type:char(36);"`
-	SeatId     string  `json:"seat_id" gorm:"not null;type:char(36);"`
-	ShowtimeId string  `json:"showtime_id" gorm:"not null;type:char(36);"`
-	Price      float64 `json:"price" gorm:"not null;type:float;"`
+	OrderId string  `json:"order_id" gorm:"not null;type:char(36);"`
+	SeatId  string  `json:"seat_id" gorm:"not null;type:char(36);"`
+	Price   float64 `json:"price" gorm:"not null;type:float;"`
 }
 
 func (Ticket) TableName() string {

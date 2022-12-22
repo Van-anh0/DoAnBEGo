@@ -71,7 +71,7 @@ func (app *BaseApp) Initialize() error {
 		cors.New(cors.Config{
 			AllowOrigins:     []string{"http://localhost:3000"},
 			AllowMethods:     []string{"PUT", "PATCH", "GET", "POST", "DELETE"},
-			AllowHeaders:     []string{"Origin"},
+			AllowHeaders:     []string{"Origin, Access-Control-Allow-Headers, Content-Type, Authorization, X-Requested-With"},
 			ExposeHeaders:    []string{"Content-Length"},
 			AllowCredentials: true,
 			AllowOriginFunc: func(origin string) bool {

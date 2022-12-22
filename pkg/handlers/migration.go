@@ -111,6 +111,21 @@ func (h *MigrationHandler) Migrate(ctx *gin.Context) {
 				return nil
 			},
 		},
+		{
+			ID: "20221222163628",
+			Migrate: func(tx *gorm.DB) error {
+				if err := h.db.AutoMigrate(&model.Ticket{}); err != nil {
+					return err
+				}
+
+				if err := tx.Exec(`
+					ALTER TABLE ticket DROP COLUMN showtime_id;
+				`).Error; err != nil {
+					log.Warn(err)
+				}
+				return nil
+			},
+		},
 	})
 	err := migrate.Migrate()
 	if err != nil {

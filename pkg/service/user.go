@@ -17,6 +17,7 @@ type UserInterface interface {
 	Delete(ctx context.Context, id string) (err error)
 	GetOne(ctx context.Context, id string) (rs *model.User, err error)
 	GetList(ctx context.Context, req model.UserParams) (rs *model.UserResponse, err error)
+	Login(ctx context.Context, req model.LoginRequest) (rs *model.User, err error)
 }
 
 func NewUserService(repo repo.PGInterface) UserInterface {
