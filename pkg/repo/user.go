@@ -85,3 +85,15 @@ func (r *RepoPG) GetListUser(ctx context.Context, req model.UserParams) (*model.
 
 	return &rs, nil
 }
+
+func (r *RepoPG) GetOneUserByEmail(ctx context.Context, email string) (*model.User, error) {
+	tx, cancel := r.DBWithTimeout(ctx)
+	defer cancel()
+
+	rs := model.User{}
+	if err := tx.Where("email = ?", email).Take(&rs).Error; err != nil {
+		return nil, r.ReturnErrorInGetFunc(ctx, err, utils.GetCurrentCaller(r, 0))
+	}
+
+	return &rs, nil
+}

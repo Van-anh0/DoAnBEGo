@@ -17,6 +17,7 @@ type PGInterface interface {
 	DeleteUser(ctx context.Context, id string) error
 	GetOneUser(ctx context.Context, id string) (*model.User, error)
 	GetListUser(ctx context.Context, req model.UserParams) (*model.UserResponse, error)
+	GetOneUserByEmail(ctx context.Context, email string) (*model.User, error)
 
 	// movie theater
 	CreateMovieTheater(ctx context.Context, user *model.MovieTheater) error
