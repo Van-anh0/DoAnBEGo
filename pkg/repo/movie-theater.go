@@ -49,6 +49,19 @@ func (r *RepoPG) GetListMovieTheater(ctx context.Context, req model.MovieTheater
 		Count int `json:"count"`
 	})
 
+	tx = tx.Model(&model.MovieTheater{}).Select("movie_theater.*")
+
+	if req.MovieId != "" || req.Day != "" {
+		tx = tx.Joins("JOIN show_time ON show_time.movie_theater_id = movie_theater.id")
+		if req.MovieId != "" {
+			tx = tx.Where("show_time.movie_id = ?", req.MovieId)
+		}
+
+		if req.Day != "" {
+			tx.Where("show_time.day = ?", req.Day)
+		}
+	}
+
 	if req.Search != "" {
 		tx = tx.Where("unaccent(name) ilike %?%", req.Search)
 	}
@@ -68,6 +81,11 @@ func (r *RepoPG) GetListMovieTheater(ctx context.Context, req model.MovieTheater
 	default:
 		tx = tx.Order("created_at desc")
 	}
+
+	if req.MovieId != "" || req.Day != "" {
+		tx = tx.Group("movie_theater.id")
+	}
+
 	if err := tx.Find(&rs.Data).Error; err != nil {
 		return nil, r.ReturnErrorInGetFunc(ctx, err, utils.GetCurrentCaller(r, 0))
 	}

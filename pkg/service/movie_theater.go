@@ -59,7 +59,6 @@ func (s *MovieTheaterService) GetOne(ctx context.Context, id string) (rs *model.
 }
 
 func (s *MovieTheaterService) GetList(ctx context.Context, req model.MovieTheaterParams) (rs *model.MovieTheaterResponse, err error) {
-
 	ob, err := s.repo.GetListMovieTheater(ctx, req)
 	if err != nil {
 		return nil, err
