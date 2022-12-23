@@ -80,7 +80,8 @@ func NewService() *Service {
 	v1Api := s.Router.Group("/api/v1")
 
 	// Auth
-	v1Api.GET("/auth/login", ginext.WrapHandler(user.Login))
+	v1Api.POST("/auth/login", ginext.WrapHandler(user.Login))
+	v1Api.POST("/auth/register", ginext.WrapHandler(user.Register))
 
 	// User
 	v1Api.POST("/user/create", ginext.WrapHandler(user.Create))

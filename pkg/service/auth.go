@@ -4,6 +4,7 @@ import (
 	"context"
 	"doan/pkg/model"
 	"github.com/praslar/cloud0/ginext"
+	"github.com/praslar/lib/common"
 	"net/http"
 )
 
@@ -25,4 +26,10 @@ func (s *UserService) CheckPassword(passwordRequest, password string) bool {
 		return true
 	}
 	return false
+}
+
+func (s *UserService) Register(ctx context.Context, req model.RegisterRequest) (err error) {
+	ob := &model.User{}
+	common.Sync(req, ob)
+	return s.repo.CreateUser(ctx, ob)
 }
