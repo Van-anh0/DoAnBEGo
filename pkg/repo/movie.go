@@ -49,6 +49,19 @@ func (r *RepoPG) GetListMovie(ctx context.Context, req model.MovieParams) (*mode
 		Count int `json:"count"`
 	})
 
+	tx = tx.Select("movie.*")
+
+	if req.Day != "" || req.MovieTheaterId != "" {
+		tx = tx.Joins("JOIN show_time ON show_time.movie_id = movie.id")
+		if req.Day != "" {
+			tx = tx.Where("show_time.day = ?", req.Day)
+		}
+
+		if req.MovieTheaterId != "" {
+			tx = tx.Where("show_time.movie_theater_id = ?", req.MovieTheaterId)
+		}
+	}
+
 	if req.Search != "" {
 		tx = tx.Where("unaccent(name) ilike %?%", req.Search)
 	}
@@ -68,10 +81,17 @@ func (r *RepoPG) GetListMovie(ctx context.Context, req model.MovieParams) (*mode
 	default:
 		tx = tx.Order("created_at desc")
 	}
+
+	if req.Day != "" || req.MovieTheaterId != "" {
+		tx = tx.Group("movie.id")
+	}
+
 	if err := tx.Find(&rs.Data).Error; err != nil {
 		return nil, r.ReturnErrorInGetFunc(ctx, err, utils.GetCurrentCaller(r, 0))
 	}
 
+	//2022-12-18T00:00:00+07:00
+	//postman: 2022-12-18T00:00:00 07:00
 	if rs.Meta, err = r.GetPaginationInfo("", tx, total.Count, page, pageSize); err != nil {
 		return nil, r.ReturnErrorInGetFunc(ctx, err, utils.GetCurrentCaller(r, 0))
 	}
