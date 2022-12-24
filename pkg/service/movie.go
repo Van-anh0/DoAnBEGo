@@ -4,6 +4,7 @@ import (
 	"context"
 	"doan/pkg/model"
 	"doan/pkg/repo"
+	"doan/pkg/valid"
 	"github.com/praslar/lib/common"
 )
 
@@ -35,8 +36,11 @@ func (s *MovieService) Create(ctx context.Context, req model.MovieRequest) (rs *
 }
 
 func (s *MovieService) Update(ctx context.Context, req model.MovieRequest) (rs *model.Movie, err error) {
+	ob, err := s.repo.GetOneMovie(ctx, valid.String(req.ID))
+	if err != nil {
+		return nil, err
+	}
 
-	ob := &model.Movie{}
 	common.Sync(req, ob)
 
 	if err := s.repo.UpdateMovie(ctx, ob); err != nil {

@@ -33,7 +33,7 @@ func (h *MigrationHandler) BaseMigrate(ctx *gin.Context, tx *gorm.DB) error {
 		&model.Seat{},
 		&model.Showtime{},
 		&model.Order{},
-		&model.Ticket{},
+		&model.OrderItem{},
 	}
 
 	for _, m := range models {
@@ -67,7 +67,7 @@ func (h *MigrationHandler) Migrate(ctx *gin.Context) {
 		{
 			ID: "20221216000202",
 			Migrate: func(tx *gorm.DB) error {
-				if err := h.db.AutoMigrate(&model.Order{}, &model.Ticket{}); err != nil {
+				if err := h.db.AutoMigrate(&model.Order{}, &model.OrderItem{}); err != nil {
 					return err
 				}
 				return nil
@@ -114,7 +114,7 @@ func (h *MigrationHandler) Migrate(ctx *gin.Context) {
 		{
 			ID: "20221222163628",
 			Migrate: func(tx *gorm.DB) error {
-				if err := h.db.AutoMigrate(&model.Ticket{}); err != nil {
+				if err := h.db.AutoMigrate(&model.OrderItem{}); err != nil {
 					return err
 				}
 
@@ -122,6 +122,20 @@ func (h *MigrationHandler) Migrate(ctx *gin.Context) {
 					ALTER TABLE ticket DROP COLUMN showtime_id;
 				`).Error; err != nil {
 					log.Warn(err)
+				}
+				return nil
+			},
+		},
+		{
+			ID: "20221224142655",
+			Migrate: func(tx *gorm.DB) error {
+				if err := h.db.AutoMigrate(
+					&model.User{}, &model.Promotion{}, &model.Product{},
+					&model.UserRank{}, &model.ProductRank{}, &model.Comment{},
+					&model.Attribute{}, &model.Order{}, &model.OrderItem{},
+					&model.Showtime{}, &model.Category{}, &model.CategoryHasProduct{},
+				); err != nil {
+					return err
 				}
 				return nil
 			},

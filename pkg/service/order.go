@@ -4,6 +4,7 @@ import (
 	"context"
 	"doan/pkg/model"
 	"doan/pkg/repo"
+	"doan/pkg/valid"
 	"github.com/praslar/cloud0/ginext"
 	"github.com/praslar/lib/common"
 	"net/http"
@@ -30,9 +31,9 @@ func (s *OrderService) Create(ctx context.Context, req model.OrderRequest) (rs *
 	ob := &model.Order{}
 	common.Sync(req, ob)
 
-	// check length ticket is not empty
-	if ob.Ticket == nil || len(ob.Ticket) == 0 {
-		return nil, ginext.NewError(http.StatusBadRequest, "Ticket is empty")
+	// check length OrderItem is not empty
+	if ob.OrderItem == nil || len(ob.OrderItem) == 0 {
+		return nil, ginext.NewError(http.StatusBadRequest, "OrderItem is empty")
 	}
 
 	if err := s.repo.CreateOrder(ctx, ob); err != nil {
@@ -40,12 +41,12 @@ func (s *OrderService) Create(ctx context.Context, req model.OrderRequest) (rs *
 	}
 	return ob, nil
 
-	for _, v := range ob.Ticket {
+	for _, v := range ob.OrderItem {
 		v.OrderId = ob.ID
 	}
 
-	// create list ticket
-	if err = s.repo.CreateMultiTicket(ctx, &ob.Ticket); err != nil {
+	// create list OrderItem
+	if err = s.repo.CreateMultiTicket(ctx, &ob.OrderItem); err != nil {
 		return nil, err
 	}
 
@@ -53,8 +54,11 @@ func (s *OrderService) Create(ctx context.Context, req model.OrderRequest) (rs *
 }
 
 func (s *OrderService) Update(ctx context.Context, req model.OrderRequest) (rs *model.Order, err error) {
+	ob, err := s.repo.GetOneOrder(ctx, valid.String(req.ID))
+	if err != nil {
+		return nil, err
+	}
 
-	ob := &model.Order{}
 	common.Sync(req, ob)
 
 	if err := s.repo.UpdateOrder(ctx, ob); err != nil {

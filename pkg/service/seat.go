@@ -4,6 +4,7 @@ import (
 	"context"
 	"doan/pkg/model"
 	"doan/pkg/repo"
+	"doan/pkg/valid"
 	"github.com/praslar/lib/common"
 )
 
@@ -35,8 +36,11 @@ func (s *SeatService) Create(ctx context.Context, req model.SeatRequest) (rs *mo
 }
 
 func (s *SeatService) Update(ctx context.Context, req model.SeatRequest) (rs *model.Seat, err error) {
+	ob, err := s.repo.GetOneSeat(ctx, valid.String(req.ID))
+	if err != nil {
+		return nil, err
+	}
 
-	ob := &model.Seat{}
 	common.Sync(req, ob)
 
 	if err := s.repo.UpdateSeat(ctx, ob); err != nil {

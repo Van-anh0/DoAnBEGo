@@ -4,6 +4,7 @@ import (
 	"context"
 	"doan/pkg/model"
 	"doan/pkg/repo"
+	"doan/pkg/valid"
 	"github.com/praslar/lib/common"
 )
 
@@ -36,8 +37,11 @@ func (s *ShowtimeService) Create(ctx context.Context, req model.ShowtimeRequest)
 }
 
 func (s *ShowtimeService) Update(ctx context.Context, req model.ShowtimeRequest) (rs *model.Showtime, err error) {
+	ob, err := s.repo.GetOneShowtime(ctx, valid.String(req.ID))
+	if err != nil {
+		return nil, err
+	}
 
-	ob := &model.Showtime{}
 	common.Sync(req, ob)
 
 	if err := s.repo.UpdateShowtime(ctx, ob); err != nil {

@@ -4,6 +4,7 @@ import (
 	"context"
 	"doan/pkg/model"
 	"doan/pkg/repo"
+	"doan/pkg/valid"
 	"github.com/praslar/lib/common"
 )
 
@@ -35,8 +36,11 @@ func (s *RoomService) Create(ctx context.Context, req model.RoomRequest) (rs *mo
 }
 
 func (s *RoomService) Update(ctx context.Context, req model.RoomRequest) (rs *model.Room, err error) {
+	ob, err := s.repo.GetOneRoom(ctx, valid.String(req.ID))
+	if err != nil {
+		return nil, err
+	}
 
-	ob := &model.Room{}
 	common.Sync(req, ob)
 
 	if err := s.repo.UpdateRoom(ctx, ob); err != nil {
