@@ -4,7 +4,6 @@ import (
 	"context"
 	"doan/pkg/model"
 	"github.com/praslar/cloud0/ginext"
-	"github.com/praslar/lib/common"
 	"net/http"
 )
 
@@ -29,7 +28,20 @@ func (s *UserService) CheckPassword(passwordRequest, password string) bool {
 }
 
 func (s *UserService) Register(ctx context.Context, req model.RegisterRequest) (err error) {
-	ob := &model.User{}
-	common.Sync(req, ob)
+	ob := &model.User{
+		Email:    req.Email,
+		Password: req.Password,
+	}
+	user, err := s.repo.GetOneUserByEmail(ctx, req.Email)
+	if err != nil {
+		if err.Error() != "record not found" {
+			return err
+		}
+	}
+
+	if user != nil && user.Email != "" {
+		return ginext.NewError(http.StatusUnauthorized, "Email is exist")
+	}
+
 	return s.repo.CreateUser(ctx, ob)
 }

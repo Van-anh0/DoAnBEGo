@@ -48,7 +48,7 @@ func (h *UserHandlers) Register(r *ginext.Request) (*ginext.Response, error) {
 	}
 
 	if err := h.service.Register(r.Context(), req); err != nil {
-		return nil, ginext.NewError(http.StatusBadRequest, "Đăng ký không thành công!")
+		return nil, err
 	}
 	return ginext.NewResponse(http.StatusOK), nil
 }

@@ -42,7 +42,7 @@ func LoadMessageError() {
 	messageError[http.StatusInternalServerError] = "Internal server error"
 	messageError[http.StatusBadRequest] = "Something when wrong with your request"
 	messageError[http.StatusUnauthorized] = "Unauthorized - Permission denied"
-	messageError[http.StatusNotFound] = "Request not found - Check your input"
+	messageError[http.StatusNotFound] = "request not found"
 	messageError[http.StatusCreated] = "Created successfully"
 	messageError[http.StatusGatewayTimeout] = "Gateway time out"
 	messageError[http.StatusConflict] = "Your input has been conflict with another data"

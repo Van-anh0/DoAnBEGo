@@ -40,6 +40,8 @@ type MovieRequest struct {
 
 type MovieParams struct {
 	BaseParam
+	Day            string `json:"day" form:"day"`
+	MovieTheaterId string `json:"movie_theater_id" form:"movie_theater_id"`
 }
 
 type MovieResponse struct {

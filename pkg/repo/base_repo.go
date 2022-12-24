@@ -93,7 +93,7 @@ func (r *RepoPG) ReturnErrorInGetFunc(ctx context.Context, err error, message st
 	log := logger.WithCtx(ctx, utils.GetCurrentCaller(r, 0))
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		log.WithError(err).Error(message)
-		return ginext.NewError(http.StatusNotFound, utils.MessageError()[http.StatusNotFound])
+		return ginext.NewError(http.StatusNotFound, err.Error())
 	}
 	log.WithError(err).Error(message)
 	return ginext.NewError(http.StatusInternalServerError, err.Error())
