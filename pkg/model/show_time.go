@@ -11,7 +11,7 @@ type Showtime struct {
 	RoomID         string    `json:"room_id" gorm:"room_id;char(36);not null"`
 	MovieTheaterID string    `json:"movie_theater_id" gorm:"movie_theater_id;char(36);not null"`
 	Day            time.Time `json:"day" gorm:"day;not null;type:date"`
-	MovieID        string    `json:"movie_id" gorm:"movie_id;char(36);not null"`
+	ProductId      string    `json:"product_id" gorm:"product_id;char(36);not null"`
 }
 
 func (Showtime) TableName() string {
@@ -25,7 +25,7 @@ type ShowtimeRequest struct {
 	RoomID         *string    `json:"room_id"`
 	MovieTheaterID *string    `json:"movie_theater_id"`
 	Day            *time.Time `json:"day"`
-	MovieID        *string    `json:"movie_id"`
+	ProductId      *string    `json:"product_id"`
 }
 
 type ShowtimeParams struct {

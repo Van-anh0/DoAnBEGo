@@ -10,23 +10,23 @@ import (
 	"net/http"
 )
 
-type MovieHandlers struct {
-	service service.MovieInterface
+type CategoryHasProductHandlers struct {
+	service service.CategoryHasProductInterface
 }
 
-func NewMovieHandlers(service service.MovieInterface) *MovieHandlers {
-	return &MovieHandlers{service: service}
+func NewCategoryHasProductHandlers(service service.CategoryHasProductInterface) *CategoryHasProductHandlers {
+	return &CategoryHasProductHandlers{service: service}
 }
 
 // Create
 // @Tags Create
 // @Accept  json
 // @Produce  json
-// @Param data body model.MovieRequest true "body data"
+// @Param data body model.CategoryHasProductRequest true "body data"
 // @Success 200 {object} interface{}
-// @Router /api/v1/movie/create [post]
-func (h *MovieHandlers) Create(r *ginext.Request) (*ginext.Response, error) {
-	req := model.MovieRequest{}
+// @Router /api/v1/category-has-product/create [post]
+func (h *CategoryHasProductHandlers) Create(r *ginext.Request) (*ginext.Response, error) {
+	req := model.CategoryHasProductRequest{}
 	r.MustBind(&req)
 
 	if err := common.CheckRequireValid(req); err != nil {
@@ -45,16 +45,16 @@ func (h *MovieHandlers) Create(r *ginext.Request) (*ginext.Response, error) {
 // @Accept  json
 // @Produce  json
 // @Param id path string true "id"
-// @Param data body model.MovieRequest true "body data"
+// @Param data body model.CategoryHasProductRequest true "body data"
 // @Success 200 {object} interface{}
-// @Router /api/v1/movie/update/:id [put]
-func (h *MovieHandlers) Update(r *ginext.Request) (*ginext.Response, error) {
+// @Router /api/v1/category-has-product/update/:id [put]
+func (h *CategoryHasProductHandlers) Update(r *ginext.Request) (*ginext.Response, error) {
 	id := utils.GetIdFromUri(r.GinCtx)
 	if id == nil {
 		return nil, ginext.NewError(http.StatusForbidden, "Wrong ID")
 	}
 
-	req := model.MovieRequest{}
+	req := model.CategoryHasProductRequest{}
 	r.MustBind(&req)
 	req.ID = id
 
@@ -75,8 +75,8 @@ func (h *MovieHandlers) Update(r *ginext.Request) (*ginext.Response, error) {
 // @Produce  json
 // @Param id path string true "id"
 // @Success 200 {object} interface{}
-// @Router /api/v1/movie/delete/:id [delete]
-func (h *MovieHandlers) Delete(r *ginext.Request) (*ginext.Response, error) {
+// @Router /api/v1/category-has-product/delete/:id [delete]
+func (h *CategoryHasProductHandlers) Delete(r *ginext.Request) (*ginext.Response, error) {
 	id := utils.ParseIDFromUri(r.GinCtx)
 	if id == nil {
 		return nil, ginext.NewError(http.StatusForbidden, "Wrong ID")
@@ -94,8 +94,8 @@ func (h *MovieHandlers) Delete(r *ginext.Request) (*ginext.Response, error) {
 // @Produce  json
 // @Param id path string true "id"
 // @Success 200 {object} interface{}
-// @Router /api/v1/movie/get-one/:id [get]
-func (h *MovieHandlers) GetOne(r *ginext.Request) (*ginext.Response, error) {
+// @Router /api/v1/category-has-product/get-one/:id [get]
+func (h *CategoryHasProductHandlers) GetOne(r *ginext.Request) (*ginext.Response, error) {
 
 	id := utils.ParseIDFromUri(r.GinCtx)
 	if id == nil {
@@ -115,11 +115,11 @@ func (h *MovieHandlers) GetOne(r *ginext.Request) (*ginext.Response, error) {
 // @Produce  json
 // @Param data body model.BlacklistParam true "body data"
 // @Success 200 {object} interface{}
-// @Router /api/v1/movie/get-list [get]
-func (h *MovieHandlers) GetList(r *ginext.Request) (*ginext.Response, error) {
+// @Router /api/v1/category-has-product/get-list [get]
+func (h *CategoryHasProductHandlers) GetList(r *ginext.Request) (*ginext.Response, error) {
 	log := logger.WithCtx(r.GinCtx, utils.GetCurrentCaller(h, 0))
 
-	req := model.MovieParams{}
+	req := model.CategoryHasProductParams{}
 	if err := r.GinCtx.BindQuery(&req); err != nil {
 		log.WithError(err).Error("error_400: error parse")
 		return nil, ginext.NewError(http.StatusBadRequest, "Yêu cầu không hợp lệ")

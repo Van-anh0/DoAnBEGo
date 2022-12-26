@@ -73,6 +73,30 @@ func NewService() *Service {
 	metadataService := service2.NewMetadataService(repoPG)
 	metadata := handlers.NewMetadataHandlers(metadataService)
 
+	productService := service2.NewProductService(repoPG)
+	product := handlers.NewProductHandlers(productService)
+
+	attributeService := service2.NewAttributeService(repoPG)
+	attribute := handlers.NewAttributeHandlers(attributeService)
+
+	categoryService := service2.NewCategoryService(repoPG)
+	category := handlers.NewCategoryHandlers(categoryService)
+
+	categoryHasProductService := service2.NewCategoryHasProductService(repoPG)
+	chp := handlers.NewCategoryHasProductHandlers(categoryHasProductService)
+
+	commentService := service2.NewCommentService(repoPG)
+	comment := handlers.NewCommentHandlers(commentService)
+
+	promotionService := service2.NewPromotionService(repoPG)
+	promotion := handlers.NewPromotionHandlers(promotionService)
+
+	userRankService := service2.NewUserRankService(repoPG)
+	userRank := handlers.NewUserRankHandlers(userRankService)
+
+	productRankService := service2.NewProductRankService(repoPG)
+	productRank := handlers.NewProductRankHandlers(productRankService)
+
 	if conf.GetEnv().EnvName == "dev" {
 		s.Router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	}
@@ -146,6 +170,62 @@ func NewService() *Service {
 	v1Api.DELETE("/ticket/delete/:id", ginext.WrapHandler(ticket.Delete))
 	v1Api.GET("/ticket/get-one/:id", ginext.WrapHandler(ticket.GetOne))
 	v1Api.GET("/ticket/get-list", ginext.WrapHandler(ticket.GetList))
+
+	// Product
+	v1Api.POST("/product/create", ginext.WrapHandler(product.Create))
+	v1Api.PUT("/product/update/:id", ginext.WrapHandler(product.Update))
+	v1Api.DELETE("/product/delete/:id", ginext.WrapHandler(product.Delete))
+	v1Api.GET("/product/get-one/:id", ginext.WrapHandler(product.GetOne))
+	v1Api.GET("/product/get-list", ginext.WrapHandler(product.GetList))
+
+	// category
+	v1Api.POST("/category/create", ginext.WrapHandler(category.Create))
+	v1Api.PUT("/category/update/:id", ginext.WrapHandler(category.Update))
+	v1Api.DELETE("/category/delete/:id", ginext.WrapHandler(category.Delete))
+	v1Api.GET("/category/get-one/:id", ginext.WrapHandler(category.GetOne))
+	v1Api.GET("/category/get-list", ginext.WrapHandler(category.GetList))
+
+	// chp
+	v1Api.POST("/category-has-product/create", ginext.WrapHandler(chp.Create))
+	v1Api.PUT("/category-has-product/update/:id", ginext.WrapHandler(chp.Update))
+	v1Api.DELETE("/category-has-product/delete/:id", ginext.WrapHandler(chp.Delete))
+	v1Api.GET("/category-has-product/get-one/:id", ginext.WrapHandler(chp.GetOne))
+	v1Api.GET("/category-has-product/get-list", ginext.WrapHandler(chp.GetList))
+
+	// comment
+	v1Api.POST("/comment/create", ginext.WrapHandler(comment.Create))
+	v1Api.PUT("/comment/update/:id", ginext.WrapHandler(comment.Update))
+	v1Api.DELETE("/comment/delete/:id", ginext.WrapHandler(comment.Delete))
+	v1Api.GET("/comment/get-one/:id", ginext.WrapHandler(comment.GetOne))
+	v1Api.GET("/comment/get-list", ginext.WrapHandler(comment.GetList))
+
+	// promotion
+	v1Api.POST("/promotion/create", ginext.WrapHandler(promotion.Create))
+	v1Api.PUT("/promotion/update/:id", ginext.WrapHandler(promotion.Update))
+	v1Api.DELETE("/promotion/delete/:id", ginext.WrapHandler(promotion.Delete))
+	v1Api.GET("/promotion/get-one/:id", ginext.WrapHandler(promotion.GetOne))
+	v1Api.GET("/promotion/get-list", ginext.WrapHandler(promotion.GetList))
+
+	// promotion
+	v1Api.POST("/attribute/create", ginext.WrapHandler(attribute.Create))
+	v1Api.PUT("/attribute/update/:id", ginext.WrapHandler(attribute.Update))
+	v1Api.DELETE("/attribute/delete/:id", ginext.WrapHandler(attribute.Delete))
+	v1Api.GET("/attribute/get-one/:id", ginext.WrapHandler(attribute.GetOne))
+	v1Api.GET("/attribute/get-list", ginext.WrapHandler(attribute.GetList))
+
+	// user_rank
+	v1Api.POST("/user-rank/create", ginext.WrapHandler(userRank.Create))
+	v1Api.PUT("/user-rank/update/:id", ginext.WrapHandler(userRank.Update))
+	v1Api.DELETE("/user-rank/delete/:id", ginext.WrapHandler(userRank.Delete))
+	v1Api.GET("/user-rank/get-one/:id", ginext.WrapHandler(userRank.GetOne))
+	v1Api.GET("/user-rank/get-list", ginext.WrapHandler(userRank.GetList))
+
+	// product_rank
+	v1Api.POST("/product-rank/create", ginext.WrapHandler(productRank.Create))
+	v1Api.PUT("/product-rank/update/:id", ginext.WrapHandler(productRank.Update))
+	v1Api.DELETE("/product-rank/delete/:id", ginext.WrapHandler(productRank.Delete))
+	v1Api.GET("/product-rank/get-one/:id", ginext.WrapHandler(productRank.GetOne))
+	v1Api.GET("/product-rank/get-list", ginext.WrapHandler(productRank.GetList))
 
 	// Migrate
 	migrateHandler := handlers.NewMigrationHandler(db)

@@ -4,6 +4,7 @@ import (
 	"context"
 	"doan/pkg/model"
 	"doan/pkg/repo"
+	"doan/pkg/valid"
 	"github.com/praslar/lib/common"
 )
 
@@ -35,8 +36,11 @@ func (s *MetadataService) Create(ctx context.Context, req model.MetadataRequest)
 }
 
 func (s *MetadataService) Update(ctx context.Context, req model.MetadataRequest) (rs *model.Metadata, err error) {
+	ob, err := s.repo.GetOneMetadata(ctx, valid.String(req.ID))
+	if err != nil {
+		return nil, err
+	}
 
-	ob := &model.Metadata{}
 	common.Sync(req, ob)
 
 	if err := s.repo.UpdateMetadata(ctx, ob); err != nil {

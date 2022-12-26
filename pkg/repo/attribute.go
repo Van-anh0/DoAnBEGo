@@ -7,29 +7,29 @@ import (
 	"strings"
 )
 
-func (r *RepoPG) CreateTicket(ctx context.Context, ob *model.OrderItem) error {
+func (r *RepoPG) CreateAttribute(ctx context.Context, ob *model.Attribute) error {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 	return tx.Create(ob).Error
 }
 
-func (r *RepoPG) UpdateTicket(ctx context.Context, ob *model.OrderItem) error {
+func (r *RepoPG) UpdateAttribute(ctx context.Context, ob *model.Attribute) error {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 	return tx.Where("id = ?", ob.ID).Updates(&ob).Error
 }
 
-func (r *RepoPG) DeleteTicket(ctx context.Context, id string) error {
+func (r *RepoPG) DeleteAttribute(ctx context.Context, id string) error {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
-	return tx.Where("id = ?", id).Delete(&model.OrderItem{}).Error
+	return tx.Where("id = ?", id).Delete(&model.Attribute{}).Error
 }
 
-func (r *RepoPG) GetOneTicket(ctx context.Context, id string) (*model.OrderItem, error) {
+func (r *RepoPG) GetOneAttribute(ctx context.Context, id string) (*model.Attribute, error) {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 
-	rs := model.OrderItem{}
+	rs := model.Attribute{}
 	if err := tx.Where("id = ?", id).Find(&rs).Error; err != nil {
 		return nil, r.ReturnErrorInGetFunc(ctx, err, utils.GetCurrentCaller(r, 0))
 	}
@@ -37,11 +37,11 @@ func (r *RepoPG) GetOneTicket(ctx context.Context, id string) (*model.OrderItem,
 	return &rs, nil
 }
 
-func (r *RepoPG) GetListTicket(ctx context.Context, req model.TicketParams) (*model.TicketResponse, error) {
+func (r *RepoPG) GetListAttribute(ctx context.Context, req model.AttributeParams) (*model.AttributeResponse, error) {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 
-	rs := model.TicketResponse{}
+	rs := model.AttributeResponse{}
 	var err error
 	page := r.GetPage(req.Page)
 	pageSize := r.GetPageSize(req.PageSize)
@@ -77,11 +77,4 @@ func (r *RepoPG) GetListTicket(ctx context.Context, req model.TicketParams) (*mo
 	}
 
 	return &rs, nil
-}
-
-// createMultiTicket is a function to create multiple tickets
-func (r *RepoPG) CreateMultiTicket(ctx context.Context, ob *[]model.OrderItem) error {
-	tx, cancel := r.DBWithTimeout(ctx)
-	defer cancel()
-	return tx.Create(ob).Error
 }
