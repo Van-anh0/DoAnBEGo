@@ -7,29 +7,29 @@ import (
 	"strings"
 )
 
-func (r *RepoPG) CreateUserRank(ctx context.Context, ob *model.UserRank) error {
+func (r *RepoPG) CreateRank(ctx context.Context, ob *model.Rank) error {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 	return tx.Create(ob).Error
 }
 
-func (r *RepoPG) UpdateUserRank(ctx context.Context, ob *model.UserRank) error {
+func (r *RepoPG) UpdateRank(ctx context.Context, ob *model.Rank) error {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 	return tx.Where("id = ?", ob.ID).Updates(&ob).Error
 }
 
-func (r *RepoPG) DeleteUserRank(ctx context.Context, id string) error {
+func (r *RepoPG) DeleteRank(ctx context.Context, id string) error {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
-	return tx.Where("id = ?", id).Delete(&model.UserRank{}).Error
+	return tx.Where("id = ?", id).Delete(&model.Rank{}).Error
 }
 
-func (r *RepoPG) GetOneUserRank(ctx context.Context, id string) (*model.UserRank, error) {
+func (r *RepoPG) GetOneRank(ctx context.Context, id string) (*model.Rank, error) {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 
-	rs := model.UserRank{}
+	rs := model.Rank{}
 	if err := tx.Where("id = ?", id).Find(&rs).Error; err != nil {
 		return nil, r.ReturnErrorInGetFunc(ctx, err, utils.GetCurrentCaller(r, 0))
 	}
@@ -37,11 +37,11 @@ func (r *RepoPG) GetOneUserRank(ctx context.Context, id string) (*model.UserRank
 	return &rs, nil
 }
 
-func (r *RepoPG) GetListUserRank(ctx context.Context, req model.UserRankParams) (*model.UserRankResponse, error) {
+func (r *RepoPG) GetListRank(ctx context.Context, req model.RankParams) (*model.RankResponse, error) {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 
-	rs := model.UserRankResponse{}
+	rs := model.RankResponse{}
 	var err error
 	page := r.GetPage(req.Page)
 	pageSize := r.GetPageSize(req.PageSize)

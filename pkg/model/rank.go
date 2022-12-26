@@ -1,8 +1,7 @@
 package model
 
-type UserRank struct {
+type Rank struct {
 	BaseModel
-	UserId      string  `json:"user_id" gorm:"type:char(36);not null"`
 	Name        string  `json:"name" gorm:"type:varchar(255);not null"`
 	Description string  `json:"description" gorm:"type:varchar(255);not null"`
 	MinPoint    int     `json:"min_point" gorm:"type:int;not null"`
@@ -11,13 +10,12 @@ type UserRank struct {
 	Position    float64 `json:"position" gorm:"type:float;not null"`
 }
 
-func (UserRank) TableName() string {
-	return "user_rank"
+func (Rank) TableName() string {
+	return "rank"
 }
 
-type UserRankRequest struct {
+type RankRequest struct {
 	ID          *string  `json:"id"`
-	UserId      *string  `json:"user_id"`
 	Name        *string  `json:"name"`
 	Description *string  `json:"description"`
 	MinPoint    *int     `json:"min_point"`
@@ -26,11 +24,11 @@ type UserRankRequest struct {
 	Position    *float64 `json:"position"`
 }
 
-type UserRankParams struct {
+type RankParams struct {
 	BaseParam
 }
 
-type UserRankResponse struct {
-	Data []UserRank             `json:"data"`
+type RankResponse struct {
+	Data []Rank                 `json:"data"`
 	Meta map[string]interface{} `json:"meta"`
 }

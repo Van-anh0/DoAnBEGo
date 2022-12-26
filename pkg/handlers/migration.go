@@ -131,9 +131,86 @@ func (h *MigrationHandler) Migrate(ctx *gin.Context) {
 			Migrate: func(tx *gorm.DB) error {
 				if err := h.db.AutoMigrate(
 					&model.User{}, &model.Promotion{}, &model.Product{},
-					&model.UserRank{}, &model.ProductRank{}, &model.Comment{},
-					&model.Attribute{}, &model.Order{}, &model.OrderItem{},
+					&model.Rank{}, &model.ProductRank{}, &model.Comment{},
+					&model.Sku{}, &model.Order{}, &model.OrderItem{},
 					&model.Showtime{}, &model.Category{}, &model.CategoryHasProduct{},
+				); err != nil {
+					return err
+				}
+				return nil
+			},
+		},
+		{
+			ID: "20221226113845",
+			Migrate: func(tx *gorm.DB) error {
+				if err := h.db.AutoMigrate(
+					&model.Rank{},
+				); err != nil {
+					return err
+				}
+				return nil
+			},
+		},
+		{
+			ID: "20221226135727",
+			Migrate: func(tx *gorm.DB) error {
+				if err := h.db.AutoMigrate(
+					&model.Product{}, &model.Sku{},
+				); err != nil {
+					return err
+				}
+				return nil
+			},
+		},
+		{
+			ID: "20221226141719",
+			Migrate: func(tx *gorm.DB) error {
+				if err := h.db.AutoMigrate(
+					&model.Product{},
+				); err != nil {
+					return err
+				}
+				return nil
+			},
+		},
+		{
+			ID: "20221226152333",
+			Migrate: func(tx *gorm.DB) error {
+				if err := h.db.AutoMigrate(
+					&model.Showtime{},
+				); err != nil {
+					return err
+				}
+				return nil
+			},
+		},
+		{
+			ID: "20221226152840",
+			Migrate: func(tx *gorm.DB) error {
+				if err := h.db.AutoMigrate(
+					&model.Showtime{},
+				); err != nil {
+					return err
+				}
+				return nil
+			},
+		},
+		{
+			ID: "20221226162531",
+			Migrate: func(tx *gorm.DB) error {
+				if err := h.db.AutoMigrate(
+					&model.Product{},
+				); err != nil {
+					return err
+				}
+				return nil
+			},
+		},
+		{
+			ID: "20221226235057",
+			Migrate: func(tx *gorm.DB) error {
+				if err := h.db.AutoMigrate(
+					&model.Sku{},
 				); err != nil {
 					return err
 				}

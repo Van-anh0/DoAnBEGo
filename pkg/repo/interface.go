@@ -81,7 +81,7 @@ type PGInterface interface {
 	UpdateProduct(ctx context.Context, user *model.Product) error
 	DeleteProduct(ctx context.Context, id string) error
 	GetOneProduct(ctx context.Context, id string) (*model.Product, error)
-	GetListProduct(ctx context.Context, req model.ProductParams) (*model.ProductResponse, error)
+	GetListProduct(ctx context.Context, req model.ProductParams) (*model.ListProductResponse, error)
 
 	// category
 	CreateCategory(ctx context.Context, user *model.Category) error
@@ -90,12 +90,12 @@ type PGInterface interface {
 	GetOneCategory(ctx context.Context, id string) (*model.Category, error)
 	GetListCategory(ctx context.Context, req model.CategoryParams) (*model.CategoryResponse, error)
 
-	// attribute
-	CreateAttribute(ctx context.Context, user *model.Attribute) error
-	UpdateAttribute(ctx context.Context, user *model.Attribute) error
-	DeleteAttribute(ctx context.Context, id string) error
-	GetOneAttribute(ctx context.Context, id string) (*model.Attribute, error)
-	GetListAttribute(ctx context.Context, req model.AttributeParams) (*model.AttributeResponse, error)
+	// Sku
+	CreateSku(ctx context.Context, user *model.Sku) error
+	UpdateSku(ctx context.Context, user *model.Sku) error
+	DeleteSku(ctx context.Context, id string) error
+	GetOneSku(ctx context.Context, id string) (*model.Sku, error)
+	GetListSku(ctx context.Context, req model.SkuParams) (*model.SkuResponse, error)
 
 	// comment
 	CreateComment(ctx context.Context, user *model.Comment) error
@@ -119,11 +119,11 @@ type PGInterface interface {
 	GetListPromotion(ctx context.Context, req model.PromotionParams) (*model.PromotionResponse, error)
 
 	// user_rank
-	CreateUserRank(ctx context.Context, user *model.UserRank) error
-	UpdateUserRank(ctx context.Context, user *model.UserRank) error
-	DeleteUserRank(ctx context.Context, id string) error
-	GetOneUserRank(ctx context.Context, id string) (*model.UserRank, error)
-	GetListUserRank(ctx context.Context, req model.UserRankParams) (*model.UserRankResponse, error)
+	CreateRank(ctx context.Context, user *model.Rank) error
+	UpdateRank(ctx context.Context, user *model.Rank) error
+	DeleteRank(ctx context.Context, id string) error
+	GetOneRank(ctx context.Context, id string) (*model.Rank, error)
+	GetListRank(ctx context.Context, req model.RankParams) (*model.RankResponse, error)
 
 	// category_has_product
 	CreateCategoryHasProduct(ctx context.Context, user *model.CategoryHasProduct) error

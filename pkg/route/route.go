@@ -76,8 +76,8 @@ func NewService() *Service {
 	productService := service2.NewProductService(repoPG)
 	product := handlers.NewProductHandlers(productService)
 
-	attributeService := service2.NewAttributeService(repoPG)
-	attribute := handlers.NewAttributeHandlers(attributeService)
+	skuService := service2.NewSkuService(repoPG)
+	sku := handlers.NewSkuHandlers(skuService)
 
 	categoryService := service2.NewCategoryService(repoPG)
 	category := handlers.NewCategoryHandlers(categoryService)
@@ -91,8 +91,8 @@ func NewService() *Service {
 	promotionService := service2.NewPromotionService(repoPG)
 	promotion := handlers.NewPromotionHandlers(promotionService)
 
-	userRankService := service2.NewUserRankService(repoPG)
-	userRank := handlers.NewUserRankHandlers(userRankService)
+	rankService := service2.NewRankService(repoPG)
+	rank := handlers.NewRankHandlers(rankService)
 
 	productRankService := service2.NewProductRankService(repoPG)
 	productRank := handlers.NewProductRankHandlers(productRankService)
@@ -207,18 +207,18 @@ func NewService() *Service {
 	v1Api.GET("/promotion/get-list", ginext.WrapHandler(promotion.GetList))
 
 	// promotion
-	v1Api.POST("/attribute/create", ginext.WrapHandler(attribute.Create))
-	v1Api.PUT("/attribute/update/:id", ginext.WrapHandler(attribute.Update))
-	v1Api.DELETE("/attribute/delete/:id", ginext.WrapHandler(attribute.Delete))
-	v1Api.GET("/attribute/get-one/:id", ginext.WrapHandler(attribute.GetOne))
-	v1Api.GET("/attribute/get-list", ginext.WrapHandler(attribute.GetList))
+	v1Api.POST("/sku/create", ginext.WrapHandler(sku.Create))
+	v1Api.PUT("/sku/update/:id", ginext.WrapHandler(sku.Update))
+	v1Api.DELETE("/sku/delete/:id", ginext.WrapHandler(sku.Delete))
+	v1Api.GET("/sku/get-one/:id", ginext.WrapHandler(sku.GetOne))
+	v1Api.GET("/sku/get-list", ginext.WrapHandler(sku.GetList))
 
 	// user_rank
-	v1Api.POST("/user-rank/create", ginext.WrapHandler(userRank.Create))
-	v1Api.PUT("/user-rank/update/:id", ginext.WrapHandler(userRank.Update))
-	v1Api.DELETE("/user-rank/delete/:id", ginext.WrapHandler(userRank.Delete))
-	v1Api.GET("/user-rank/get-one/:id", ginext.WrapHandler(userRank.GetOne))
-	v1Api.GET("/user-rank/get-list", ginext.WrapHandler(userRank.GetList))
+	v1Api.POST("/rank/create", ginext.WrapHandler(rank.Create))
+	v1Api.PUT("/rank/update/:id", ginext.WrapHandler(rank.Update))
+	v1Api.DELETE("/rank/delete/:id", ginext.WrapHandler(rank.Delete))
+	v1Api.GET("/rank/get-one/:id", ginext.WrapHandler(rank.GetOne))
+	v1Api.GET("/rank/get-list", ginext.WrapHandler(rank.GetList))
 
 	// product_rank
 	v1Api.POST("/product-rank/create", ginext.WrapHandler(productRank.Create))

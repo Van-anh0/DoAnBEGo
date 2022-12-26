@@ -6,7 +6,8 @@ type Order struct {
 	Status        string      `json:"status" gorm:"type:varchar(100);not null"`
 	PaymentMethod string      `json:"payment_method" gorm:"type:varchar(100);not null"`
 	UserId        string      `json:"user_id" gorm:"not null;char(36)"`
-	OrderItem     []OrderItem `json:"order_item" gorm:"foreignKey:order_id;references:id"`
+	OrderNumber   string      `json:"order_number" gorm:"type:varchar(100);not null"`
+	OrderItem     []OrderItem `json:"order_item" gorm:"foreignKey:order_id;association_foreignkey:id"`
 }
 
 func (Order) TableName() string {
