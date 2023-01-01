@@ -13,10 +13,10 @@ type RankService struct {
 }
 
 type RankInterface interface {
-	Create(ctx context.Context, ob model.RankRequest) (rs *model.Rank, err error)
-	Update(ctx context.Context, ob model.RankRequest) (rs *model.Rank, err error)
+	Create(ctx context.Context, ob model.UserRankRequest) (rs *model.UserRank, err error)
+	Update(ctx context.Context, ob model.UserRankRequest) (rs *model.UserRank, err error)
 	Delete(ctx context.Context, id string) (err error)
-	GetOne(ctx context.Context, id string) (rs *model.Rank, err error)
+	GetOne(ctx context.Context, id string) (rs *model.UserRank, err error)
 	GetList(ctx context.Context, req model.RankParams) (rs *model.RankResponse, err error)
 }
 
@@ -24,9 +24,9 @@ func NewRankService(repo repo.PGInterface) RankInterface {
 	return &RankService{repo: repo}
 }
 
-func (s *RankService) Create(ctx context.Context, req model.RankRequest) (rs *model.Rank, err error) {
+func (s *RankService) Create(ctx context.Context, req model.UserRankRequest) (rs *model.UserRank, err error) {
 
-	ob := &model.Rank{}
+	ob := &model.UserRank{}
 	common.Sync(req, ob)
 
 	if err := s.repo.CreateRank(ctx, ob); err != nil {
@@ -35,7 +35,7 @@ func (s *RankService) Create(ctx context.Context, req model.RankRequest) (rs *mo
 	return ob, nil
 }
 
-func (s *RankService) Update(ctx context.Context, req model.RankRequest) (rs *model.Rank, err error) {
+func (s *RankService) Update(ctx context.Context, req model.UserRankRequest) (rs *model.UserRank, err error) {
 	ob, err := s.repo.GetOneRank(ctx, valid.String(req.ID))
 	if err != nil {
 		return nil, err
@@ -53,7 +53,7 @@ func (s *RankService) Delete(ctx context.Context, id string) (err error) {
 	return s.repo.DeleteRank(ctx, id)
 }
 
-func (s *RankService) GetOne(ctx context.Context, id string) (rs *model.Rank, err error) {
+func (s *RankService) GetOne(ctx context.Context, id string) (rs *model.UserRank, err error) {
 
 	ob, err := s.repo.GetOneRank(ctx, id)
 	if err != nil {

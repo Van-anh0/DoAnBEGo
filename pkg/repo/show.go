@@ -7,29 +7,29 @@ import (
 	"strings"
 )
 
-func (r *RepoPG) CreateMovieTheater(ctx context.Context, ob *model.MovieTheater) error {
+func (r *RepoPG) CreateShowtime(ctx context.Context, ob *model.Show) error {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 	return tx.Create(ob).Error
 }
 
-func (r *RepoPG) UpdateMovieTheater(ctx context.Context, ob *model.MovieTheater) error {
+func (r *RepoPG) UpdateShowtime(ctx context.Context, ob *model.Show) error {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 	return tx.Where("id = ?", ob.ID).Updates(&ob).Error
 }
 
-func (r *RepoPG) DeleteMovieTheater(ctx context.Context, id string) error {
+func (r *RepoPG) DeleteShowtime(ctx context.Context, id string) error {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
-	return tx.Where("id = ?", id).Delete(&model.MovieTheater{}).Error
+	return tx.Where("id = ?", id).Delete(&model.Show{}).Error
 }
 
-func (r *RepoPG) GetOneMovieTheater(ctx context.Context, id string) (*model.MovieTheater, error) {
+func (r *RepoPG) GetOneShowtime(ctx context.Context, id string) (*model.Show, error) {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 
-	rs := model.MovieTheater{}
+	rs := model.Show{}
 	if err := tx.Where("id = ?", id).Find(&rs).Error; err != nil {
 		return nil, r.ReturnErrorInGetFunc(ctx, err, utils.GetCurrentCaller(r, 0))
 	}
@@ -37,30 +37,17 @@ func (r *RepoPG) GetOneMovieTheater(ctx context.Context, id string) (*model.Movi
 	return &rs, nil
 }
 
-func (r *RepoPG) GetListMovieTheater(ctx context.Context, req model.MovieTheaterParams) (*model.MovieTheaterResponse, error) {
+func (r *RepoPG) GetListShowtime(ctx context.Context, req model.ShowParams) (*model.ShowtimeResponse, error) {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 
-	rs := model.MovieTheaterResponse{}
+	rs := model.ShowtimeResponse{}
 	var err error
 	page := r.GetPage(req.Page)
 	pageSize := r.GetPageSize(req.PageSize)
 	total := new(struct {
 		Count int `json:"count"`
 	})
-
-	tx = tx.Model(&model.MovieTheater{}).Select("movie_theater.*")
-
-	if req.MovieId != "" || req.Day != "" {
-		tx = tx.Joins("JOIN showtime ON showtime.movie_theater_id = movie_theater.id")
-		if req.MovieId != "" {
-			tx = tx.Where("showtime.movie_id = ?", req.MovieId)
-		}
-
-		if req.Day != "" {
-			tx.Where("showtime.day = ?", req.Day)
-		}
-	}
 
 	if req.Search != "" {
 		tx = tx.Where("unaccent(name) ilike %?%", req.Search)
@@ -78,14 +65,13 @@ func (r *RepoPG) GetListMovieTheater(ctx context.Context, req model.MovieTheater
 	switch req.Sort {
 	case utils.SORT_CREATED_AT_OLDEST:
 		tx = tx.Order("created_at")
+	case "-start_time":
+		tx = tx.Order("start_time desc")
+	case "start_time":
+		tx = tx.Order("start_time")
 	default:
 		tx = tx.Order("created_at desc")
 	}
-
-	if req.MovieId != "" || req.Day != "" {
-		tx = tx.Group("movie_theater.id")
-	}
-
 	if err := tx.Find(&rs.Data).Error; err != nil {
 		return nil, r.ReturnErrorInGetFunc(ctx, err, utils.GetCurrentCaller(r, 0))
 	}

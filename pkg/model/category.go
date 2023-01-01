@@ -11,8 +11,9 @@ func (Category) TableName() string {
 }
 
 type CategoryRequest struct {
-	ID   *string `json:"id"`
-	Name *string `json:"name"`
+	ID       *string  `json:"id"`
+	Name     *string  `json:"name"`
+	Position *float64 `json:"position"`
 }
 
 type CategoryParams struct {

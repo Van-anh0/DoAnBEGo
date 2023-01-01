@@ -10,23 +10,23 @@ import (
 	"net/http"
 )
 
-type RankHandlers struct {
+type UserRankHandlers struct {
 	service service.RankInterface
 }
 
-func NewRankHandlers(service service.RankInterface) *RankHandlers {
-	return &RankHandlers{service: service}
+func NewRankHandlers(service service.RankInterface) *UserRankHandlers {
+	return &UserRankHandlers{service: service}
 }
 
 // Create
 // @Tags Create
 // @Accept  json
 // @Produce  json
-// @Param data body model.RankRequest true "body data"
+// @Param data body model.UserRankRequest true "body data"
 // @Success 200 {object} interface{}
 // @Router /api/v1/user-rank/create [post]
-func (h *RankHandlers) Create(r *ginext.Request) (*ginext.Response, error) {
-	req := model.RankRequest{}
+func (h *UserRankHandlers) Create(r *ginext.Request) (*ginext.Response, error) {
+	req := model.UserRankRequest{}
 	r.MustBind(&req)
 
 	if err := common.CheckRequireValid(req); err != nil {
@@ -45,16 +45,16 @@ func (h *RankHandlers) Create(r *ginext.Request) (*ginext.Response, error) {
 // @Accept  json
 // @Produce  json
 // @Param id path string true "id"
-// @Param data body model.RankRequest true "body data"
+// @Param data body model.UserRankRequest true "body data"
 // @Success 200 {object} interface{}
 // @Router /api/v1/user-rank/update/:id [put]
-func (h *RankHandlers) Update(r *ginext.Request) (*ginext.Response, error) {
+func (h *UserRankHandlers) Update(r *ginext.Request) (*ginext.Response, error) {
 	id := utils.GetIdFromUri(r.GinCtx)
 	if id == nil {
 		return nil, ginext.NewError(http.StatusForbidden, "Wrong ID")
 	}
 
-	req := model.RankRequest{}
+	req := model.UserRankRequest{}
 	r.MustBind(&req)
 	req.ID = id
 
@@ -76,7 +76,7 @@ func (h *RankHandlers) Update(r *ginext.Request) (*ginext.Response, error) {
 // @Param id path string true "id"
 // @Success 200 {object} interface{}
 // @Router /api/v1/user-rank/delete/:id [delete]
-func (h *RankHandlers) Delete(r *ginext.Request) (*ginext.Response, error) {
+func (h *UserRankHandlers) Delete(r *ginext.Request) (*ginext.Response, error) {
 	id := utils.ParseIDFromUri(r.GinCtx)
 	if id == nil {
 		return nil, ginext.NewError(http.StatusForbidden, "Wrong ID")
@@ -95,7 +95,7 @@ func (h *RankHandlers) Delete(r *ginext.Request) (*ginext.Response, error) {
 // @Param id path string true "id"
 // @Success 200 {object} interface{}
 // @Router /api/v1/user-rank/get-one/:id [get]
-func (h *RankHandlers) GetOne(r *ginext.Request) (*ginext.Response, error) {
+func (h *UserRankHandlers) GetOne(r *ginext.Request) (*ginext.Response, error) {
 
 	id := utils.ParseIDFromUri(r.GinCtx)
 	if id == nil {
@@ -116,7 +116,7 @@ func (h *RankHandlers) GetOne(r *ginext.Request) (*ginext.Response, error) {
 // @Param data body model.BlacklistParam true "body data"
 // @Success 200 {object} interface{}
 // @Router /api/v1/user-rank/get-list [get]
-func (h *RankHandlers) GetList(r *ginext.Request) (*ginext.Response, error) {
+func (h *UserRankHandlers) GetList(r *ginext.Request) (*ginext.Response, error) {
 	log := logger.WithCtx(r.GinCtx, utils.GetCurrentCaller(h, 0))
 
 	req := model.RankParams{}

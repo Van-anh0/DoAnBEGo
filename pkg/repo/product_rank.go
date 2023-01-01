@@ -7,29 +7,29 @@ import (
 	"strings"
 )
 
-func (r *RepoPG) CreateProductRank(ctx context.Context, ob *model.ProductRank) error {
+func (r *RepoPG) CreateMovieRank(ctx context.Context, ob *model.MovieRank) error {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 	return tx.Create(ob).Error
 }
 
-func (r *RepoPG) UpdateProductRank(ctx context.Context, ob *model.ProductRank) error {
+func (r *RepoPG) UpdateMovieRank(ctx context.Context, ob *model.MovieRank) error {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 	return tx.Where("id = ?", ob.ID).Updates(&ob).Error
 }
 
-func (r *RepoPG) DeleteProductRank(ctx context.Context, id string) error {
+func (r *RepoPG) DeleteMovieRank(ctx context.Context, id string) error {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
-	return tx.Where("id = ?", id).Delete(&model.ProductRank{}).Error
+	return tx.Where("id = ?", id).Delete(&model.MovieRank{}).Error
 }
 
-func (r *RepoPG) GetOneProductRank(ctx context.Context, id string) (*model.ProductRank, error) {
+func (r *RepoPG) GetOneMovieRank(ctx context.Context, id string) (*model.MovieRank, error) {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 
-	rs := model.ProductRank{}
+	rs := model.MovieRank{}
 	if err := tx.Where("id = ?", id).Find(&rs).Error; err != nil {
 		return nil, r.ReturnErrorInGetFunc(ctx, err, utils.GetCurrentCaller(r, 0))
 	}
@@ -37,11 +37,11 @@ func (r *RepoPG) GetOneProductRank(ctx context.Context, id string) (*model.Produ
 	return &rs, nil
 }
 
-func (r *RepoPG) GetListProductRank(ctx context.Context, req model.ProductRankParams) (*model.ProductRankResponse, error) {
+func (r *RepoPG) GetListMovieRank(ctx context.Context, req model.MovieRankParams) (*model.MovieRankResponse, error) {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 
-	rs := model.ProductRankResponse{}
+	rs := model.MovieRankResponse{}
 	var err error
 	page := r.GetPage(req.Page)
 	pageSize := r.GetPageSize(req.PageSize)

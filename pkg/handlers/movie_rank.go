@@ -10,23 +10,23 @@ import (
 	"net/http"
 )
 
-type CommentHandlers struct {
-	service service.CommentInterface
+type MovieRankHandlers struct {
+	service service.MovieRankInterface
 }
 
-func NewCommentHandlers(service service.CommentInterface) *CommentHandlers {
-	return &CommentHandlers{service: service}
+func NewMovieRankHandlers(service service.MovieRankInterface) *MovieRankHandlers {
+	return &MovieRankHandlers{service: service}
 }
 
 // Create
 // @Tags Create
 // @Accept  json
 // @Produce  json
-// @Param data body model.CommentRequest true "body data"
+// @Param data body model.MovieRankRequest true "body data"
 // @Success 200 {object} interface{}
-// @Router /api/v1/comment/create [post]
-func (h *CommentHandlers) Create(r *ginext.Request) (*ginext.Response, error) {
-	req := model.CommentRequest{}
+// @Router /api/v1/product-rank/create [post]
+func (h *MovieRankHandlers) Create(r *ginext.Request) (*ginext.Response, error) {
+	req := model.MovieRankRequest{}
 	r.MustBind(&req)
 
 	if err := common.CheckRequireValid(req); err != nil {
@@ -45,16 +45,16 @@ func (h *CommentHandlers) Create(r *ginext.Request) (*ginext.Response, error) {
 // @Accept  json
 // @Produce  json
 // @Param id path string true "id"
-// @Param data body model.CommentRequest true "body data"
+// @Param data body model.MovieRankRequest true "body data"
 // @Success 200 {object} interface{}
-// @Router /api/v1/comment/update/:id [put]
-func (h *CommentHandlers) Update(r *ginext.Request) (*ginext.Response, error) {
+// @Router /api/v1/product-rank/update/:id [put]
+func (h *MovieRankHandlers) Update(r *ginext.Request) (*ginext.Response, error) {
 	id := utils.GetIdFromUri(r.GinCtx)
 	if id == nil {
 		return nil, ginext.NewError(http.StatusForbidden, "Wrong ID")
 	}
 
-	req := model.CommentRequest{}
+	req := model.MovieRankRequest{}
 	r.MustBind(&req)
 	req.ID = id
 
@@ -75,8 +75,8 @@ func (h *CommentHandlers) Update(r *ginext.Request) (*ginext.Response, error) {
 // @Produce  json
 // @Param id path string true "id"
 // @Success 200 {object} interface{}
-// @Router /api/v1/comment/delete/:id [delete]
-func (h *CommentHandlers) Delete(r *ginext.Request) (*ginext.Response, error) {
+// @Router /api/v1/product-rank/delete/:id [delete]
+func (h *MovieRankHandlers) Delete(r *ginext.Request) (*ginext.Response, error) {
 	id := utils.ParseIDFromUri(r.GinCtx)
 	if id == nil {
 		return nil, ginext.NewError(http.StatusForbidden, "Wrong ID")
@@ -94,8 +94,8 @@ func (h *CommentHandlers) Delete(r *ginext.Request) (*ginext.Response, error) {
 // @Produce  json
 // @Param id path string true "id"
 // @Success 200 {object} interface{}
-// @Router /api/v1/comment/get-one/:id [get]
-func (h *CommentHandlers) GetOne(r *ginext.Request) (*ginext.Response, error) {
+// @Router /api/v1/product-rank/get-one/:id [get]
+func (h *MovieRankHandlers) GetOne(r *ginext.Request) (*ginext.Response, error) {
 
 	id := utils.ParseIDFromUri(r.GinCtx)
 	if id == nil {
@@ -115,11 +115,11 @@ func (h *CommentHandlers) GetOne(r *ginext.Request) (*ginext.Response, error) {
 // @Produce  json
 // @Param data body model.BlacklistParam true "body data"
 // @Success 200 {object} interface{}
-// @Router /api/v1/comment/get-list [get]
-func (h *CommentHandlers) GetList(r *ginext.Request) (*ginext.Response, error) {
+// @Router /api/v1/product-rank/get-list [get]
+func (h *MovieRankHandlers) GetList(r *ginext.Request) (*ginext.Response, error) {
 	log := logger.WithCtx(r.GinCtx, utils.GetCurrentCaller(h, 0))
 
-	req := model.CommentParams{}
+	req := model.MovieRankParams{}
 	if err := r.GinCtx.BindQuery(&req); err != nil {
 		log.WithError(err).Error("error_400: error parse")
 		return nil, ginext.NewError(http.StatusBadRequest, "Yêu cầu không hợp lệ")

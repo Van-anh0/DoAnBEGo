@@ -7,29 +7,29 @@ import (
 	"strings"
 )
 
-func (r *RepoPG) CreateSku(ctx context.Context, ob *model.Sku) error {
+func (r *RepoPG) CreateShowSeat(ctx context.Context, ob *model.ShowSeat) error {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 	return tx.Create(ob).Error
 }
 
-func (r *RepoPG) UpdateSku(ctx context.Context, ob *model.Sku) error {
+func (r *RepoPG) UpdateShowSeat(ctx context.Context, ob *model.ShowSeat) error {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 	return tx.Where("id = ?", ob.ID).Updates(&ob).Error
 }
 
-func (r *RepoPG) DeleteSku(ctx context.Context, id string) error {
+func (r *RepoPG) DeleteShowSeat(ctx context.Context, id string) error {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
-	return tx.Where("id = ?", id).Delete(&model.Sku{}).Error
+	return tx.Where("id = ?", id).Delete(&model.ShowSeat{}).Error
 }
 
-func (r *RepoPG) GetOneSku(ctx context.Context, id string) (*model.Sku, error) {
+func (r *RepoPG) GetOneShowSeat(ctx context.Context, id string) (*model.ShowSeat, error) {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 
-	rs := model.Sku{}
+	rs := model.ShowSeat{}
 	if err := tx.Where("id = ?", id).Find(&rs).Error; err != nil {
 		return nil, r.ReturnErrorInGetFunc(ctx, err, utils.GetCurrentCaller(r, 0))
 	}
@@ -37,11 +37,11 @@ func (r *RepoPG) GetOneSku(ctx context.Context, id string) (*model.Sku, error) {
 	return &rs, nil
 }
 
-func (r *RepoPG) GetListSku(ctx context.Context, req model.SkuParams) (*model.SkuResponse, error) {
+func (r *RepoPG) GetListShowSeat(ctx context.Context, req model.ShowSeatParams) (*model.ShowSeatResponse, error) {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 
-	rs := model.SkuResponse{}
+	rs := model.ShowSeatResponse{}
 	var err error
 	page := r.GetPage(req.Page)
 	pageSize := r.GetPageSize(req.PageSize)
@@ -49,17 +49,7 @@ func (r *RepoPG) GetListSku(ctx context.Context, req model.SkuParams) (*model.Sk
 		Count int `json:"count"`
 	})
 
-	// filter by day or movie_theater_id
-	if req.Day != "" || req.MovieTheaterId != "" {
-		// join table showtime
-		tx = tx.Select("sku.*").Joins("left join showtime on showtime.sku_id = sku.id")
-		if req.Day != "" {
-			tx = tx.Where("showtime.day = ?", req.Day)
-		}
-		if req.MovieTheaterId != "" {
-			tx = tx.Where("showtime.movie_theater_id = ?", req.MovieTheaterId)
-		}
-	}
+	tx = tx.Select("ShowSeat.*")
 
 	if req.Search != "" {
 		tx = tx.Where("unaccent(name) ilike %?%", req.Search)
@@ -81,15 +71,12 @@ func (r *RepoPG) GetListSku(ctx context.Context, req model.SkuParams) (*model.Sk
 		tx = tx.Order("created_at desc")
 	}
 
-	// if req.Day or req.MovieTheaterId then group by sku.id
-	if req.Day != "" || req.MovieTheaterId != "" {
-		tx = tx.Group("sku.id")
-	}
-
-	if err := tx.Preload("Showtime").Find(&rs.Data).Error; err != nil {
+	if err := tx.Find(&rs.Data).Error; err != nil {
 		return nil, r.ReturnErrorInGetFunc(ctx, err, utils.GetCurrentCaller(r, 0))
 	}
 
+	//2022-12-18T00:00:00+07:00
+	//postman: 2022-12-18T00:00:00 07:00
 	if rs.Meta, err = r.GetPaginationInfo("", tx, total.Count, page, pageSize); err != nil {
 		return nil, r.ReturnErrorInGetFunc(ctx, err, utils.GetCurrentCaller(r, 0))
 	}

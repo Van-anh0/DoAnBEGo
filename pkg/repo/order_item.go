@@ -7,29 +7,29 @@ import (
 	"strings"
 )
 
-func (r *RepoPG) CreateShowtime(ctx context.Context, ob *model.Showtime) error {
+func (r *RepoPG) CreateOrderItem(ctx context.Context, ob *model.OrderItem) error {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 	return tx.Create(ob).Error
 }
 
-func (r *RepoPG) UpdateShowtime(ctx context.Context, ob *model.Showtime) error {
+func (r *RepoPG) UpdateOrderItem(ctx context.Context, ob *model.OrderItem) error {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 	return tx.Where("id = ?", ob.ID).Updates(&ob).Error
 }
 
-func (r *RepoPG) DeleteShowtime(ctx context.Context, id string) error {
+func (r *RepoPG) DeleteOrderItem(ctx context.Context, id string) error {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
-	return tx.Where("id = ?", id).Delete(&model.Showtime{}).Error
+	return tx.Where("id = ?", id).Delete(&model.OrderItem{}).Error
 }
 
-func (r *RepoPG) GetOneShowtime(ctx context.Context, id string) (*model.Showtime, error) {
+func (r *RepoPG) GetOneOrderItem(ctx context.Context, id string) (*model.OrderItem, error) {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 
-	rs := model.Showtime{}
+	rs := model.OrderItem{}
 	if err := tx.Where("id = ?", id).Find(&rs).Error; err != nil {
 		return nil, r.ReturnErrorInGetFunc(ctx, err, utils.GetCurrentCaller(r, 0))
 	}
@@ -37,11 +37,11 @@ func (r *RepoPG) GetOneShowtime(ctx context.Context, id string) (*model.Showtime
 	return &rs, nil
 }
 
-func (r *RepoPG) GetListShowtime(ctx context.Context, req model.ShowtimeParams) (*model.ShowtimeResponse, error) {
+func (r *RepoPG) GetListOrderItem(ctx context.Context, req model.OrderItemParams) (*model.OrderItemResponse, error) {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 
-	rs := model.ShowtimeResponse{}
+	rs := model.OrderItemResponse{}
 	var err error
 	page := r.GetPage(req.Page)
 	pageSize := r.GetPageSize(req.PageSize)
@@ -65,10 +65,6 @@ func (r *RepoPG) GetListShowtime(ctx context.Context, req model.ShowtimeParams) 
 	switch req.Sort {
 	case utils.SORT_CREATED_AT_OLDEST:
 		tx = tx.Order("created_at")
-	case "-start_time":
-		tx = tx.Order("start_time desc")
-	case "start_time":
-		tx = tx.Order("start_time")
 	default:
 		tx = tx.Order("created_at desc")
 	}
@@ -81,4 +77,11 @@ func (r *RepoPG) GetListShowtime(ctx context.Context, req model.ShowtimeParams) 
 	}
 
 	return &rs, nil
+}
+
+// createMultiOrderItem is a function to create multiple OrderItems
+func (r *RepoPG) CreateMultiOrderItem(ctx context.Context, ob *[]model.OrderItem) error {
+	tx, cancel := r.DBWithTimeout(ctx)
+	defer cancel()
+	return tx.Create(ob).Error
 }

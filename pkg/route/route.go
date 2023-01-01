@@ -49,8 +49,8 @@ func NewService() *Service {
 	userService := service2.NewUserService(repoPG)
 	user := handlers.NewUserHandlers(userService)
 
-	movieTheaterService := service2.NewMovieTheaterService(repoPG)
-	movieTheater := handlers.NewMovieTheaterHandlers(movieTheaterService)
+	CinemaService := service2.NewCinemaService(repoPG)
+	Cinema := handlers.NewCinemaHandlers(CinemaService)
 
 	movieService := service2.NewMovieService(repoPG)
 	movie := handlers.NewMovieHandlers(movieService)
@@ -62,22 +62,19 @@ func NewService() *Service {
 	seat := handlers.NewSeatHandlers(seatService)
 
 	showtimeService := service2.NewShowtimeService(repoPG)
-	showtime := handlers.NewShowtimeHandlers(showtimeService)
+	show := handlers.NewShowtimeHandlers(showtimeService)
 
 	orderService := service2.NewOrderService(repoPG)
 	order := handlers.NewOrderHandlers(orderService)
 
-	ticketService := service2.NewTicketService(repoPG)
-	ticket := handlers.NewTicketHandlers(ticketService)
+	orderItemService := service2.NewOrderItemService(repoPG)
+	orderItem := handlers.NewOrderItemHandlers(orderItemService)
 
 	metadataService := service2.NewMetadataService(repoPG)
 	metadata := handlers.NewMetadataHandlers(metadataService)
 
 	productService := service2.NewProductService(repoPG)
 	product := handlers.NewProductHandlers(productService)
-
-	skuService := service2.NewSkuService(repoPG)
-	sku := handlers.NewSkuHandlers(skuService)
 
 	categoryService := service2.NewCategoryService(repoPG)
 	category := handlers.NewCategoryHandlers(categoryService)
@@ -94,8 +91,8 @@ func NewService() *Service {
 	rankService := service2.NewRankService(repoPG)
 	rank := handlers.NewRankHandlers(rankService)
 
-	productRankService := service2.NewProductRankService(repoPG)
-	productRank := handlers.NewProductRankHandlers(productRankService)
+	MovieRankService := service2.NewMovieRankService(repoPG)
+	MovieRank := handlers.NewMovieRankHandlers(MovieRankService)
 
 	if conf.GetEnv().EnvName == "dev" {
 		s.Router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
@@ -115,11 +112,11 @@ func NewService() *Service {
 	v1Api.GET("/user/get-list", ginext.WrapHandler(user.GetList))
 
 	// Movie Theater
-	v1Api.POST("/movie-theater/create", ginext.WrapHandler(movieTheater.Create))
-	v1Api.PUT("/movie-theater/update/:id", ginext.WrapHandler(movieTheater.Update))
-	v1Api.DELETE("/movie-theater/delete/:id", ginext.WrapHandler(movieTheater.Delete))
-	v1Api.GET("/movie-theater/get-one/:id", ginext.WrapHandler(movieTheater.GetOne))
-	v1Api.GET("/movie-theater/get-list", ginext.WrapHandler(movieTheater.GetList))
+	v1Api.POST("/cinema/create", ginext.WrapHandler(Cinema.Create))
+	v1Api.PUT("/cinema/update/:id", ginext.WrapHandler(Cinema.Update))
+	v1Api.DELETE("/cinema/delete/:id", ginext.WrapHandler(Cinema.Delete))
+	v1Api.GET("/cinema/get-one/:id", ginext.WrapHandler(Cinema.GetOne))
+	v1Api.GET("/cinema/get-list", ginext.WrapHandler(Cinema.GetList))
 
 	// Movie
 	v1Api.POST("/movie/create", ginext.WrapHandler(movie.Create))
@@ -143,12 +140,12 @@ func NewService() *Service {
 	v1Api.GET("/seat/get-list", ginext.WrapHandler(seat.GetList))
 
 	// Showtime
-	v1Api.POST("/showtime/create", ginext.WrapHandler(showtime.Create))
-	v1Api.PUT("/showtime/update/:id", ginext.WrapHandler(showtime.Update))
-	v1Api.DELETE("/showtime/delete/:id", ginext.WrapHandler(showtime.Delete))
-	v1Api.GET("/showtime/get-one/:id", ginext.WrapHandler(showtime.GetOne))
-	v1Api.GET("/showtime/get-list", ginext.WrapHandler(showtime.GetList))
-	v1Api.GET("/showtime/get-list-group", ginext.WrapHandler(showtime.GetListGroup))
+	v1Api.POST("/show/create", ginext.WrapHandler(show.Create))
+	v1Api.PUT("/show/update/:id", ginext.WrapHandler(show.Update))
+	v1Api.DELETE("/show/delete/:id", ginext.WrapHandler(show.Delete))
+	v1Api.GET("/show/get-one/:id", ginext.WrapHandler(show.GetOne))
+	v1Api.GET("/show/get-list", ginext.WrapHandler(show.GetList))
+	v1Api.GET("/show/get-list-group", ginext.WrapHandler(show.GetListGroup))
 
 	// Metadata
 	v1Api.POST("/metadata/create", ginext.WrapHandler(metadata.Create))
@@ -164,12 +161,12 @@ func NewService() *Service {
 	v1Api.GET("/order/get-one/:id", ginext.WrapHandler(order.GetOne))
 	v1Api.GET("/order/get-list", ginext.WrapHandler(order.GetList))
 
-	// Ticket
-	v1Api.POST("/ticket/create", ginext.WrapHandler(ticket.Create))
-	v1Api.PUT("/ticket/update/:id", ginext.WrapHandler(ticket.Update))
-	v1Api.DELETE("/ticket/delete/:id", ginext.WrapHandler(ticket.Delete))
-	v1Api.GET("/ticket/get-one/:id", ginext.WrapHandler(ticket.GetOne))
-	v1Api.GET("/ticket/get-list", ginext.WrapHandler(ticket.GetList))
+	// orderItem
+	v1Api.POST("/order-item/create", ginext.WrapHandler(orderItem.Create))
+	v1Api.PUT("/order-item/update/:id", ginext.WrapHandler(orderItem.Update))
+	v1Api.DELETE("/order-item/delete/:id", ginext.WrapHandler(orderItem.Delete))
+	v1Api.GET("/order-item/get-one/:id", ginext.WrapHandler(orderItem.GetOne))
+	v1Api.GET("/order-item/get-list", ginext.WrapHandler(orderItem.GetList))
 
 	// Product
 	v1Api.POST("/product/create", ginext.WrapHandler(product.Create))
@@ -206,13 +203,6 @@ func NewService() *Service {
 	v1Api.GET("/promotion/get-one/:id", ginext.WrapHandler(promotion.GetOne))
 	v1Api.GET("/promotion/get-list", ginext.WrapHandler(promotion.GetList))
 
-	// promotion
-	v1Api.POST("/sku/create", ginext.WrapHandler(sku.Create))
-	v1Api.PUT("/sku/update/:id", ginext.WrapHandler(sku.Update))
-	v1Api.DELETE("/sku/delete/:id", ginext.WrapHandler(sku.Delete))
-	v1Api.GET("/sku/get-one/:id", ginext.WrapHandler(sku.GetOne))
-	v1Api.GET("/sku/get-list", ginext.WrapHandler(sku.GetList))
-
 	// user_rank
 	v1Api.POST("/rank/create", ginext.WrapHandler(rank.Create))
 	v1Api.PUT("/rank/update/:id", ginext.WrapHandler(rank.Update))
@@ -221,11 +211,11 @@ func NewService() *Service {
 	v1Api.GET("/rank/get-list", ginext.WrapHandler(rank.GetList))
 
 	// product_rank
-	v1Api.POST("/product-rank/create", ginext.WrapHandler(productRank.Create))
-	v1Api.PUT("/product-rank/update/:id", ginext.WrapHandler(productRank.Update))
-	v1Api.DELETE("/product-rank/delete/:id", ginext.WrapHandler(productRank.Delete))
-	v1Api.GET("/product-rank/get-one/:id", ginext.WrapHandler(productRank.GetOne))
-	v1Api.GET("/product-rank/get-list", ginext.WrapHandler(productRank.GetList))
+	v1Api.POST("/product-rank/create", ginext.WrapHandler(MovieRank.Create))
+	v1Api.PUT("/product-rank/update/:id", ginext.WrapHandler(MovieRank.Update))
+	v1Api.DELETE("/product-rank/delete/:id", ginext.WrapHandler(MovieRank.Delete))
+	v1Api.GET("/product-rank/get-one/:id", ginext.WrapHandler(MovieRank.GetOne))
+	v1Api.GET("/product-rank/get-list", ginext.WrapHandler(MovieRank.GetList))
 
 	// Migrate
 	migrateHandler := handlers.NewMigrationHandler(db)

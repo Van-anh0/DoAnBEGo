@@ -10,23 +10,23 @@ import (
 	"net/http"
 )
 
-type SkuHandlers struct {
-	service service.SkuInterface
+type ShowHandlers struct {
+	service service.ShowtimeInterface
 }
 
-func NewSkuHandlers(service service.SkuInterface) *SkuHandlers {
-	return &SkuHandlers{service: service}
+func NewShowtimeHandlers(service service.ShowtimeInterface) *ShowHandlers {
+	return &ShowHandlers{service: service}
 }
 
 // Create
 // @Tags Create
 // @Accept  json
 // @Produce  json
-// @Param data body model.SkuRequest true "body data"
+// @Param data body model.ShowRequest true "body data"
 // @Success 200 {object} interface{}
-// @Router /api/v1/sku/create [post]
-func (h *SkuHandlers) Create(r *ginext.Request) (*ginext.Response, error) {
-	req := model.SkuRequest{}
+// @Router /api/v1/show-time/create [post]
+func (h *ShowHandlers) Create(r *ginext.Request) (*ginext.Response, error) {
+	req := model.ShowRequest{}
 	r.MustBind(&req)
 
 	if err := common.CheckRequireValid(req); err != nil {
@@ -45,17 +45,22 @@ func (h *SkuHandlers) Create(r *ginext.Request) (*ginext.Response, error) {
 // @Accept  json
 // @Produce  json
 // @Param id path string true "id"
-// @Param data body model.SkuRequest true "body data"
+// @Param data body model.ShowRequest true "body data"
 // @Success 200 {object} interface{}
-// @Router /api/v1/sku/update/:id [put]
-func (h *SkuHandlers) Update(r *ginext.Request) (*ginext.Response, error) {
+// @Router /api/v1/show-time/update/:id [put]
+func (h *ShowHandlers) Update(r *ginext.Request) (*ginext.Response, error) {
+	log := logger.WithCtx(r.GinCtx, utils.GetCurrentCaller(h, 0))
+
 	id := utils.GetIdFromUri(r.GinCtx)
 	if id == nil {
 		return nil, ginext.NewError(http.StatusForbidden, "Wrong ID")
 	}
 
-	req := model.SkuRequest{}
-	r.MustBind(&req)
+	req := model.ShowRequest{}
+	if err := r.GinCtx.ShouldBind(&req); err != nil {
+		log.WithError(err).Error("error_400: error parse")
+		return nil, ginext.NewError(http.StatusBadRequest, "Yêu cầu không hợp lệ")
+	}
 	req.ID = id
 
 	if err := common.CheckRequireValid(req); err != nil {
@@ -75,8 +80,8 @@ func (h *SkuHandlers) Update(r *ginext.Request) (*ginext.Response, error) {
 // @Produce  json
 // @Param id path string true "id"
 // @Success 200 {object} interface{}
-// @Router /api/v1/sku/delete/:id [delete]
-func (h *SkuHandlers) Delete(r *ginext.Request) (*ginext.Response, error) {
+// @Router /api/v1/show-time/delete/:id [delete]
+func (h *ShowHandlers) Delete(r *ginext.Request) (*ginext.Response, error) {
 	id := utils.ParseIDFromUri(r.GinCtx)
 	if id == nil {
 		return nil, ginext.NewError(http.StatusForbidden, "Wrong ID")
@@ -94,8 +99,8 @@ func (h *SkuHandlers) Delete(r *ginext.Request) (*ginext.Response, error) {
 // @Produce  json
 // @Param id path string true "id"
 // @Success 200 {object} interface{}
-// @Router /api/v1/sku/get-one/:id [get]
-func (h *SkuHandlers) GetOne(r *ginext.Request) (*ginext.Response, error) {
+// @Router /api/v1/show-time/get-one/:id [get]
+func (h *ShowHandlers) GetOne(r *ginext.Request) (*ginext.Response, error) {
 
 	id := utils.ParseIDFromUri(r.GinCtx)
 	if id == nil {
@@ -115,17 +120,43 @@ func (h *SkuHandlers) GetOne(r *ginext.Request) (*ginext.Response, error) {
 // @Produce  json
 // @Param data body model.BlacklistParam true "body data"
 // @Success 200 {object} interface{}
-// @Router /api/v1/sku/get-list [get]
-func (h *SkuHandlers) GetList(r *ginext.Request) (*ginext.Response, error) {
+// @Router /api/v1/showtime/get-list [get]
+func (h *ShowHandlers) GetList(r *ginext.Request) (*ginext.Response, error) {
 	log := logger.WithCtx(r.GinCtx, utils.GetCurrentCaller(h, 0))
 
-	req := model.SkuParams{}
+	req := model.ShowParams{}
 	if err := r.GinCtx.BindQuery(&req); err != nil {
 		log.WithError(err).Error("error_400: error parse")
 		return nil, ginext.NewError(http.StatusBadRequest, "Yêu cầu không hợp lệ")
 	}
 
 	data, err := h.service.GetList(r.Context(), req)
+	if err != nil {
+		return nil, err
+	}
+	return &ginext.Response{Code: http.StatusOK, GeneralBody: &ginext.GeneralBody{
+		Data: data.Data,
+		Meta: data.Meta,
+	}}, nil
+}
+
+// GetListGroup
+// @Tags GetListGroup
+// @Accept  json
+// @Produce  json
+// @Param data body model.BlacklistParam true "body data"
+// @Success 200 {object} interface{}
+// @Router /api/v1/showtime/get-list-group [get]
+func (h *ShowHandlers) GetListGroup(r *ginext.Request) (*ginext.Response, error) {
+	log := logger.WithCtx(r.GinCtx, utils.GetCurrentCaller(h, 0))
+
+	req := model.ShowParams{}
+	if err := r.GinCtx.BindQuery(&req); err != nil {
+		log.WithError(err).Error("error_400: error parse")
+		return nil, ginext.NewError(http.StatusBadRequest, "Yêu cầu không hợp lệ")
+	}
+
+	data, err := h.service.GetListGroupByDay(r.Context(), req)
 	if err != nil {
 		return nil, err
 	}

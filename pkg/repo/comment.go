@@ -7,13 +7,13 @@ import (
 	"strings"
 )
 
-func (r *RepoPG) CreateComment(ctx context.Context, ob *model.Comment) error {
+func (r *RepoPG) CreateComment(ctx context.Context, ob *model.MovieComment) error {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 	return tx.Create(ob).Error
 }
 
-func (r *RepoPG) UpdateComment(ctx context.Context, ob *model.Comment) error {
+func (r *RepoPG) UpdateComment(ctx context.Context, ob *model.MovieComment) error {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 	return tx.Where("id = ?", ob.ID).Updates(&ob).Error
@@ -22,14 +22,14 @@ func (r *RepoPG) UpdateComment(ctx context.Context, ob *model.Comment) error {
 func (r *RepoPG) DeleteComment(ctx context.Context, id string) error {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
-	return tx.Where("id = ?", id).Delete(&model.Comment{}).Error
+	return tx.Where("id = ?", id).Delete(&model.MovieComment{}).Error
 }
 
-func (r *RepoPG) GetOneComment(ctx context.Context, id string) (*model.Comment, error) {
+func (r *RepoPG) GetOneComment(ctx context.Context, id string) (*model.MovieComment, error) {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 
-	rs := model.Comment{}
+	rs := model.MovieComment{}
 	if err := tx.Where("id = ?", id).Find(&rs).Error; err != nil {
 		return nil, r.ReturnErrorInGetFunc(ctx, err, utils.GetCurrentCaller(r, 0))
 	}
@@ -37,11 +37,11 @@ func (r *RepoPG) GetOneComment(ctx context.Context, id string) (*model.Comment, 
 	return &rs, nil
 }
 
-func (r *RepoPG) GetListComment(ctx context.Context, req model.CommentParams) (*model.CommentResponse, error) {
+func (r *RepoPG) GetListComment(ctx context.Context, req model.MovieCommentParams) (*model.MovieCommentResponse, error) {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 
-	rs := model.CommentResponse{}
+	rs := model.MovieCommentResponse{}
 	var err error
 	page := r.GetPage(req.Page)
 	pageSize := r.GetPageSize(req.PageSize)

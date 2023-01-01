@@ -35,16 +35,16 @@ func (s *ProductService) Create(ctx context.Context, req model.ProductRequest) (
 	}
 	respone.Product = ob
 
-	// create multi sku
-	for _, v := range req.Sku {
-		sku := &model.Sku{}
-		common.Sync(v, sku)
-		sku.ProductId = ob.ID
-		if err := s.repo.CreateSku(ctx, sku); err != nil {
-			return nil, err
-		}
-		respone.Sku = append(respone.Sku, sku)
-	}
+	//// create multi sku
+	//for _, v := range req.Sku {
+	//	sku := &model.Sku{}
+	//	common.Sync(v, sku)
+	//	sku.ProductId = ob.ID
+	//	if err := s.repo.CreateSku(ctx, sku); err != nil {
+	//		return nil, err
+	//	}
+	//	respone.Sku = append(respone.Sku, sku)
+	//}
 
 	return &respone, nil
 }

@@ -52,13 +52,13 @@ func (r *RepoPG) GetListMovie(ctx context.Context, req model.MovieParams) (*mode
 	tx = tx.Select("movie.*")
 
 	if req.Day != "" || req.MovieTheaterId != "" {
-		tx = tx.Joins("JOIN showtime ON showtime.movie_id = movie.id")
+		tx = tx.Joins("JOIN show ON show.movie_id = movie.id")
 		if req.Day != "" {
-			tx = tx.Where("showtime.day = ?", req.Day)
+			tx = tx.Where("show.day = ?", req.Day)
 		}
 
 		if req.MovieTheaterId != "" {
-			tx = tx.Where("showtime.movie_theater_id = ?", req.MovieTheaterId)
+			tx = tx.Where("show.movie_theater_id = ?", req.MovieTheaterId)
 		}
 	}
 

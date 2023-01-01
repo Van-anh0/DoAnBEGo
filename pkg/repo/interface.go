@@ -20,11 +20,11 @@ type PGInterface interface {
 	GetOneUserByEmail(ctx context.Context, email string) (*model.User, error)
 
 	// movie theater
-	CreateMovieTheater(ctx context.Context, user *model.MovieTheater) error
-	UpdateMovieTheater(ctx context.Context, user *model.MovieTheater) error
-	DeleteMovieTheater(ctx context.Context, id string) error
-	GetOneMovieTheater(ctx context.Context, id string) (*model.MovieTheater, error)
-	GetListMovieTheater(ctx context.Context, req model.MovieTheaterParams) (*model.MovieTheaterResponse, error)
+	CreateCinema(ctx context.Context, user *model.Cinema) error
+	UpdateCinema(ctx context.Context, user *model.Cinema) error
+	DeleteCinema(ctx context.Context, id string) error
+	GetOneCinema(ctx context.Context, id string) (*model.Cinema, error)
+	GetListCinema(ctx context.Context, req model.CinemaParams) (*model.CinemaResponse, error)
 
 	// room
 	CreateRoom(ctx context.Context, user *model.Room) error
@@ -47,20 +47,20 @@ type PGInterface interface {
 	GetOneOrder(ctx context.Context, id string) (*model.Order, error)
 	GetListOrder(ctx context.Context, req model.OrderParams) (*model.OrderResponse, error)
 
-	// ticket
-	CreateTicket(ctx context.Context, user *model.OrderItem) error
-	UpdateTicket(ctx context.Context, user *model.OrderItem) error
-	DeleteTicket(ctx context.Context, id string) error
-	GetOneTicket(ctx context.Context, id string) (*model.OrderItem, error)
-	GetListTicket(ctx context.Context, req model.TicketParams) (*model.TicketResponse, error)
-	CreateMultiTicket(ctx context.Context, ob *[]model.OrderItem) error
+	// OrderItem
+	CreateOrderItem(ctx context.Context, user *model.OrderItem) error
+	UpdateOrderItem(ctx context.Context, user *model.OrderItem) error
+	DeleteOrderItem(ctx context.Context, id string) error
+	GetOneOrderItem(ctx context.Context, id string) (*model.OrderItem, error)
+	GetListOrderItem(ctx context.Context, req model.OrderItemParams) (*model.OrderItemResponse, error)
+	CreateMultiOrderItem(ctx context.Context, ob *[]model.OrderItem) error
 
 	// showtime
-	CreateShowtime(ctx context.Context, user *model.Showtime) error
-	UpdateShowtime(ctx context.Context, user *model.Showtime) error
+	CreateShowtime(ctx context.Context, user *model.Show) error
+	UpdateShowtime(ctx context.Context, user *model.Show) error
 	DeleteShowtime(ctx context.Context, id string) error
-	GetOneShowtime(ctx context.Context, id string) (*model.Showtime, error)
-	GetListShowtime(ctx context.Context, req model.ShowtimeParams) (*model.ShowtimeResponse, error)
+	GetOneShowtime(ctx context.Context, id string) (*model.Show, error)
+	GetListShowtime(ctx context.Context, req model.ShowParams) (*model.ShowtimeResponse, error)
 
 	// movie
 	CreateMovie(ctx context.Context, user *model.Movie) error
@@ -90,26 +90,19 @@ type PGInterface interface {
 	GetOneCategory(ctx context.Context, id string) (*model.Category, error)
 	GetListCategory(ctx context.Context, req model.CategoryParams) (*model.CategoryResponse, error)
 
-	// Sku
-	CreateSku(ctx context.Context, user *model.Sku) error
-	UpdateSku(ctx context.Context, user *model.Sku) error
-	DeleteSku(ctx context.Context, id string) error
-	GetOneSku(ctx context.Context, id string) (*model.Sku, error)
-	GetListSku(ctx context.Context, req model.SkuParams) (*model.SkuResponse, error)
-
 	// comment
-	CreateComment(ctx context.Context, user *model.Comment) error
-	UpdateComment(ctx context.Context, user *model.Comment) error
+	CreateComment(ctx context.Context, user *model.MovieComment) error
+	UpdateComment(ctx context.Context, user *model.MovieComment) error
 	DeleteComment(ctx context.Context, id string) error
-	GetOneComment(ctx context.Context, id string) (*model.Comment, error)
-	GetListComment(ctx context.Context, req model.CommentParams) (*model.CommentResponse, error)
+	GetOneComment(ctx context.Context, id string) (*model.MovieComment, error)
+	GetListComment(ctx context.Context, req model.MovieCommentParams) (*model.MovieCommentResponse, error)
 
 	// product_rank
-	CreateProductRank(ctx context.Context, user *model.ProductRank) error
-	UpdateProductRank(ctx context.Context, user *model.ProductRank) error
-	DeleteProductRank(ctx context.Context, id string) error
-	GetOneProductRank(ctx context.Context, id string) (*model.ProductRank, error)
-	GetListProductRank(ctx context.Context, req model.ProductRankParams) (*model.ProductRankResponse, error)
+	CreateMovieRank(ctx context.Context, user *model.MovieRank) error
+	UpdateMovieRank(ctx context.Context, user *model.MovieRank) error
+	DeleteMovieRank(ctx context.Context, id string) error
+	GetOneMovieRank(ctx context.Context, id string) (*model.MovieRank, error)
+	GetListMovieRank(ctx context.Context, req model.MovieRankParams) (*model.MovieRankResponse, error)
 
 	// promotion
 	CreatePromotion(ctx context.Context, user *model.Promotion) error
@@ -119,10 +112,10 @@ type PGInterface interface {
 	GetListPromotion(ctx context.Context, req model.PromotionParams) (*model.PromotionResponse, error)
 
 	// user_rank
-	CreateRank(ctx context.Context, user *model.Rank) error
-	UpdateRank(ctx context.Context, user *model.Rank) error
+	CreateRank(ctx context.Context, user *model.UserRank) error
+	UpdateRank(ctx context.Context, user *model.UserRank) error
 	DeleteRank(ctx context.Context, id string) error
-	GetOneRank(ctx context.Context, id string) (*model.Rank, error)
+	GetOneRank(ctx context.Context, id string) (*model.UserRank, error)
 	GetListRank(ctx context.Context, req model.RankParams) (*model.RankResponse, error)
 
 	// category_has_product
@@ -131,4 +124,11 @@ type PGInterface interface {
 	DeleteCategoryHasProduct(ctx context.Context, id string) error
 	GetOneCategoryHasProduct(ctx context.Context, id string) (*model.CategoryHasProduct, error)
 	GetListCategoryHasProduct(ctx context.Context, req model.CategoryHasProductParams) (*model.CategoryHasProductResponse, error)
+
+	// ShowSeat
+	CreateShowSeat(ctx context.Context, user *model.ShowSeat) error
+	UpdateShowSeat(ctx context.Context, user *model.ShowSeat) error
+	DeleteShowSeat(ctx context.Context, id string) error
+	GetOneShowSeat(ctx context.Context, id string) (*model.ShowSeat, error)
+	GetListShowSeat(ctx context.Context, req model.ShowSeatParams) (*model.ShowSeatResponse, error)
 }
