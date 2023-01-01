@@ -8,12 +8,11 @@ type User struct {
 	Password string  `json:"password" gorm:"password;type:varchar(250);not null"`
 	Gender   string  `json:"gender" gorm:"column:gender"`
 	Phone    string  `json:"phone" gorm:"phone;type:varchar(20)"`
-	Role     int     `json:"role" gorm:"role"`
 	Address  string  `json:"address" gorm:"address;type:varchar(250)"`
-	IdCard   string  `json:"id_card" gorm:"id_card;type:varchar(20)"`
 	IsActive bool    `json:"is_active" gorm:"is_active"`
 	Point    float64 `json:"point" gorm:"point"`
 	RankName string  `json:"rank_name" gorm:"rank_name"`
+	Role     int     `json:"role" gorm:"role"`
 }
 
 func (User) TableName() string {
@@ -28,9 +27,7 @@ type UserRequest struct {
 	Password *string `json:"password"`
 	Gender   *string `json:"gender"`
 	Phone    *string `json:"phone"`
-	Role     *int    `json:"role"`
 	Address  *string `json:"address"`
-	IdCard   *string `json:"id_card"`
 	IsActive *bool   `json:"is_active"`
 }
 

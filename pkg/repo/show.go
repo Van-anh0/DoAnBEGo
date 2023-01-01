@@ -7,29 +7,29 @@ import (
 	"strings"
 )
 
-func (r *RepoPG) CreateAttribute(ctx context.Context, ob *model.Attribute) error {
+func (r *RepoPG) CreateShowtime(ctx context.Context, ob *model.Show) error {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 	return tx.Create(ob).Error
 }
 
-func (r *RepoPG) UpdateAttribute(ctx context.Context, ob *model.Attribute) error {
+func (r *RepoPG) UpdateShowtime(ctx context.Context, ob *model.Show) error {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 	return tx.Where("id = ?", ob.ID).Updates(&ob).Error
 }
 
-func (r *RepoPG) DeleteAttribute(ctx context.Context, id string) error {
+func (r *RepoPG) DeleteShowtime(ctx context.Context, id string) error {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
-	return tx.Where("id = ?", id).Delete(&model.Attribute{}).Error
+	return tx.Where("id = ?", id).Delete(&model.Show{}).Error
 }
 
-func (r *RepoPG) GetOneAttribute(ctx context.Context, id string) (*model.Attribute, error) {
+func (r *RepoPG) GetOneShowtime(ctx context.Context, id string) (*model.Show, error) {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 
-	rs := model.Attribute{}
+	rs := model.Show{}
 	if err := tx.Where("id = ?", id).Find(&rs).Error; err != nil {
 		return nil, r.ReturnErrorInGetFunc(ctx, err, utils.GetCurrentCaller(r, 0))
 	}
@@ -37,11 +37,11 @@ func (r *RepoPG) GetOneAttribute(ctx context.Context, id string) (*model.Attribu
 	return &rs, nil
 }
 
-func (r *RepoPG) GetListAttribute(ctx context.Context, req model.AttributeParams) (*model.AttributeResponse, error) {
+func (r *RepoPG) GetListShowtime(ctx context.Context, req model.ShowParams) (*model.ShowtimeResponse, error) {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 
-	rs := model.AttributeResponse{}
+	rs := model.ShowtimeResponse{}
 	var err error
 	page := r.GetPage(req.Page)
 	pageSize := r.GetPageSize(req.PageSize)
@@ -65,6 +65,10 @@ func (r *RepoPG) GetListAttribute(ctx context.Context, req model.AttributeParams
 	switch req.Sort {
 	case utils.SORT_CREATED_AT_OLDEST:
 		tx = tx.Order("created_at")
+	case "-start_time":
+		tx = tx.Order("start_time desc")
+	case "start_time":
+		tx = tx.Order("start_time")
 	default:
 		tx = tx.Order("created_at desc")
 	}

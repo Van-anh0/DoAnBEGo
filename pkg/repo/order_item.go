@@ -7,29 +7,29 @@ import (
 	"strings"
 )
 
-func (r *RepoPG) CreateMovieTheater(ctx context.Context, ob *model.MovieTheater) error {
+func (r *RepoPG) CreateOrderItem(ctx context.Context, ob *model.OrderItem) error {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 	return tx.Create(ob).Error
 }
 
-func (r *RepoPG) UpdateMovieTheater(ctx context.Context, ob *model.MovieTheater) error {
+func (r *RepoPG) UpdateOrderItem(ctx context.Context, ob *model.OrderItem) error {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 	return tx.Where("id = ?", ob.ID).Updates(&ob).Error
 }
 
-func (r *RepoPG) DeleteMovieTheater(ctx context.Context, id string) error {
+func (r *RepoPG) DeleteOrderItem(ctx context.Context, id string) error {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
-	return tx.Where("id = ?", id).Delete(&model.MovieTheater{}).Error
+	return tx.Where("id = ?", id).Delete(&model.OrderItem{}).Error
 }
 
-func (r *RepoPG) GetOneMovieTheater(ctx context.Context, id string) (*model.MovieTheater, error) {
+func (r *RepoPG) GetOneOrderItem(ctx context.Context, id string) (*model.OrderItem, error) {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 
-	rs := model.MovieTheater{}
+	rs := model.OrderItem{}
 	if err := tx.Where("id = ?", id).Find(&rs).Error; err != nil {
 		return nil, r.ReturnErrorInGetFunc(ctx, err, utils.GetCurrentCaller(r, 0))
 	}
@@ -37,30 +37,17 @@ func (r *RepoPG) GetOneMovieTheater(ctx context.Context, id string) (*model.Movi
 	return &rs, nil
 }
 
-func (r *RepoPG) GetListMovieTheater(ctx context.Context, req model.MovieTheaterParams) (*model.MovieTheaterResponse, error) {
+func (r *RepoPG) GetListOrderItem(ctx context.Context, req model.OrderItemParams) (*model.OrderItemResponse, error) {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 
-	rs := model.MovieTheaterResponse{}
+	rs := model.OrderItemResponse{}
 	var err error
 	page := r.GetPage(req.Page)
 	pageSize := r.GetPageSize(req.PageSize)
 	total := new(struct {
 		Count int `json:"count"`
 	})
-
-	tx = tx.Model(&model.MovieTheater{}).Select("movie_theater.*")
-
-	if req.MovieId != "" || req.Day != "" {
-		tx = tx.Joins("JOIN show_time ON show_time.movie_theater_id = movie_theater.id")
-		if req.MovieId != "" {
-			tx = tx.Where("show_time.movie_id = ?", req.MovieId)
-		}
-
-		if req.Day != "" {
-			tx.Where("show_time.day = ?", req.Day)
-		}
-	}
 
 	if req.Search != "" {
 		tx = tx.Where("unaccent(name) ilike %?%", req.Search)
@@ -81,11 +68,6 @@ func (r *RepoPG) GetListMovieTheater(ctx context.Context, req model.MovieTheater
 	default:
 		tx = tx.Order("created_at desc")
 	}
-
-	if req.MovieId != "" || req.Day != "" {
-		tx = tx.Group("movie_theater.id")
-	}
-
 	if err := tx.Find(&rs.Data).Error; err != nil {
 		return nil, r.ReturnErrorInGetFunc(ctx, err, utils.GetCurrentCaller(r, 0))
 	}
@@ -95,4 +77,11 @@ func (r *RepoPG) GetListMovieTheater(ctx context.Context, req model.MovieTheater
 	}
 
 	return &rs, nil
+}
+
+// createMultiOrderItem is a function to create multiple OrderItems
+func (r *RepoPG) CreateMultiOrderItem(ctx context.Context, ob *[]model.OrderItem) error {
+	tx, cancel := r.DBWithTimeout(ctx)
+	defer cancel()
+	return tx.Create(ob).Error
 }

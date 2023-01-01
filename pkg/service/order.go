@@ -46,7 +46,7 @@ func (s *OrderService) Create(ctx context.Context, req model.OrderRequest) (rs *
 	}
 
 	// create list OrderItem
-	if err = s.repo.CreateMultiTicket(ctx, &ob.OrderItem); err != nil {
+	if err = s.repo.CreateMultiOrderItem(ctx, &ob.OrderItem); err != nil {
 		return nil, err
 	}
 

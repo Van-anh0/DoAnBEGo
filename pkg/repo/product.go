@@ -37,11 +37,11 @@ func (r *RepoPG) GetOneProduct(ctx context.Context, id string) (*model.Product, 
 	return &rs, nil
 }
 
-func (r *RepoPG) GetListProduct(ctx context.Context, req model.ProductParams) (*model.ProductResponse, error) {
+func (r *RepoPG) GetListProduct(ctx context.Context, req model.ProductParams) (*model.ListProductResponse, error) {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 
-	rs := model.ProductResponse{}
+	rs := model.ListProductResponse{}
 	var err error
 	page := r.GetPage(req.Page)
 	pageSize := r.GetPageSize(req.PageSize)
@@ -52,13 +52,13 @@ func (r *RepoPG) GetListProduct(ctx context.Context, req model.ProductParams) (*
 	tx = tx.Select("product.*")
 
 	//if req.Day != "" || req.MovieTheaterId != "" {
-	//	tx = tx.Joins("JOIN show_time ON show_time.Product_id = Product.id")
+	//	tx = tx.Joins("Join sku s on s.product_id = product.id").Joins("Join showtime st on st.sku_id = s.id")
 	//	if req.Day != "" {
-	//		tx = tx.Where("show_time.day = ?", req.Day)
+	//		tx = tx.Where("st.day = ?", req.Day)
 	//	}
 	//
 	//	if req.MovieTheaterId != "" {
-	//		tx = tx.Where("show_time.Product_theater_id = ?", req.MovieTheaterId)
+	//		tx = tx.Where("st.movie_theater_id = ?", req.MovieTheaterId)
 	//	}
 	//}
 
@@ -83,9 +83,10 @@ func (r *RepoPG) GetListProduct(ctx context.Context, req model.ProductParams) (*
 	}
 
 	//if req.Day != "" || req.MovieTheaterId != "" {
-	//	tx = tx.Group("Product.id")
+	//	tx = tx.Group("product.id")
 	//}
 
+	// find product and preload sku
 	if err := tx.Find(&rs.Data).Error; err != nil {
 		return nil, r.ReturnErrorInGetFunc(ctx, err, utils.GetCurrentCaller(r, 0))
 	}

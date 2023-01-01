@@ -25,15 +25,23 @@ func (h *MigrationHandler) BaseMigrate(ctx *gin.Context, tx *gorm.DB) error {
 	//}
 
 	models := []interface{}{
-		&model.User{},
 		&model.Metadata{},
-		&model.MovieTheater{},
+		&model.User{},
+		&model.Cinema{},
 		&model.Room{},
-		&model.Movie{},
 		&model.Seat{},
-		&model.Showtime{},
+		&model.Movie{},
+		&model.Show{},
+		&model.ShowSeat{},
 		&model.Order{},
 		&model.OrderItem{},
+		&model.Product{},
+		&model.UserRank{},
+		&model.MovieRank{},
+		&model.Promotion{},
+		&model.Category{},
+		&model.CategoryHasProduct{},
+		&model.MovieComment{},
 	}
 
 	for _, m := range models {
@@ -54,87 +62,13 @@ func (h *MigrationHandler) BaseMigrate(ctx *gin.Context, tx *gorm.DB) error {
 
 func (h *MigrationHandler) Migrate(ctx *gin.Context) {
 	log := logger.WithCtx(ctx, "Migrate")
+	// put your migrations at the end of the list
 	migrate := gormigrate.New(h.db, gormigrate.DefaultOptions, []*gormigrate.Migration{
 		{
-			ID: "20221212085554",
+			ID: "20221229163504",
 			Migrate: func(tx *gorm.DB) error {
+				log.Info("Migrate 20221229163504 - BaseMigrate")
 				if err := h.BaseMigrate(ctx, tx); err != nil {
-					return err
-				}
-				return nil
-			},
-		},
-		{
-			ID: "20221216000202",
-			Migrate: func(tx *gorm.DB) error {
-				if err := h.db.AutoMigrate(&model.Order{}, &model.OrderItem{}); err != nil {
-					return err
-				}
-				return nil
-			},
-		},
-		{
-			ID: "20221221143528",
-			Migrate: func(tx *gorm.DB) error {
-				if err := h.db.AutoMigrate(&model.Seat{}, &model.Showtime{}); err != nil {
-					return err
-				}
-				return nil
-			},
-		},
-		{
-			ID: "20221216091924",
-			Migrate: func(tx *gorm.DB) error {
-				if err := h.db.AutoMigrate(&model.Showtime{}); err != nil {
-					return err
-				}
-				return nil
-			},
-		},
-		{
-			ID: "20221216110030",
-			Migrate: func(tx *gorm.DB) error {
-				if err := tx.Exec(`
-					ALTER TABLE orders DROP COLUMN slot_id;
-				`).Error; err != nil {
-					log.Warn(err)
-				}
-				return nil
-			},
-		},
-		{
-			ID: "20221221173006",
-			Migrate: func(tx *gorm.DB) error {
-				if err := h.db.AutoMigrate(&model.Showtime{}); err != nil {
-					return err
-				}
-				return nil
-			},
-		},
-		{
-			ID: "20221222163628",
-			Migrate: func(tx *gorm.DB) error {
-				if err := h.db.AutoMigrate(&model.OrderItem{}); err != nil {
-					return err
-				}
-
-				if err := tx.Exec(`
-					ALTER TABLE ticket DROP COLUMN showtime_id;
-				`).Error; err != nil {
-					log.Warn(err)
-				}
-				return nil
-			},
-		},
-		{
-			ID: "20221224142655",
-			Migrate: func(tx *gorm.DB) error {
-				if err := h.db.AutoMigrate(
-					&model.User{}, &model.Promotion{}, &model.Product{},
-					&model.UserRank{}, &model.ProductRank{}, &model.Comment{},
-					&model.Attribute{}, &model.Order{}, &model.OrderItem{},
-					&model.Showtime{}, &model.Category{}, &model.CategoryHasProduct{},
-				); err != nil {
 					return err
 				}
 				return nil

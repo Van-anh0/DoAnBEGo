@@ -5,7 +5,7 @@ type Movie struct {
 	Type        string  `gorm:"type:varchar(250);column:type" json:"type"`
 	Cast        string  `gorm:"type:varchar(250);cast" json:"cast"`
 	Name        string  `gorm:"type:varchar(250); name;index" json:"name"`
-	Description string  `gorm:"type:varchar(500);description" json:"description"`
+	Spoil       string  `gorm:"type:varchar(500);spoil" json:"spoil"`
 	Duration    float64 `gorm:"duration;type:double" json:"duration"`
 	ReleaseDate string  `gorm:"type:varchar(100);release_date" json:"release_date"`
 	Country     string  `gorm:"type:varchar(100);country" json:"country"`
@@ -26,7 +26,7 @@ type MovieRequest struct {
 	Type        *string  `json:"type"`
 	Cast        *string  `json:"cast"`
 	Name        *string  `json:"name"`
-	Description *string  `json:"description"`
+	Spoil       *string  `json:"spoil"`
 	Duration    *float64 `json:"duration"`
 	ReleaseDate *string  `json:"release_date"`
 	Country     *string  `json:"country"`

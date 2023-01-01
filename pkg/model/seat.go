@@ -2,11 +2,11 @@ package model
 
 type Seat struct {
 	BaseModel
-	Status string  `json:"status" gorm:"status;type:varchar(100);not null"`
-	Type   string  `json:"type" gorm:"type;type:varchar(100);not null"`
-	Price  float64 `json:"price" gorm:"price;not null;default:0"`
 	RoomID string  `json:"room_id" gorm:"room_id;char(36);not null"`
 	Name   string  `json:"name" gorm:"name;type:varchar(100);not null"`
+	Row    string  `json:"row" gorm:"row;type:varchar(10);not null"`
+	Column int     `json:"column" gorm:"column;type:int;not null"`
+	Price  float64 `json:"price" gorm:"price;type:float;not null"`
 }
 
 func (Seat) TableName() string {
@@ -15,11 +15,11 @@ func (Seat) TableName() string {
 
 type SeatRequest struct {
 	ID     *string  `json:"id"`
-	Status *string  `json:"status"`
-	Type   *string  `json:"type"`
-	Price  *float64 `json:"price"`
 	RoomID *string  `json:"room_id"`
 	Name   *string  `json:"name"`
+	Row    *string  `json:"row"`
+	Column *int     `json:"column"`
+	Price  *float64 `json:"price"`
 }
 
 type SeatParams struct {

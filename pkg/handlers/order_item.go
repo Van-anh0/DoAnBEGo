@@ -10,23 +10,23 @@ import (
 	"net/http"
 )
 
-type TicketHandlers struct {
-	service service.TicketInterface
+type OrderItemHandlers struct {
+	service service.OrderItemInterface
 }
 
-func NewTicketHandlers(service service.TicketInterface) *TicketHandlers {
-	return &TicketHandlers{service: service}
+func NewOrderItemHandlers(service service.OrderItemInterface) *OrderItemHandlers {
+	return &OrderItemHandlers{service: service}
 }
 
 // Create
 // @Tags Create
 // @Accept  json
 // @Produce  json
-// @Param data body model.TicketRequest true "body data"
+// @Param data body model.OrderItemRequest true "body data"
 // @Success 200 {object} interface{}
-// @Router /api/v1/ticket/create [post]
-func (h *TicketHandlers) Create(r *ginext.Request) (*ginext.Response, error) {
-	req := model.TicketRequest{}
+// @Router /api/v1/order-item/create [post]
+func (h *OrderItemHandlers) Create(r *ginext.Request) (*ginext.Response, error) {
+	req := model.OrderItemRequest{}
 	r.MustBind(&req)
 
 	if err := common.CheckRequireValid(req); err != nil {
@@ -45,10 +45,10 @@ func (h *TicketHandlers) Create(r *ginext.Request) (*ginext.Response, error) {
 // @Accept  json
 // @Produce  json
 // @Param id path string true "id"
-// @Param data body model.TicketRequest true "body data"
+// @Param data body model.OrderItemRequest true "body data"
 // @Success 200 {object} interface{}
-// @Router /api/v1/ticket/update/:id [put]
-func (h *TicketHandlers) Update(r *ginext.Request) (*ginext.Response, error) {
+// @Router /api/v1/order-item/update/:id [put]
+func (h *OrderItemHandlers) Update(r *ginext.Request) (*ginext.Response, error) {
 	log := logger.WithCtx(r.GinCtx, utils.GetCurrentCaller(h, 0))
 
 	id := utils.GetIdFromUri(r.GinCtx)
@@ -56,7 +56,7 @@ func (h *TicketHandlers) Update(r *ginext.Request) (*ginext.Response, error) {
 		return nil, ginext.NewError(http.StatusForbidden, "Wrong ID")
 	}
 
-	req := model.TicketRequest{}
+	req := model.OrderItemRequest{}
 	if err := r.GinCtx.ShouldBind(&req); err != nil {
 		log.WithError(err).Error("error_400: error parse")
 		return nil, ginext.NewError(http.StatusBadRequest, "Yêu cầu không hợp lệ")
@@ -80,8 +80,8 @@ func (h *TicketHandlers) Update(r *ginext.Request) (*ginext.Response, error) {
 // @Produce  json
 // @Param id path string true "id"
 // @Success 200 {object} interface{}
-// @Router /api/v1/ticket/delete/:id [delete]
-func (h *TicketHandlers) Delete(r *ginext.Request) (*ginext.Response, error) {
+// @Router /api/v1/order-item/delete/:id [delete]
+func (h *OrderItemHandlers) Delete(r *ginext.Request) (*ginext.Response, error) {
 	id := utils.ParseIDFromUri(r.GinCtx)
 	if id == nil {
 		return nil, ginext.NewError(http.StatusForbidden, "Wrong ID")
@@ -99,8 +99,8 @@ func (h *TicketHandlers) Delete(r *ginext.Request) (*ginext.Response, error) {
 // @Produce  json
 // @Param id path string true "id"
 // @Success 200 {object} interface{}
-// @Router /api/v1/ticket/get-one/:id [get]
-func (h *TicketHandlers) GetOne(r *ginext.Request) (*ginext.Response, error) {
+// @Router /api/v1/order-item/get-one/:id [get]
+func (h *OrderItemHandlers) GetOne(r *ginext.Request) (*ginext.Response, error) {
 
 	id := utils.ParseIDFromUri(r.GinCtx)
 	if id == nil {
@@ -120,11 +120,11 @@ func (h *TicketHandlers) GetOne(r *ginext.Request) (*ginext.Response, error) {
 // @Produce  json
 // @Param data body model.BlacklistParam true "body data"
 // @Success 200 {object} interface{}
-// @Router /api/v1/ticket/get-list [get]
-func (h *TicketHandlers) GetList(r *ginext.Request) (*ginext.Response, error) {
+// @Router /api/v1/order-item/get-list [get]
+func (h *OrderItemHandlers) GetList(r *ginext.Request) (*ginext.Response, error) {
 	log := logger.WithCtx(r.GinCtx, utils.GetCurrentCaller(h, 0))
 
-	req := model.TicketParams{}
+	req := model.OrderItemParams{}
 	if err := r.GinCtx.BindQuery(&req); err != nil {
 		log.WithError(err).Error("error_400: error parse")
 		return nil, ginext.NewError(http.StatusBadRequest, "Yêu cầu không hợp lệ")

@@ -2,12 +2,11 @@ package model
 
 type Product struct {
 	BaseModel
-	Type     string  `gorm:"column:Type;type:varchar(255);not null"` // movie | event | ticket | product
-	Name     string  `gorm:"type:varchar(250); name;index" json:"name"`
-	Price    float64 `json:"price" gorm:"type:float"`
-	Cost     float64 `json:"cost" gorm:"type:float"`
-	Quantity float64 `json:"quantity" gorm:"type:float"`
-	Image    string  `json:"image"`
+	Name     string  `json:"name" gorm:"type:varchar(250); name;index" `
+	Quantity float64 `json:"quantity" gorm:"type:float;default:0"`
+	Uom      string  `json:"uom"` // don vi
+	Price    float64 `json:"price" gorm:"type:float;default:0"`
+	Sold     float64 `json:"sold" gorm:"type:float;default:0"`
 }
 
 func (Product) TableName() string {
@@ -17,17 +16,21 @@ func (Product) TableName() string {
 type ProductRequest struct {
 	ID       *string  `json:"id"`
 	Name     *string  `json:"name"`
-	Price    *float64 `json:"price"`
-	Cost     *float64 `json:"cost"`
 	Quantity *float64 `json:"quantity"`
-	Image    *string  `json:"image"`
+	Uom      *string  `json:"uom"` // don vi
+	Price    *float64 `json:"price"`
+	Sold     *float64 `json:"sold"`
+}
+
+type ProductResponse struct {
+	*Product
 }
 
 type ProductParams struct {
 	BaseParam
 }
 
-type ProductResponse struct {
+type ListProductResponse struct {
 	Data []Product              `json:"data"`
 	Meta map[string]interface{} `json:"meta"`
 }

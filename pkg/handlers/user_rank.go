@@ -11,10 +11,10 @@ import (
 )
 
 type UserRankHandlers struct {
-	service service.UserRankInterface
+	service service.RankInterface
 }
 
-func NewUserRankHandlers(service service.UserRankInterface) *UserRankHandlers {
+func NewRankHandlers(service service.RankInterface) *UserRankHandlers {
 	return &UserRankHandlers{service: service}
 }
 
@@ -119,7 +119,7 @@ func (h *UserRankHandlers) GetOne(r *ginext.Request) (*ginext.Response, error) {
 func (h *UserRankHandlers) GetList(r *ginext.Request) (*ginext.Response, error) {
 	log := logger.WithCtx(r.GinCtx, utils.GetCurrentCaller(h, 0))
 
-	req := model.UserRankParams{}
+	req := model.RankParams{}
 	if err := r.GinCtx.BindQuery(&req); err != nil {
 		log.WithError(err).Error("error_400: error parse")
 		return nil, ginext.NewError(http.StatusBadRequest, "Yêu cầu không hợp lệ")
