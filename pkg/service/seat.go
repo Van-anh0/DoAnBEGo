@@ -4,6 +4,7 @@ import (
 	"context"
 	"doan/pkg/model"
 	"doan/pkg/repo"
+	"doan/pkg/utils"
 	"doan/pkg/valid"
 	"github.com/praslar/lib/common"
 )
@@ -17,7 +18,7 @@ type SeatInterface interface {
 	Update(ctx context.Context, ob model.SeatRequest) (rs *model.Seat, err error)
 	Delete(ctx context.Context, id string) (err error)
 	GetOne(ctx context.Context, id string) (rs *model.Seat, err error)
-	GetList(ctx context.Context, req model.SeatParams) (rs *model.SeatResponse, err error)
+	GetList(ctx context.Context, req model.SeatParams) (rs *model.ListSeatResponse, err error)
 }
 
 func NewSeatService(repo repo.PGInterface) SeatInterface {
@@ -62,11 +63,37 @@ func (s *SeatService) GetOne(ctx context.Context, id string) (rs *model.Seat, er
 	return ob, nil
 }
 
-func (s *SeatService) GetList(ctx context.Context, req model.SeatParams) (rs *model.SeatResponse, err error) {
+func (s *SeatService) GetList(ctx context.Context, req model.SeatParams) (rs *model.ListSeatResponse, err error) {
 
 	ob, err := s.repo.GetListSeat(ctx, req)
 	if err != nil {
 		return nil, err
 	}
+
+	listId := make([]string, 0)
+	for _, v := range ob.Data {
+		listId = append(listId, v.ID)
+	}
+
+	// Get list show seat
+	showSeat, err := s.repo.GetListShowSeat(ctx, model.ShowSeatParams{
+		SeatId:     listId,
+		ShowtimeId: req.ShowtimeId,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	// combine ob and showSeat to get status with map
+	mapShowSeat := make(map[string]string)
+	for _, v := range showSeat.Data {
+		mapShowSeat[v.SeatId] = utils.SEAT_BOOKED
+	}
+	for i, v := range ob.Data {
+		if _, ok := mapShowSeat[v.ID]; ok {
+			ob.Data[i].Status = mapShowSeat[v.ID]
+		}
+	}
+
 	return ob, nil
 }

@@ -37,17 +37,24 @@ func (r *RepoPG) GetOneSeat(ctx context.Context, id string) (*model.Seat, error)
 	return &rs, nil
 }
 
-func (r *RepoPG) GetListSeat(ctx context.Context, req model.SeatParams) (*model.SeatResponse, error) {
+func (r *RepoPG) GetListSeat(ctx context.Context, req model.SeatParams) (*model.ListSeatResponse, error) {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 
-	rs := model.SeatResponse{}
+	rs := model.ListSeatResponse{}
 	var err error
 	page := r.GetPage(req.Page)
 	pageSize := r.GetPageSize(req.PageSize)
 	total := new(struct {
 		Count int `json:"count"`
 	})
+
+	tx = tx.Table("seat")
+
+	//if req.ShowtimeId != "" {
+	//	tx = tx.Select("seat.*, CASE WHEN show_seat.showtime_id = ? THEN 'booked' ELSE 'available' END AS status", req.ShowtimeId)
+	//	tx = tx.Joins("LEFT JOIN show_seat ON seat.id = show_seat.seat_id")
+	//}
 
 	if req.Search != "" {
 		tx = tx.Where("unaccent(name) ilike %?%", req.Search)
@@ -65,11 +72,13 @@ func (r *RepoPG) GetListSeat(ctx context.Context, req model.SeatParams) (*model.
 	case utils.SORT_CREATED_AT_OLDEST:
 		tx = tx.Order("created_at")
 	case "name":
-		tx = tx.Order("name")
+		tx = tx.Order("seat.name")
 	case "-name":
-		tx = tx.Order("name desc")
+		tx = tx.Order("seat.name desc")
+	case "row":
+		tx = tx.Order("seat.row")
 	default:
-		tx = tx.Order("created_at desc")
+		tx = tx.Order("seat.row,seat.col")
 	}
 	if err := tx.Find(&rs.Data).Error; err != nil {
 		return nil, r.ReturnErrorInGetFunc(ctx, err, utils.GetCurrentCaller(r, 0))

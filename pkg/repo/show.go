@@ -7,13 +7,13 @@ import (
 	"strings"
 )
 
-func (r *RepoPG) CreateShowtime(ctx context.Context, ob *model.Show) error {
+func (r *RepoPG) CreateShowtime(ctx context.Context, ob *model.Showtime) error {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 	return tx.Create(ob).Error
 }
 
-func (r *RepoPG) UpdateShowtime(ctx context.Context, ob *model.Show) error {
+func (r *RepoPG) UpdateShowtime(ctx context.Context, ob *model.Showtime) error {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 	return tx.Where("id = ?", ob.ID).Updates(&ob).Error
@@ -22,14 +22,14 @@ func (r *RepoPG) UpdateShowtime(ctx context.Context, ob *model.Show) error {
 func (r *RepoPG) DeleteShowtime(ctx context.Context, id string) error {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
-	return tx.Where("id = ?", id).Delete(&model.Show{}).Error
+	return tx.Where("id = ?", id).Delete(&model.Showtime{}).Error
 }
 
-func (r *RepoPG) GetOneShowtime(ctx context.Context, id string) (*model.Show, error) {
+func (r *RepoPG) GetOneShowtime(ctx context.Context, id string) (*model.Showtime, error) {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 
-	rs := model.Show{}
+	rs := model.Showtime{}
 	if err := tx.Where("id = ?", id).Find(&rs).Error; err != nil {
 		return nil, r.ReturnErrorInGetFunc(ctx, err, utils.GetCurrentCaller(r, 0))
 	}
@@ -65,10 +65,10 @@ func (r *RepoPG) GetListShowtime(ctx context.Context, req model.ShowParams) (*mo
 	switch req.Sort {
 	case utils.SORT_CREATED_AT_OLDEST:
 		tx = tx.Order("created_at")
-	case "-start_time":
-		tx = tx.Order("start_time desc")
-	case "start_time":
-		tx = tx.Order("start_time")
+	case "-showtime":
+		tx = tx.Order("showtime desc")
+	case "showtime":
+		tx = tx.Order("showtime")
 	default:
 		tx = tx.Order("created_at desc")
 	}

@@ -22,11 +22,11 @@ func NewShowtimeHandlers(service service.ShowtimeInterface) *ShowHandlers {
 // @Tags Create
 // @Accept  json
 // @Produce  json
-// @Param data body model.ShowRequest true "body data"
+// @Param data body model.ShowtimeRequest true "body data"
 // @Success 200 {object} interface{}
 // @Router /api/v1/show-time/create [post]
 func (h *ShowHandlers) Create(r *ginext.Request) (*ginext.Response, error) {
-	req := model.ShowRequest{}
+	req := model.ShowtimeRequest{}
 	r.MustBind(&req)
 
 	if err := common.CheckRequireValid(req); err != nil {
@@ -45,7 +45,7 @@ func (h *ShowHandlers) Create(r *ginext.Request) (*ginext.Response, error) {
 // @Accept  json
 // @Produce  json
 // @Param id path string true "id"
-// @Param data body model.ShowRequest true "body data"
+// @Param data body model.ShowtimeRequest true "body data"
 // @Success 200 {object} interface{}
 // @Router /api/v1/show-time/update/:id [put]
 func (h *ShowHandlers) Update(r *ginext.Request) (*ginext.Response, error) {
@@ -56,7 +56,7 @@ func (h *ShowHandlers) Update(r *ginext.Request) (*ginext.Response, error) {
 		return nil, ginext.NewError(http.StatusForbidden, "Wrong ID")
 	}
 
-	req := model.ShowRequest{}
+	req := model.ShowtimeRequest{}
 	if err := r.GinCtx.ShouldBind(&req); err != nil {
 		log.WithError(err).Error("error_400: error parse")
 		return nil, ginext.NewError(http.StatusBadRequest, "Yêu cầu không hợp lệ")

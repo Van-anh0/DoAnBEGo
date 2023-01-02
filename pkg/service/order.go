@@ -32,8 +32,13 @@ func (s *OrderService) Create(ctx context.Context, req model.OrderRequest) (rs *
 	common.Sync(req, ob)
 
 	// check length OrderItem is not empty
-	if ob.OrderItem == nil || len(ob.OrderItem) == 0 {
-		return nil, ginext.NewError(http.StatusBadRequest, "OrderItem is empty")
+	//if ob.OrderItem == nil || len(ob.OrderItem) == 0 {
+	//	return nil, ginext.NewError(http.StatusBadRequest, "OrderItem is empty")
+	//}
+
+	// check length ShowSeat is not empty
+	if ob.ShowSeat == nil || len(ob.ShowSeat) == 0 {
+		return nil, ginext.NewError(http.StatusBadRequest, "ShowSeat is empty")
 	}
 
 	if err := s.repo.CreateOrder(ctx, ob); err != nil {
@@ -41,12 +46,23 @@ func (s *OrderService) Create(ctx context.Context, req model.OrderRequest) (rs *
 	}
 	return ob, nil
 
-	for _, v := range ob.OrderItem {
+	if ob.OrderItem == nil || len(ob.OrderItem) == 0 {
+		for _, v := range ob.OrderItem {
+			v.OrderId = ob.ID
+		}
+
+		// create list OrderItem
+		if err = s.repo.CreateMultiOrderItem(ctx, &ob.OrderItem); err != nil {
+			return nil, err
+		}
+	}
+
+	for _, v := range ob.ShowSeat {
 		v.OrderId = ob.ID
 	}
 
-	// create list OrderItem
-	if err = s.repo.CreateMultiOrderItem(ctx, &ob.OrderItem); err != nil {
+	// create list ShowSeat
+	if err = s.repo.CreateMultiShowSeat(ctx, &ob.ShowSeat); err != nil {
 		return nil, err
 	}
 

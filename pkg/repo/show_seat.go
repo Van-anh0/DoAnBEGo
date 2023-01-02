@@ -49,10 +49,18 @@ func (r *RepoPG) GetListShowSeat(ctx context.Context, req model.ShowSeatParams) 
 		Count int `json:"count"`
 	})
 
-	tx = tx.Select("ShowSeat.*")
+	tx = tx.Select("show_seat.*, 'available' as status")
 
 	if req.Search != "" {
 		tx = tx.Where("unaccent(name) ilike %?%", req.Search)
+	}
+
+	if req.ShowtimeId != "" {
+		tx = tx.Where("showtime_id = ?", req.ShowtimeId)
+	}
+
+	if len(req.SeatId) > 0 {
+		tx = tx.Where("seat_id in (?)", req.SeatId)
 	}
 
 	if req.Filter != "" {
@@ -82,4 +90,11 @@ func (r *RepoPG) GetListShowSeat(ctx context.Context, req model.ShowSeatParams) 
 	}
 
 	return &rs, nil
+}
+
+// createMultiOrderItem is a function to create multiple OrderItems
+func (r *RepoPG) CreateMultiShowSeat(ctx context.Context, ob *[]model.ShowSeat) error {
+	tx, cancel := r.DBWithTimeout(ctx)
+	defer cancel()
+	return tx.Create(ob).Error
 }

@@ -69,7 +69,7 @@ func (app *BaseApp) Initialize() error {
 		ginext.AccessLogMiddleware(app.Config.Env),
 		ginext.CreateErrorHandler(app.Config.Debug),
 		cors.New(cors.Config{
-			AllowOrigins:     []string{"http://localhost:3000"},
+			AllowOrigins:     []string{"http://localhost:3000", "http://localhost:3003"},
 			AllowMethods:     []string{"PUT", "PATCH", "GET", "POST", "DELETE"},
 			AllowHeaders:     []string{"Origin, Access-Control-Allow-Headers, Content-Type, Authorization, X-Requested-With"},
 			ExposeHeaders:    []string{"Content-Length"},

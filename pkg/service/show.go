@@ -13,10 +13,10 @@ type ShowtimeService struct {
 }
 
 type ShowtimeInterface interface {
-	Create(ctx context.Context, ob model.ShowRequest) (rs *model.Show, err error)
-	Update(ctx context.Context, ob model.ShowRequest) (rs *model.Show, err error)
+	Create(ctx context.Context, ob model.ShowtimeRequest) (rs *model.Showtime, err error)
+	Update(ctx context.Context, ob model.ShowtimeRequest) (rs *model.Showtime, err error)
 	Delete(ctx context.Context, id string) (err error)
-	GetOne(ctx context.Context, id string) (rs *model.Show, err error)
+	GetOne(ctx context.Context, id string) (rs *model.Showtime, err error)
 	GetList(ctx context.Context, req model.ShowParams) (rs *model.ShowtimeResponse, err error)
 	GetListGroupByDay(ctx context.Context, req model.ShowParams) (rs *model.ShowtimeGroupResponse, err error)
 }
@@ -25,9 +25,9 @@ func NewShowtimeService(repo repo.PGInterface) ShowtimeInterface {
 	return &ShowtimeService{repo: repo}
 }
 
-func (s *ShowtimeService) Create(ctx context.Context, req model.ShowRequest) (rs *model.Show, err error) {
+func (s *ShowtimeService) Create(ctx context.Context, req model.ShowtimeRequest) (rs *model.Showtime, err error) {
 
-	ob := &model.Show{}
+	ob := &model.Showtime{}
 	common.Sync(req, ob)
 
 	if err := s.repo.CreateShowtime(ctx, ob); err != nil {
@@ -36,7 +36,7 @@ func (s *ShowtimeService) Create(ctx context.Context, req model.ShowRequest) (rs
 	return ob, nil
 }
 
-func (s *ShowtimeService) Update(ctx context.Context, req model.ShowRequest) (rs *model.Show, err error) {
+func (s *ShowtimeService) Update(ctx context.Context, req model.ShowtimeRequest) (rs *model.Showtime, err error) {
 	ob, err := s.repo.GetOneShowtime(ctx, valid.String(req.ID))
 	if err != nil {
 		return nil, err
@@ -54,7 +54,7 @@ func (s *ShowtimeService) Delete(ctx context.Context, id string) (err error) {
 	return s.repo.DeleteShowtime(ctx, id)
 }
 
-func (s *ShowtimeService) GetOne(ctx context.Context, id string) (rs *model.Show, err error) {
+func (s *ShowtimeService) GetOne(ctx context.Context, id string) (rs *model.Showtime, err error) {
 
 	ob, err := s.repo.GetOneShowtime(ctx, id)
 	if err != nil {
@@ -71,7 +71,7 @@ func (s *ShowtimeService) GetList(ctx context.Context, req model.ShowParams) (rs
 	}
 
 	// change list to object group by day
-	//var listShowtime = make(map[string][]model.Show)
+	//var listShowtime = make(map[string][]model.Showtime)
 	//for _, v := range ob.Data {
 	//	listShowtime[v.Day.String()] = append(listShowtime[v.Day.String()], v)
 	//}
@@ -80,20 +80,22 @@ func (s *ShowtimeService) GetList(ctx context.Context, req model.ShowParams) (rs
 
 func (s *ShowtimeService) GetListGroupByDay(ctx context.Context, req model.ShowParams) (rs *model.ShowtimeGroupResponse, err error) {
 
-	_, err = s.repo.GetListShowtime(ctx, req)
+	ob, err := s.repo.GetListShowtime(ctx, req)
 	if err != nil {
 		return nil, err
 	}
 
 	// change list to object group by day
-	//var listShowtime = make(map[string][]model.Show)
-	//for _, v := range ob.Data {
-	//	listShowtime[v.Day.String()] = append(listShowtime[v.Day.String()], v)
-	//}
+	var listShowtime = make(map[string][]model.Showtime)
+	for _, v := range ob.Data {
+		// convert v.Showtime from time to day
+		showtime := v.Showtime.Format("2006-01-02")
+		listShowtime[showtime] = append(listShowtime[showtime], v)
+	}
 
 	var listShowtimeGroup model.ShowtimeGroupResponse
-	//listShowtimeGroup.Data = listShowtime
-	//listShowtimeGroup.Meta = ob.Meta
+	listShowtimeGroup.Data = listShowtime
+	listShowtimeGroup.Meta = ob.Meta
 
 	return &listShowtimeGroup, nil
 }
