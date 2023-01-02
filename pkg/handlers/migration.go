@@ -31,7 +31,7 @@ func (h *MigrationHandler) BaseMigrate(ctx *gin.Context, tx *gorm.DB) error {
 		&model.Room{},
 		&model.Seat{},
 		&model.Movie{},
-		&model.Show{},
+		&model.Showtime{},
 		&model.ShowSeat{},
 		&model.Order{},
 		&model.OrderItem{},
@@ -70,6 +70,17 @@ func (h *MigrationHandler) Migrate(ctx *gin.Context) {
 				log.Info("Migrate 20221229163504 - BaseMigrate")
 				if err := h.BaseMigrate(ctx, tx); err != nil {
 					return err
+				}
+				return nil
+			},
+		},
+		{
+			ID: "20230102002023",
+			Migrate: func(tx *gorm.DB) error {
+				log.Info("Migrate 20230102002023 - BaseMigrate")
+				err := h.db.AutoMigrate(&model.Order{})
+				if err != nil {
+					_ = ctx.Error(err)
 				}
 				return nil
 			},

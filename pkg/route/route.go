@@ -61,6 +61,9 @@ func NewService() *Service {
 	seatService := service2.NewSeatService(repoPG)
 	seat := handlers.NewSeatHandlers(seatService)
 
+	showSeatService := service2.NewShowSeatService(repoPG)
+	showSeat := handlers.NewShowSeatHandlers(showSeatService)
+
 	showtimeService := service2.NewShowtimeService(repoPG)
 	show := handlers.NewShowtimeHandlers(showtimeService)
 
@@ -146,6 +149,13 @@ func NewService() *Service {
 	v1Api.GET("/show/get-one/:id", ginext.WrapHandler(show.GetOne))
 	v1Api.GET("/show/get-list", ginext.WrapHandler(show.GetList))
 	v1Api.GET("/show/get-list-group", ginext.WrapHandler(show.GetListGroup))
+
+	// Showtime
+	v1Api.POST("/show-seat/create", ginext.WrapHandler(showSeat.Create))
+	v1Api.PUT("/show-seat/update/:id", ginext.WrapHandler(showSeat.Update))
+	v1Api.DELETE("/show-seat/delete/:id", ginext.WrapHandler(showSeat.Delete))
+	v1Api.GET("/show-seat/get-one/:id", ginext.WrapHandler(showSeat.GetOne))
+	v1Api.GET("/show-seat/get-list", ginext.WrapHandler(showSeat.GetList))
 
 	// Metadata
 	v1Api.POST("/metadata/create", ginext.WrapHandler(metadata.Create))

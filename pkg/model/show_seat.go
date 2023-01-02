@@ -2,10 +2,10 @@ package model
 
 type ShowSeat struct {
 	BaseModel
-	OrderId string  `json:"order_id" gorm:"not null;type:char(36);"`
-	SeatId  string  `json:"seat_id" gorm:"not null;type:char(36);"`
-	ShowId  string  `json:"show_id" gorm:"not null;type:char(36);"`
-	Price   float64 `json:"price" gorm:"type:float;not null"`
+	OrderId    string  `json:"order_id" gorm:"not null;type:char(36);"`
+	SeatId     string  `json:"seat_id" gorm:"not null;type:char(36);"`
+	ShowtimeId string  `json:"showtime_id" gorm:"not null;type:char(36);"`
+	Price      float64 `json:"price" gorm:"type:float;not null"`
 }
 
 func (ShowSeat) TableName() string {
@@ -13,15 +13,17 @@ func (ShowSeat) TableName() string {
 }
 
 type ShowSeatRequest struct {
-	ID      *string  `json:"id"`
-	OrderId *string  `json:"order_id"`
-	SeatId  *string  `json:"seat_id"`
-	ShowId  *string  `json:"show_id"`
-	Price   *float64 `json:"price"`
+	ID         *string  `json:"id"`
+	OrderId    *string  `json:"order_id"`
+	SeatId     *string  `json:"seat_id"`
+	ShowtimeId *string  `json:"showtime_id"`
+	Price      *float64 `json:"price"`
 }
 
 type ShowSeatParams struct {
 	BaseParam
+	SeatId     []string `json:"seat_id"`
+	ShowtimeId string   `json:"showtime_id" form:"showtime_id"`
 }
 
 type ShowSeatResponse struct {

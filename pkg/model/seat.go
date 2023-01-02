@@ -5,7 +5,7 @@ type Seat struct {
 	RoomID string  `json:"room_id" gorm:"room_id;char(36);not null"`
 	Name   string  `json:"name" gorm:"name;type:varchar(100);not null"`
 	Row    string  `json:"row" gorm:"row;type:varchar(10);not null"`
-	Column int     `json:"column" gorm:"column;type:int;not null"`
+	Col    int     `json:"col" gorm:"col;type:int;not null"`
 	Price  float64 `json:"price" gorm:"price;type:float;not null"`
 }
 
@@ -18,15 +18,26 @@ type SeatRequest struct {
 	RoomID *string  `json:"room_id"`
 	Name   *string  `json:"name"`
 	Row    *string  `json:"row"`
-	Column *int     `json:"column"`
+	Col    *int     `json:"col"`
 	Price  *float64 `json:"price"`
 }
 
 type SeatParams struct {
 	BaseParam
+	ShowtimeId string `json:"showtime_id" form:"showtime_id"`
 }
 
 type SeatResponse struct {
-	Data []Seat                 `json:"data"`
+	BaseModel
+	RoomID string  `json:"room_id"`
+	Name   string  `json:"name"`
+	Row    string  `json:"row"`
+	Col    int     `json:"col"`
+	Price  float64 `json:"price"`
+	Status string  `json:"status"`
+}
+
+type ListSeatResponse struct {
+	Data []SeatResponse         `json:"data"`
 	Meta map[string]interface{} `json:"meta"`
 }

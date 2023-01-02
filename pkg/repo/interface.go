@@ -38,7 +38,7 @@ type PGInterface interface {
 	UpdateSeat(ctx context.Context, user *model.Seat) error
 	DeleteSeat(ctx context.Context, id string) error
 	GetOneSeat(ctx context.Context, id string) (*model.Seat, error)
-	GetListSeat(ctx context.Context, req model.SeatParams) (*model.SeatResponse, error)
+	GetListSeat(ctx context.Context, req model.SeatParams) (*model.ListSeatResponse, error)
 
 	// order
 	CreateOrder(ctx context.Context, user *model.Order) error
@@ -56,10 +56,10 @@ type PGInterface interface {
 	CreateMultiOrderItem(ctx context.Context, ob *[]model.OrderItem) error
 
 	// showtime
-	CreateShowtime(ctx context.Context, user *model.Show) error
-	UpdateShowtime(ctx context.Context, user *model.Show) error
+	CreateShowtime(ctx context.Context, user *model.Showtime) error
+	UpdateShowtime(ctx context.Context, user *model.Showtime) error
 	DeleteShowtime(ctx context.Context, id string) error
-	GetOneShowtime(ctx context.Context, id string) (*model.Show, error)
+	GetOneShowtime(ctx context.Context, id string) (*model.Showtime, error)
 	GetListShowtime(ctx context.Context, req model.ShowParams) (*model.ShowtimeResponse, error)
 
 	// movie
@@ -131,4 +131,5 @@ type PGInterface interface {
 	DeleteShowSeat(ctx context.Context, id string) error
 	GetOneShowSeat(ctx context.Context, id string) (*model.ShowSeat, error)
 	GetListShowSeat(ctx context.Context, req model.ShowSeatParams) (*model.ShowSeatResponse, error)
+	CreateMultiShowSeat(ctx context.Context, ob *[]model.ShowSeat) error
 }

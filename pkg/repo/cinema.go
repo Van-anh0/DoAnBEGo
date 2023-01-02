@@ -49,16 +49,16 @@ func (r *RepoPG) GetListCinema(ctx context.Context, req model.CinemaParams) (*mo
 		Count int `json:"count"`
 	})
 
-	tx = tx.Model(&model.Cinema{}).Select("movie_theater.*")
+	tx = tx.Model(&model.Cinema{}).Select("cinema.*")
 
 	if req.MovieId != "" || req.Day != "" {
-		tx = tx.Joins("JOIN showtime ON showtime.movie_theater_id = movie_theater.id")
+		tx = tx.Joins("JOIN showtime ON showtime.cinema_id = cinema.id")
 		if req.MovieId != "" {
 			tx = tx.Where("showtime.movie_id = ?", req.MovieId)
 		}
 
 		if req.Day != "" {
-			tx.Where("showtime.day = ?", req.Day)
+			tx.Where("showtime.showtime = ?", req.Day)
 		}
 	}
 
@@ -83,7 +83,7 @@ func (r *RepoPG) GetListCinema(ctx context.Context, req model.CinemaParams) (*mo
 	}
 
 	if req.MovieId != "" || req.Day != "" {
-		tx = tx.Group("movie_theater.id")
+		tx = tx.Group("cinema.id")
 	}
 
 	if err := tx.Find(&rs.Data).Error; err != nil {
