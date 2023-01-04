@@ -92,6 +92,8 @@ func (s *SeatService) GetList(ctx context.Context, req model.SeatParams) (rs *mo
 	for i, v := range ob.Data {
 		if _, ok := mapShowSeat[v.ID]; ok {
 			ob.Data[i].Status = mapShowSeat[v.ID]
+		} else {
+			ob.Data[i].Status = utils.SEAT_AVAILABLE
 		}
 	}
 

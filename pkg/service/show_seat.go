@@ -17,7 +17,7 @@ type ShowSeatInterface interface {
 	Update(ctx context.Context, ob model.ShowSeatRequest) (rs *model.ShowSeat, err error)
 	Delete(ctx context.Context, id string) (err error)
 	GetOne(ctx context.Context, id string) (rs *model.ShowSeat, err error)
-	GetList(ctx context.Context, req model.ShowSeatParams) (rs *model.ShowSeatResponse, err error)
+	GetList(ctx context.Context, req model.ShowSeatParams) (rs *model.ListShowSeatResponse, err error)
 }
 
 func NewShowSeatService(repo repo.PGInterface) ShowSeatInterface {
@@ -62,7 +62,7 @@ func (s *ShowSeatService) GetOne(ctx context.Context, id string) (rs *model.Show
 	return ob, nil
 }
 
-func (s *ShowSeatService) GetList(ctx context.Context, req model.ShowSeatParams) (rs *model.ShowSeatResponse, err error) {
+func (s *ShowSeatService) GetList(ctx context.Context, req model.ShowSeatParams) (rs *model.ListShowSeatResponse, err error) {
 
 	ob, err := s.repo.GetListShowSeat(ctx, req)
 	if err != nil {

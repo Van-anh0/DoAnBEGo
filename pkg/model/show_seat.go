@@ -27,6 +27,15 @@ type ShowSeatParams struct {
 }
 
 type ShowSeatResponse struct {
-	Data []ShowSeat             `json:"data"`
+	BaseModel
+	OrderId    string  `json:"order_id"`
+	SeatId     string  `json:"seat_id"`
+	ShowtimeId string  `json:"showtime_id"`
+	Price      float64 `json:"price"`
+	Status     string  `json:"status"`
+}
+
+type ListShowSeatResponse struct {
+	Data []ShowSeatResponse     `json:"data"`
 	Meta map[string]interface{} `json:"meta"`
 }
