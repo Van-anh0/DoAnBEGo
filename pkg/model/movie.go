@@ -2,7 +2,7 @@ package model
 
 type Movie struct {
 	BaseModel
-	Type        string  `gorm:"type:varchar(250);column:type" json:"type"`
+	Type        string  `gorm:"type:varchar(250);column:type" json:"type"` // the loai phim
 	Cast        string  `gorm:"type:varchar(250);cast" json:"cast"`
 	Name        string  `gorm:"type:varchar(250); name;index" json:"name"`
 	Spoil       string  `gorm:"type:varchar(500);spoil" json:"spoil"`
@@ -15,6 +15,7 @@ type Movie struct {
 	Status      string  `gorm:"type:varchar(100);status" json:"status"`
 	Poster      string  `gorm:"poster" json:"poster"`
 	Trailer     string  `gorm:"trailer" json:"trailer"`
+	Ticker      string  `gorm:"ticker" json:"ticker"`
 }
 
 func (Movie) TableName() string {

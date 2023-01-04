@@ -130,6 +130,6 @@ type PGInterface interface {
 	UpdateShowSeat(ctx context.Context, user *model.ShowSeat) error
 	DeleteShowSeat(ctx context.Context, id string) error
 	GetOneShowSeat(ctx context.Context, id string) (*model.ShowSeat, error)
-	GetListShowSeat(ctx context.Context, req model.ShowSeatParams) (*model.ShowSeatResponse, error)
+	GetListShowSeat(ctx context.Context, req model.ShowSeatParams) (*model.ListShowSeatResponse, error)
 	CreateMultiShowSeat(ctx context.Context, ob *[]model.ShowSeat) error
 }

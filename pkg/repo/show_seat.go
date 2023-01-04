@@ -37,11 +37,11 @@ func (r *RepoPG) GetOneShowSeat(ctx context.Context, id string) (*model.ShowSeat
 	return &rs, nil
 }
 
-func (r *RepoPG) GetListShowSeat(ctx context.Context, req model.ShowSeatParams) (*model.ShowSeatResponse, error) {
+func (r *RepoPG) GetListShowSeat(ctx context.Context, req model.ShowSeatParams) (*model.ListShowSeatResponse, error) {
 	tx, cancel := r.DBWithTimeout(ctx)
 	defer cancel()
 
-	rs := model.ShowSeatResponse{}
+	rs := model.ListShowSeatResponse{}
 	var err error
 	page := r.GetPage(req.Page)
 	pageSize := r.GetPageSize(req.PageSize)
@@ -49,7 +49,7 @@ func (r *RepoPG) GetListShowSeat(ctx context.Context, req model.ShowSeatParams) 
 		Count int `json:"count"`
 	})
 
-	tx = tx.Select("show_seat.*, 'available' as status")
+	tx = tx.Table("show_seat").Select("show_seat.*, 'available' as status")
 
 	if req.Search != "" {
 		tx = tx.Where("unaccent(name) ilike %?%", req.Search)
