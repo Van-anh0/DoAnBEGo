@@ -120,7 +120,7 @@ func (h *ShowHandlers) GetOne(r *ginext.Request) (*ginext.Response, error) {
 // @Produce  json
 // @Param data body model.BlacklistParam true "body data"
 // @Success 200 {object} interface{}
-// @Router /api/v1/showtime/get-list [get]
+// @Router /api/v1/show/get-list [get]
 func (h *ShowHandlers) GetList(r *ginext.Request) (*ginext.Response, error) {
 	log := logger.WithCtx(r.GinCtx, utils.GetCurrentCaller(h, 0))
 
@@ -140,14 +140,14 @@ func (h *ShowHandlers) GetList(r *ginext.Request) (*ginext.Response, error) {
 	}}, nil
 }
 
-// GetListGroup
-// @Tags GetListGroup
+// GetListGroupDay
+// @Tags GetListGroupDay
 // @Accept  json
 // @Produce  json
 // @Param data body model.BlacklistParam true "body data"
 // @Success 200 {object} interface{}
-// @Router /api/v1/showtime/get-list-group [get]
-func (h *ShowHandlers) GetListGroup(r *ginext.Request) (*ginext.Response, error) {
+// @Router /api/v1/show/get-list-group [get]
+func (h *ShowHandlers) GetListGroupDay(r *ginext.Request) (*ginext.Response, error) {
 	log := logger.WithCtx(r.GinCtx, utils.GetCurrentCaller(h, 0))
 
 	req := model.ShowParams{}
@@ -157,6 +157,32 @@ func (h *ShowHandlers) GetListGroup(r *ginext.Request) (*ginext.Response, error)
 	}
 
 	data, err := h.service.GetListGroupByDay(r.Context(), req)
+	if err != nil {
+		return nil, err
+	}
+	return &ginext.Response{Code: http.StatusOK, GeneralBody: &ginext.GeneralBody{
+		Data: data.Data,
+		Meta: data.Meta,
+	}}, nil
+}
+
+// GetListGroupMovie
+// @Tags GetListGroupMovie
+// @Accept  json
+// @Produce  json
+// @Param data body model.BlacklistParam true "body data"
+// @Success 200 {object} interface{}
+// @Router /api/v1/show/get-list-group-movie [get]
+func (h *ShowHandlers) GetListGroupMovie(r *ginext.Request) (*ginext.Response, error) {
+	log := logger.WithCtx(r.GinCtx, utils.GetCurrentCaller(h, 0))
+
+	req := model.ShowParams{}
+	if err := r.GinCtx.BindQuery(&req); err != nil {
+		log.WithError(err).Error("error_400: error parse")
+		return nil, ginext.NewError(http.StatusBadRequest, "Yêu cầu không hợp lệ")
+	}
+
+	data, err := h.service.GetListGroupMovie(r.Context(), req)
 	if err != nil {
 		return nil, err
 	}
