@@ -19,6 +19,7 @@ type ShowtimeInterface interface {
 	GetOne(ctx context.Context, id string) (rs *model.Showtime, err error)
 	GetList(ctx context.Context, req model.ShowParams) (rs *model.ShowtimeResponse, err error)
 	GetListGroupByDay(ctx context.Context, req model.ShowParams) (rs *model.ShowtimeGroupResponse, err error)
+	GetListGroupMovie(ctx context.Context, req model.ShowParams) (rs *model.ShowtimeGroupMovieResponse, err error)
 }
 
 func NewShowtimeService(repo repo.PGInterface) ShowtimeInterface {
@@ -95,6 +96,38 @@ func (s *ShowtimeService) GetListGroupByDay(ctx context.Context, req model.ShowP
 
 	var listShowtimeGroup model.ShowtimeGroupResponse
 	listShowtimeGroup.Data = listShowtime
+	listShowtimeGroup.Meta = ob.Meta
+
+	return &listShowtimeGroup, nil
+}
+
+func (s *ShowtimeService) GetListGroupMovie(ctx context.Context, req model.ShowParams) (rs *model.ShowtimeGroupMovieResponse, err error) {
+
+	ob, err := s.repo.GetListShowtime(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	// change list to object group by movie
+	var listMovie = make(map[string][]model.Showtime)
+	for _, v := range ob.Data {
+		// convert v.Showtime from time to day
+		listMovie[v.MovieId] = append(listMovie[v.MovieId], v)
+	}
+
+	// group by day
+	var listGroupMovieDay = make(map[string]map[string][]model.Showtime)
+	for i, v := range listMovie {
+		var listShowtime = make(map[string][]model.Showtime)
+		for _, v := range v {
+			showtime := v.Showtime.Format("2006-01-02")
+			listShowtime[showtime] = append(listShowtime[showtime], v)
+		}
+		listGroupMovieDay[i] = listShowtime
+	}
+
+	var listShowtimeGroup model.ShowtimeGroupMovieResponse
+	listShowtimeGroup.Data = listGroupMovieDay
 	listShowtimeGroup.Meta = ob.Meta
 
 	return &listShowtimeGroup, nil

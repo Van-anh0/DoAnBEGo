@@ -207,3 +207,11 @@ func CheckExistPath(path string) (err error) {
 
 	return err
 }
+
+func GetCurrentTime() time.Time {
+	return time.Now().UTC()
+}
+
+func GetToday() time.Time {
+	return time.Now().UTC().Truncate(24 * time.Hour)
+}

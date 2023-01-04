@@ -15,7 +15,7 @@ type Movie struct {
 	Status      string  `gorm:"type:varchar(100);status" json:"status"`
 	Poster      string  `gorm:"poster" json:"poster"`
 	Trailer     string  `gorm:"trailer" json:"trailer"`
-	Ticker      string  `gorm:"ticker" json:"ticker"`
+	Ticket      string  `gorm:"ticket" json:"ticket"`
 }
 
 func (Movie) TableName() string {
@@ -37,6 +37,7 @@ type MovieRequest struct {
 	Status      *string  `json:"status"`
 	Poster      *string  `json:"poster"`
 	Trailer     *string  `json:"trailer"`
+	Ticket      *string  `json:"ticket"`
 }
 
 type MovieParams struct {

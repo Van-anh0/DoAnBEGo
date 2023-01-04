@@ -49,6 +49,9 @@ func (r *RepoPG) GetListShowtime(ctx context.Context, req model.ShowParams) (*mo
 		Count int `json:"count"`
 	})
 
+	// select showtime from today
+	tx = tx.Where("showtime >= ?", utils.GetToday())
+
 	if req.Search != "" {
 		tx = tx.Where("unaccent(name) ilike %?%", req.Search)
 	}
