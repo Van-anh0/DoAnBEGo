@@ -19,6 +19,8 @@ type ShowtimeInterface interface {
 	GetOne(ctx context.Context, id string) (rs *model.Showtime, err error)
 	GetList(ctx context.Context, req model.ShowParams) (rs *model.ShowtimeResponse, err error)
 	GetListGroupByDay(ctx context.Context, req model.ShowParams) (rs *model.ShowtimeGroupResponse, err error)
+	GetListGroupMovie(ctx context.Context, req model.ShowParams) (rs *model.ShowtimeGroupNestedResponse, err error)
+	GetListGroupRoom(ctx context.Context, req model.ShowParams) (rs *model.ShowtimeGroupNestedResponse, err error)
 }
 
 func NewShowtimeService(repo repo.PGInterface) ShowtimeInterface {
@@ -95,6 +97,70 @@ func (s *ShowtimeService) GetListGroupByDay(ctx context.Context, req model.ShowP
 
 	var listShowtimeGroup model.ShowtimeGroupResponse
 	listShowtimeGroup.Data = listShowtime
+	listShowtimeGroup.Meta = ob.Meta
+
+	return &listShowtimeGroup, nil
+}
+
+func (s *ShowtimeService) GetListGroupRoom(ctx context.Context, req model.ShowParams) (rs *model.ShowtimeGroupNestedResponse, err error) {
+
+	ob, err := s.repo.GetListShowtimeByRoom(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	// change list to object group by movie
+	var listRoom = make(map[string][]model.Showtime)
+	for _, v := range ob.Data {
+		// convert v.Showtime from time to day
+		listRoom[v.RoomId] = append(listRoom[v.RoomId], v)
+	}
+
+	// group by day
+	var listGroupNestedDay = make(map[string]map[string][]model.Showtime)
+	for i, v := range listRoom {
+		var listShowtime = make(map[string][]model.Showtime)
+		for _, v := range v {
+			showtime := v.Showtime.Format("2006-01-02")
+			listShowtime[showtime] = append(listShowtime[showtime], v)
+		}
+		listGroupNestedDay[i] = listShowtime
+	}
+
+	var listShowtimeGroup model.ShowtimeGroupNestedResponse
+	listShowtimeGroup.Data = listGroupNestedDay
+	listShowtimeGroup.Meta = ob.Meta
+
+	return &listShowtimeGroup, nil
+}
+
+func (s *ShowtimeService) GetListGroupMovie(ctx context.Context, req model.ShowParams) (rs *model.ShowtimeGroupNestedResponse, err error) {
+
+	ob, err := s.repo.GetListShowtimeByRoom(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	// change list to object group by movie
+	var listRoom = make(map[string][]model.Showtime)
+	for _, v := range ob.Data {
+		// convert v.Showtime from time to day
+		listRoom[v.MovieId] = append(listRoom[v.MovieId], v)
+	}
+
+	// group by day
+	var listGroupNestedDay = make(map[string]map[string][]model.Showtime)
+	for i, v := range listRoom {
+		var listShowtime = make(map[string][]model.Showtime)
+		for _, v := range v {
+			showtime := v.Showtime.Format("2006-01-02")
+			listShowtime[showtime] = append(listShowtime[showtime], v)
+		}
+		listGroupNestedDay[i] = listShowtime
+	}
+
+	var listShowtimeGroup model.ShowtimeGroupNestedResponse
+	listShowtimeGroup.Data = listGroupNestedDay
 	listShowtimeGroup.Meta = ob.Meta
 
 	return &listShowtimeGroup, nil

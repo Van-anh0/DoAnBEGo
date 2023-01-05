@@ -49,8 +49,18 @@ func (r *RepoPG) GetListRoom(ctx context.Context, req model.RoomParams) (*model.
 		Count int `json:"count"`
 	})
 
+	tx = tx.Table("room")
+
 	if req.Search != "" {
 		tx = tx.Where("unaccent(name) ilike %?%", req.Search)
+	}
+
+	if req.CinemaId != "" {
+		tx = tx.Where("room.cinema_id = ?", req.CinemaId)
+	}
+
+	if req.MovieId != "" {
+		tx = tx.Joins("inner join showtime on showtime.room_id = room.id").Where("showtime.movie_id = ?", req.MovieId)
 	}
 
 	if req.Filter != "" {
@@ -68,6 +78,11 @@ func (r *RepoPG) GetListRoom(ctx context.Context, req model.RoomParams) (*model.
 	default:
 		tx = tx.Order("created_at desc")
 	}
+
+	if req.MovieId != "" {
+		tx = tx.Group("room.id")
+	}
+
 	if err := tx.Find(&rs.Data).Error; err != nil {
 		return nil, r.ReturnErrorInGetFunc(ctx, err, utils.GetCurrentCaller(r, 0))
 	}

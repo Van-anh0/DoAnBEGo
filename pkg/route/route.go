@@ -148,7 +148,9 @@ func NewService() *Service {
 	v1Api.DELETE("/show/delete/:id", ginext.WrapHandler(show.Delete))
 	v1Api.GET("/show/get-one/:id", ginext.WrapHandler(show.GetOne))
 	v1Api.GET("/show/get-list", ginext.WrapHandler(show.GetList))
-	v1Api.GET("/show/get-list-group", ginext.WrapHandler(show.GetListGroup))
+	v1Api.GET("/show/get-list-group", ginext.WrapHandler(show.GetListGroupDay))
+	v1Api.GET("/show/get-list-group-movie", ginext.WrapHandler(show.GetListGroupMovie))
+	v1Api.GET("/show/get-list-group-room", ginext.WrapHandler(show.GetListGroupRoom))
 
 	// Showtime
 	v1Api.POST("/show-seat/create", ginext.WrapHandler(showSeat.Create))

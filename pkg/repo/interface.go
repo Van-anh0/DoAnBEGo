@@ -61,6 +61,7 @@ type PGInterface interface {
 	DeleteShowtime(ctx context.Context, id string) error
 	GetOneShowtime(ctx context.Context, id string) (*model.Showtime, error)
 	GetListShowtime(ctx context.Context, req model.ShowParams) (*model.ShowtimeResponse, error)
+	GetListShowtimeByRoom(ctx context.Context, req model.ShowParams) (*model.ShowtimeResponse, error)
 
 	// movie
 	CreateMovie(ctx context.Context, user *model.Movie) error
@@ -130,6 +131,6 @@ type PGInterface interface {
 	UpdateShowSeat(ctx context.Context, user *model.ShowSeat) error
 	DeleteShowSeat(ctx context.Context, id string) error
 	GetOneShowSeat(ctx context.Context, id string) (*model.ShowSeat, error)
-	GetListShowSeat(ctx context.Context, req model.ShowSeatParams) (*model.ShowSeatResponse, error)
+	GetListShowSeat(ctx context.Context, req model.ShowSeatParams) (*model.ListShowSeatResponse, error)
 	CreateMultiShowSeat(ctx context.Context, ob *[]model.ShowSeat) error
 }

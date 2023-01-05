@@ -96,6 +96,39 @@ func (h *MigrationHandler) Migrate(ctx *gin.Context) {
 				return nil
 			},
 		},
+		{
+			ID: "20230104114622",
+			Migrate: func(tx *gorm.DB) error {
+				log.Info("Migrate 20230104114622 - Rename column ticker to ticker in movie")
+				err := h.db.Exec(`alter table movie rename column ticker to ticket;`).Error
+				if err != nil {
+					_ = ctx.Error(err)
+				}
+				return nil
+			},
+		},
+		{
+			ID: "20230104130843",
+			Migrate: func(tx *gorm.DB) error {
+				log.Info("Migrate 20230104130843 - Add column room_id in showtime")
+				err := h.db.AutoMigrate(&model.Showtime{})
+				if err != nil {
+					_ = ctx.Error(err)
+				}
+				return nil
+			},
+		},
+		{
+			ID: "20230104135545",
+			Migrate: func(tx *gorm.DB) error {
+				log.Info("Migrate 20230104135545 - Add column room_name in showtime")
+				err := h.db.AutoMigrate(&model.Showtime{})
+				if err != nil {
+					_ = ctx.Error(err)
+				}
+				return nil
+			},
+		},
 	})
 	err := migrate.Migrate()
 	if err != nil {
