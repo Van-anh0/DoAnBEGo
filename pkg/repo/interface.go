@@ -61,6 +61,7 @@ type PGInterface interface {
 	DeleteShowtime(ctx context.Context, id string) error
 	GetOneShowtime(ctx context.Context, id string) (*model.Showtime, error)
 	GetListShowtime(ctx context.Context, req model.ShowParams) (*model.ShowtimeResponse, error)
+	GetListShowtimeByRoom(ctx context.Context, req model.ShowParams) (*model.ShowtimeResponse, error)
 
 	// movie
 	CreateMovie(ctx context.Context, user *model.Movie) error

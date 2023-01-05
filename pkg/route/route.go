@@ -150,6 +150,7 @@ func NewService() *Service {
 	v1Api.GET("/show/get-list", ginext.WrapHandler(show.GetList))
 	v1Api.GET("/show/get-list-group", ginext.WrapHandler(show.GetListGroupDay))
 	v1Api.GET("/show/get-list-group-movie", ginext.WrapHandler(show.GetListGroupMovie))
+	v1Api.GET("/show/get-list-group-room", ginext.WrapHandler(show.GetListGroupRoom))
 
 	// Showtime
 	v1Api.POST("/show-seat/create", ginext.WrapHandler(showSeat.Create))
