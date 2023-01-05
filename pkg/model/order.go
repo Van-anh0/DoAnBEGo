@@ -29,6 +29,11 @@ type OrderRequest struct {
 	ShowtimeId    *string      `json:"showtime_id"`
 	OrderItem     *[]OrderItem `json:"order_item"`
 	ShowSeat      *[]ShowSeat  `json:"show_seat"`
+	MovieName     *string      `json:"movie_name"`
+	MovieImage    *string      `json:"movie_image"`
+	RoomName      *string      `json:"room_name"`
+	Showtime      *string      `json:"showtime"`
+	CinemaName    *string      `json:"cinema_name"`
 }
 
 type OrderParams struct {
