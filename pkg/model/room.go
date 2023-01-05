@@ -20,6 +20,8 @@ type RoomRequest struct {
 
 type RoomParams struct {
 	BaseParam
+	CinemaId string `json:"cinema_id" form:"cinema_id"`
+	MovieId  string `json:"movie_id" form:"movie_id"`
 }
 
 type RoomResponse struct {

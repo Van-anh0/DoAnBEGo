@@ -63,7 +63,7 @@ func (r *RepoPG) GetListMovie(ctx context.Context, req model.MovieParams) (*mode
 	}
 
 	if req.Search != "" {
-		tx = tx.Where("unaccent(name) ilike %?%", req.Search)
+		tx = tx.Where("movie.name like ?", "%"+req.Search+"%")
 	}
 
 	if req.Filter != "" {

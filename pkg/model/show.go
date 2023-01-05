@@ -29,6 +29,8 @@ type ShowtimeRequest struct {
 
 type ShowParams struct {
 	BaseParam
+	ListRoomId string `json:"list_room_id" form:"list_room_id"`
+	MovieId    string `json:"movie_id" form:"movie_id"`
 }
 
 type ShowtimeResponse struct {
@@ -41,7 +43,7 @@ type ShowtimeGroupResponse struct {
 	Meta map[string]interface{} `json:"meta"`
 }
 
-type ShowtimeGroupMovieResponse struct {
+type ShowtimeGroupNestedResponse struct {
 	Data map[string]map[string][]Showtime `json:"data"`
 	Meta map[string]interface{}           `json:"meta"`
 }

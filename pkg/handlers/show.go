@@ -191,3 +191,29 @@ func (h *ShowHandlers) GetListGroupMovie(r *ginext.Request) (*ginext.Response, e
 		Meta: data.Meta,
 	}}, nil
 }
+
+// GetListGroupRoom
+// @Tags GetListGroupRoom
+// @Accept  json
+// @Produce  json
+// @Param data body model.BlacklistParam true "body data"
+// @Success 200 {object} interface{}
+// @Router /api/v1/show/get-list-group-room [get]
+func (h *ShowHandlers) GetListGroupRoom(r *ginext.Request) (*ginext.Response, error) {
+	log := logger.WithCtx(r.GinCtx, utils.GetCurrentCaller(h, 0))
+
+	req := model.ShowParams{}
+	if err := r.GinCtx.BindQuery(&req); err != nil {
+		log.WithError(err).Error("error_400: error parse")
+		return nil, ginext.NewError(http.StatusBadRequest, "Yêu cầu không hợp lệ")
+	}
+
+	data, err := h.service.GetListGroupRoom(r.Context(), req)
+	if err != nil {
+		return nil, err
+	}
+	return &ginext.Response{Code: http.StatusOK, GeneralBody: &ginext.GeneralBody{
+		Data: data.Data,
+		Meta: data.Meta,
+	}}, nil
+}
