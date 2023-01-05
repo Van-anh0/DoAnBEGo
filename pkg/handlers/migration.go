@@ -86,10 +86,10 @@ func (h *MigrationHandler) Migrate(ctx *gin.Context) {
 			},
 		},
 		{
-			ID: "20230103211916",
+			ID: "20230105224224",
 			Migrate: func(tx *gorm.DB) error {
-				log.Info("Migrate 20230103211916 - Add column ticket")
-				err := h.db.AutoMigrate(&model.Movie{})
+				log.Info("Migrate 20230105224224 - BaseMigrate")
+				err := h.db.AutoMigrate(&model.ShowSeat{})
 				if err != nil {
 					_ = ctx.Error(err)
 				}
