@@ -132,13 +132,13 @@ func (h *MigrationHandler) Migrate(ctx *gin.Context) {
 		{
 			ID: "20230105225115",
 			Migrate: func(tx *gorm.DB) error {
-				log.Info("Migrate 20230105225115 - Add column in ShowSeat")
-				err := h.db.AutoMigrate(&model.Order{}, &model.ShowSeat{})
+				log.Info("Migrate 20230106113457 - Delete table ShowSeat")
+				err := h.db.Exec("DROP TABLE show_seat").Error
 				if err != nil {
 					_ = ctx.Error(err)
 				}
-				log.Info("Migrate 20230105225115 - Delete table ShowSeat")
-				err = h.db.Exec("DROP TABLE show_seat").Error
+				log.Info("Migrate 20230105225115 - Add column in ShowSeat")
+				err = h.db.AutoMigrate(&model.Order{}, &model.ShowSeat{})
 				if err != nil {
 					_ = ctx.Error(err)
 				}
@@ -147,6 +147,18 @@ func (h *MigrationHandler) Migrate(ctx *gin.Context) {
 				if err != nil {
 					_ = ctx.Error(err)
 				}
+				return nil
+			},
+		},
+		{
+			ID: "20230106113457",
+			Migrate: func(tx *gorm.DB) error {
+				log.Info("Migrate 20230106113457 - Add column in ShowSeat")
+				err := h.db.AutoMigrate(&model.Order{}, &model.ShowSeat{})
+				if err != nil {
+					_ = ctx.Error(err)
+				}
+
 				return nil
 			},
 		},
