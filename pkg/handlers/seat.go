@@ -139,3 +139,29 @@ func (h *SeatHandlers) GetList(r *ginext.Request) (*ginext.Response, error) {
 		Meta: data.Meta,
 	}}, nil
 }
+
+// AdminGetList
+// @Tags AdminGetList
+// @Accept  json
+// @Produce  json
+// @Param data body model.BlacklistParam true "body data"
+// @Success 200 {object} interface{}
+// @Router /api/v1/admin/seat/get-list [get]
+func (h *SeatHandlers) AdminGetList(r *ginext.Request) (*ginext.Response, error) {
+	log := logger.WithCtx(r.GinCtx, utils.GetCurrentCaller(h, 0))
+
+	req := model.SeatParams{}
+	if err := r.GinCtx.BindQuery(&req); err != nil {
+		log.WithError(err).Error("error_400: error parse")
+		return nil, ginext.NewError(http.StatusBadRequest, "Yêu cầu không hợp lệ")
+	}
+
+	data, err := h.service.AdminGetList(r.Context(), req)
+	if err != nil {
+		return nil, err
+	}
+	return &ginext.Response{Code: http.StatusOK, GeneralBody: &ginext.GeneralBody{
+		Data: data.Data,
+		Meta: data.Meta,
+	}}, nil
+}

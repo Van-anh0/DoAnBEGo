@@ -136,14 +136,16 @@ func NewService() *Service {
 	v1Api.GET("/room/get-list", ginext.WrapHandler(room.GetList))
 
 	// Seat
-	v1Api.POST("/seat/create", ginext.WrapHandler(seat.Create))
-	v1Api.PUT("/seat/update/:id", ginext.WrapHandler(seat.Update))
-	v1Api.DELETE("/seat/delete/:id", ginext.WrapHandler(seat.Delete))
+	v1Api.POST("/admin/seat/create", ginext.WrapHandler(seat.Create))
+	v1Api.PUT("/admin/seat/update/:id", ginext.WrapHandler(seat.Update))
+	v1Api.DELETE("/admin/seat/delete/:id", ginext.WrapHandler(seat.Delete))
 	v1Api.GET("/seat/get-one/:id", ginext.WrapHandler(seat.GetOne))
 	v1Api.GET("/seat/get-list", ginext.WrapHandler(seat.GetList))
+	v1Api.GET("/admin/seat/get-list", ginext.WrapHandler(seat.AdminGetList))
 
 	// Showtime
 	v1Api.POST("/show/create", ginext.WrapHandler(show.Create))
+	v1Api.POST("/show/create-multiple", ginext.WrapHandler(show.CreateMultiple))
 	v1Api.PUT("/show/update/:id", ginext.WrapHandler(show.Update))
 	v1Api.DELETE("/show/delete/:id", ginext.WrapHandler(show.Delete))
 	v1Api.GET("/show/get-one/:id", ginext.WrapHandler(show.GetOne))
@@ -230,11 +232,11 @@ func NewService() *Service {
 	v1Api.GET("/product-rank/get-list", ginext.WrapHandler(MovieRank.GetList))
 
 	// Migrate
-	migrateHandler := handlers.NewMigrationHandler(db)
-	v1Api.POST("/internal/migrate", migrateHandler.Migrate)
-
-	return s
-}
-func enableCors(w *http.ResponseWriter) {
-	(*w).Header().Set("Access-Control-Allow-Origin", "*")
-}
+		migrateHandler := handlers.NewMigrationHandler(db)
+		v1Api.POST("/internal/migrate", migrateHandler.Migrate)
+	
+		return s
+	}
+	func enableCors(w *http.ResponseWriter) {
+		(*w).Header().Set("Access-Control-Allow-Origin", "*")
+	}

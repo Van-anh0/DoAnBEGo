@@ -14,6 +14,7 @@ type ShowtimeService struct {
 
 type ShowtimeInterface interface {
 	Create(ctx context.Context, ob model.ShowtimeRequest) (rs *model.Showtime, err error)
+	CreateMultiple(ctx context.Context, ob model.ShowtimeRequest) (rs *model.Showtime, err error)
 	Update(ctx context.Context, ob model.ShowtimeRequest) (rs *model.Showtime, err error)
 	Delete(ctx context.Context, id string) (err error)
 	GetOne(ctx context.Context, id string) (rs *model.Showtime, err error)
@@ -25,6 +26,22 @@ type ShowtimeInterface interface {
 
 func NewShowtimeService(repo repo.PGInterface) ShowtimeInterface {
 	return &ShowtimeService{repo: repo}
+}
+
+func (s *ShowtimeService) CreateMultiple(ctx context.Context, req model.ShowtimeRequest) (rs *model.Showtime, err error) {
+
+	listShowtime := req.ListShowtime
+	req.ListShowtime = nil
+	for _, v := range listShowtime {
+		ob := &model.Showtime{}
+		common.Sync(req, ob)
+		ob.Showtime = v
+		if err := s.repo.CreateShowtime(ctx, ob); err != nil {
+			return nil, err
+		}
+	}
+
+	return rs, nil
 }
 
 func (s *ShowtimeService) Create(ctx context.Context, req model.ShowtimeRequest) (rs *model.Showtime, err error) {
@@ -72,11 +89,6 @@ func (s *ShowtimeService) GetList(ctx context.Context, req model.ShowParams) (rs
 		return nil, err
 	}
 
-	// change list to object group by day
-	//var listShowtime = make(map[string][]model.Showtime)
-	//for _, v := range ob.Data {
-	//	listShowtime[v.Day.String()] = append(listShowtime[v.Day.String()], v)
-	//}
 	return ob, nil
 }
 

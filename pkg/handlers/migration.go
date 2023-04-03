@@ -162,6 +162,18 @@ func (h *MigrationHandler) Migrate(ctx *gin.Context) {
 				return nil
 			},
 		},
+		{
+			ID: "20230107095306",
+			Migrate: func(tx *gorm.DB) error {
+				log.Info("Migrate 20230107095306 - Add column movie_name in ShowSeat")
+				err := h.db.AutoMigrate(&model.Showtime{})
+				if err != nil {
+					_ = ctx.Error(err)
+				}
+
+				return nil
+			},
+		},
 	})
 	err := migrate.Migrate()
 	if err != nil {

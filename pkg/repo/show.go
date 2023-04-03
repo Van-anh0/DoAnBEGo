@@ -56,6 +56,10 @@ func (r *RepoPG) GetListShowtime(ctx context.Context, req model.ShowParams) (*mo
 		tx = tx.Where("unaccent(name) ilike %?%", req.Search)
 	}
 
+	if req.CinemaId != "" {
+		tx = tx.Where("cinema_id = ?", req.CinemaId)
+	}
+
 	if req.Filter != "" {
 		filter := strings.Split(req.Filter, ",")
 		for i := 0; i < len(filter); i += 2 {

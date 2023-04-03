@@ -29,6 +29,11 @@ func (s *MovieService) Create(ctx context.Context, req model.MovieRequest) (rs *
 	ob := &model.Movie{}
 	common.Sync(req, ob)
 
+	// check poster exist. create default image when don't have poster
+	if ob.Poster == "" {
+		ob.Poster = "https://www.publicdomainpictures.net/pictures/280000/velka/not-found-image-15383864787lu.jpg"
+	}
+
 	if err := s.repo.CreateMovie(ctx, ob); err != nil {
 		return nil, err
 	}

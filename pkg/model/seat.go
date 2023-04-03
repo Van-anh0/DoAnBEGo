@@ -25,6 +25,7 @@ type SeatRequest struct {
 type SeatParams struct {
 	BaseParam
 	ShowtimeId string `json:"showtime_id" form:"showtime_id"`
+	RoomId     string `json:"room_id" form:"room_id"`
 }
 
 type SeatResponse struct {
