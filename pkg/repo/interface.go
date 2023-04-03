@@ -39,6 +39,7 @@ type PGInterface interface {
 	DeleteSeat(ctx context.Context, id string) error
 	GetOneSeat(ctx context.Context, id string) (*model.Seat, error)
 	GetListSeat(ctx context.Context, req model.SeatParams) (*model.ListSeatResponse, error)
+	AdminGetListSeat(ctx context.Context, req model.SeatParams) (*model.ListSeatResponse, error)
 
 	// order
 	CreateOrder(ctx context.Context, user *model.Order) error

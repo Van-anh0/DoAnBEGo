@@ -24,7 +24,7 @@ func NewShowtimeHandlers(service service.ShowtimeInterface) *ShowHandlers {
 // @Produce  json
 // @Param data body model.ShowtimeRequest true "body data"
 // @Success 200 {object} interface{}
-// @Router /api/v1/show-time/create [post]
+// @Router /api/v1/show/create [post]
 func (h *ShowHandlers) Create(r *ginext.Request) (*ginext.Response, error) {
 	req := model.ShowtimeRequest{}
 	r.MustBind(&req)
@@ -40,6 +40,28 @@ func (h *ShowHandlers) Create(r *ginext.Request) (*ginext.Response, error) {
 	return ginext.NewResponseData(http.StatusOK, data), nil
 }
 
+// CreateMultiple
+// @Tags CreateMultiple
+// @Accept  json
+// @Produce  json
+// @Param data body model.ShowtimeRequest true "body data"
+// @Success 200 {object} interface{}
+// @Router /api/v1/show/create-multiple [post]
+func (h *ShowHandlers) CreateMultiple(r *ginext.Request) (*ginext.Response, error) {
+	req := model.ShowtimeRequest{}
+	r.MustBind(&req)
+
+	if err := common.CheckRequireValid(req); err != nil {
+		return nil, ginext.NewError(http.StatusBadRequest, utils.MessageError()[http.StatusBadRequest])
+	}
+
+	data, err := h.service.CreateMultiple(r.Context(), req)
+	if err != nil {
+		return nil, err
+	}
+	return ginext.NewResponseData(http.StatusOK, data), nil
+}
+
 // Update
 // @Tags Update
 // @Accept  json
@@ -47,7 +69,7 @@ func (h *ShowHandlers) Create(r *ginext.Request) (*ginext.Response, error) {
 // @Param id path string true "id"
 // @Param data body model.ShowtimeRequest true "body data"
 // @Success 200 {object} interface{}
-// @Router /api/v1/show-time/update/:id [put]
+// @Router /api/v1/show/update/:id [put]
 func (h *ShowHandlers) Update(r *ginext.Request) (*ginext.Response, error) {
 	log := logger.WithCtx(r.GinCtx, utils.GetCurrentCaller(h, 0))
 
@@ -80,7 +102,7 @@ func (h *ShowHandlers) Update(r *ginext.Request) (*ginext.Response, error) {
 // @Produce  json
 // @Param id path string true "id"
 // @Success 200 {object} interface{}
-// @Router /api/v1/show-time/delete/:id [delete]
+// @Router /api/v1/show/delete/:id [delete]
 func (h *ShowHandlers) Delete(r *ginext.Request) (*ginext.Response, error) {
 	id := utils.ParseIDFromUri(r.GinCtx)
 	if id == nil {
@@ -99,7 +121,7 @@ func (h *ShowHandlers) Delete(r *ginext.Request) (*ginext.Response, error) {
 // @Produce  json
 // @Param id path string true "id"
 // @Success 200 {object} interface{}
-// @Router /api/v1/show-time/get-one/:id [get]
+// @Router /api/v1/show/get-one/:id [get]
 func (h *ShowHandlers) GetOne(r *ginext.Request) (*ginext.Response, error) {
 
 	id := utils.ParseIDFromUri(r.GinCtx)

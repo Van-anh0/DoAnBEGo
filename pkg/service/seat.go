@@ -19,6 +19,7 @@ type SeatInterface interface {
 	Delete(ctx context.Context, id string) (err error)
 	GetOne(ctx context.Context, id string) (rs *model.Seat, err error)
 	GetList(ctx context.Context, req model.SeatParams) (rs *model.ListSeatResponse, err error)
+	AdminGetList(ctx context.Context, req model.SeatParams) (rs *model.ListSeatResponse, err error)
 }
 
 func NewSeatService(repo repo.PGInterface) SeatInterface {
@@ -97,5 +98,14 @@ func (s *SeatService) GetList(ctx context.Context, req model.SeatParams) (rs *mo
 		}
 	}
 
+	return ob, nil
+}
+
+func (s *SeatService) AdminGetList(ctx context.Context, req model.SeatParams) (rs *model.ListSeatResponse, err error) {
+
+	ob, err := s.repo.AdminGetListSeat(ctx, req)
+	if err != nil {
+		return nil, err
+	}
 	return ob, nil
 }
