@@ -44,7 +44,7 @@ func NewService() *Service {
 	if s.setting.DbDebugEnable {
 		db = db.Debug()
 	}
-	repoPG := repo.NewPGRepo(db)
+	repoPG := repo.NewRepo(db)
 
 	userService := service2.NewUserService(repoPG)
 	user := handlers.NewUserHandlers(userService)
@@ -154,7 +154,7 @@ func NewService() *Service {
 	v1Api.GET("/show/get-list-group-movie", ginext.WrapHandler(show.GetListGroupMovie))
 	v1Api.GET("/show/get-list-group-room", ginext.WrapHandler(show.GetListGroupRoom))
 
-	// Showtime
+	// ShowSeat
 	v1Api.POST("/show-seat/create", ginext.WrapHandler(showSeat.Create))
 	v1Api.PUT("/show-seat/update/:id", ginext.WrapHandler(showSeat.Update))
 	v1Api.DELETE("/show-seat/delete/:id", ginext.WrapHandler(showSeat.Delete))
@@ -232,11 +232,11 @@ func NewService() *Service {
 	v1Api.GET("/product-rank/get-list", ginext.WrapHandler(MovieRank.GetList))
 
 	// Migrate
-		migrateHandler := handlers.NewMigrationHandler(db)
-		v1Api.POST("/internal/migrate", migrateHandler.Migrate)
-	
-		return s
-	}
-	func enableCors(w *http.ResponseWriter) {
-		(*w).Header().Set("Access-Control-Allow-Origin", "*")
-	}
+	migrateHandler := handlers.NewMigrationHandler(db)
+	v1Api.POST("/internal/migrate", migrateHandler.Migrate)
+
+	return s
+}
+func enableCors(w *http.ResponseWriter) {
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+}

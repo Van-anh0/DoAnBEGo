@@ -58,7 +58,7 @@ func (h *RoomHandlers) Update(r *ginext.Request) (*ginext.Response, error) {
 
 	req := model.RoomRequest{}
 	if err := r.GinCtx.ShouldBind(&req); err != nil {
-		log.WithError(err).Error("error_400: error parse")
+		log.WithError(err).Error("error_400: response parse")
 		return nil, ginext.NewError(http.StatusBadRequest, "Yêu cầu không hợp lệ")
 	}
 	req.ID = id
@@ -126,7 +126,7 @@ func (h *RoomHandlers) GetList(r *ginext.Request) (*ginext.Response, error) {
 
 	req := model.RoomParams{}
 	if err := r.GinCtx.BindQuery(&req); err != nil {
-		log.WithError(err).Error("error_400: error parse")
+		log.WithError(err).Error("error_400: response parse")
 		return nil, ginext.NewError(http.StatusBadRequest, "Yêu cầu không hợp lệ")
 	}
 

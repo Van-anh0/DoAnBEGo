@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// Generate error response
+// Generate response response
 
 type ErrorCustomMessage int
 
@@ -39,7 +39,7 @@ func LoadMessageError() {
 	messageError = make(map[int]string)
 	messageError[http.StatusOK] = "Successfully"
 	messageError[http.StatusForbidden] = "Something when wrong, Your request has been rejected"
-	messageError[http.StatusInternalServerError] = "Internal server error"
+	messageError[http.StatusInternalServerError] = "Internal server response"
 	messageError[http.StatusBadRequest] = "Something when wrong with your request"
 	messageError[http.StatusUnauthorized] = "Unauthorized - Permission denied"
 	messageError[http.StatusNotFound] = "request not found"

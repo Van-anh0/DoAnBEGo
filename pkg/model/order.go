@@ -25,10 +25,10 @@ type OrderRequest struct {
 	Total         *float64     `json:"total"`
 	Status        *string      `json:"status"`
 	PaymentMethod *string      `json:"payment_method"`
-	UserID        *string      `json:"user_id"`
-	ShowtimeId    *string      `json:"showtime_id"`
-	OrderItem     *[]OrderItem `json:"order_item"`
-	ShowSeat      *[]ShowSeat  `json:"show_seat"`
+	UserID        *string      `json:"user_id" valid:"Required"`
+	ShowtimeId    *string      `json:"showtime_id" valid:"Required"`
+	OrderItem     *[]OrderItem `json:"order_item" valid:"Required"`
+	ShowSeat      *[]ShowSeat  `json:"show_seat" valid:"Required"`
 	MovieName     *string      `json:"movie_name"`
 	MovieImage    *string      `json:"movie_image"`
 	RoomName      *string      `json:"room_name"`
