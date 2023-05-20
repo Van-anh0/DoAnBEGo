@@ -102,7 +102,7 @@ func Open(config *Config) (*gorm.DB, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*2)
 	defer cancel()
 	if err = theDB.PingContext(ctx); err != nil {
-		return nil, fmt.Errorf("error while ping DB: %v", err)
+		return nil, fmt.Errorf("response while ping DB: %v", err)
 	}
 
 	return db, nil

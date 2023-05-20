@@ -67,7 +67,7 @@ func (r *RepoPG) GetListOrder(ctx context.Context, req model.OrderParams) (*mode
 	default:
 		tx = tx.Order("created_at desc")
 	}
-	if err := tx.Find(&rs.Data).Error; err != nil {
+	if err := tx.Limit(pageSize).Offset(r.GetOffset(page, pageSize)).Find(&rs.Data).Error; err != nil {
 		return nil, r.ReturnErrorInGetFunc(ctx, err, utils.GetCurrentCaller(r, 0))
 	}
 

@@ -29,7 +29,7 @@ func (r *RepoPG) GetRepo() *gorm.DB {
 	return r.DB
 }
 
-func NewPGRepo(db *gorm.DB) PGInterface {
+func NewRepo(db *gorm.DB) PGInterface {
 	return &RepoPG{DB: db}
 }
 

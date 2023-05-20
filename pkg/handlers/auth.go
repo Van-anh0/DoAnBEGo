@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"doan/pkg/model"
+	"doan/pkg/response"
 	"doan/pkg/utils"
 	"github.com/praslar/cloud0/ginext"
 	"github.com/praslar/cloud0/logger"
@@ -20,13 +21,14 @@ func (h *UserHandlers) Login(r *ginext.Request) (*ginext.Response, error) {
 
 	req := model.LoginRequest{}
 	if err := r.GinCtx.ShouldBind(&req); err != nil {
-		log.WithError(err).Error("error_400: error parse")
-		return nil, ginext.NewError(http.StatusUnauthorized, "Yêu cầu không hợp lệ")
+		log.WithError(err).Error("error_400: response parse")
+		// set status code
+		return nil, response.NewError(r, http.StatusUnauthorized, "Yêu cầu không hợp lệ")
 	}
 
 	data, err := h.service.Login(r.Context(), req)
 	if err != nil {
-		return nil, ginext.NewError(http.StatusUnauthorized, "Tài khoản hoặc mật khẩu không chính xác!")
+		return nil, response.NewError(r, http.StatusUnauthorized, "Tài khoản hoặc mật khẩu không chính xác!")
 	}
 	return ginext.NewResponseData(http.StatusOK, data), nil
 }
@@ -43,7 +45,7 @@ func (h *UserHandlers) Register(r *ginext.Request) (*ginext.Response, error) {
 
 	req := model.RegisterRequest{}
 	if err := r.GinCtx.ShouldBind(&req); err != nil {
-		log.WithError(err).Error("error_400: error parse")
+		log.WithError(err).Error("error_400: response parse")
 		return nil, ginext.NewError(http.StatusUnauthorized, "Yêu cầu không hợp lệ")
 	}
 

@@ -121,7 +121,7 @@ func (h *CategoryHasProductHandlers) GetList(r *ginext.Request) (*ginext.Respons
 
 	req := model.CategoryHasProductParams{}
 	if err := r.GinCtx.BindQuery(&req); err != nil {
-		log.WithError(err).Error("error_400: error parse")
+		log.WithError(err).Error("error_400: response parse")
 		return nil, ginext.NewError(http.StatusBadRequest, "Yêu cầu không hợp lệ")
 	}
 

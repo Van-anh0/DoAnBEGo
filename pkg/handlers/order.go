@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"doan/pkg/model"
+	"doan/pkg/response"
 	"doan/pkg/service"
 	"doan/pkg/utils"
 	"github.com/praslar/cloud0/ginext"
@@ -30,7 +31,7 @@ func (h *OrderHandlers) Create(r *ginext.Request) (*ginext.Response, error) {
 	r.MustBind(&req)
 
 	if err := common.CheckRequireValid(req); err != nil {
-		return nil, ginext.NewError(http.StatusBadRequest, utils.MessageError()[http.StatusBadRequest])
+		return nil, response.NewError(r, http.StatusBadRequest, utils.MessageError()[http.StatusBadRequest])
 	}
 
 	data, err := h.service.Create(r.Context(), req)
@@ -58,7 +59,7 @@ func (h *OrderHandlers) Update(r *ginext.Request) (*ginext.Response, error) {
 
 	req := model.OrderRequest{}
 	if err := r.GinCtx.ShouldBind(&req); err != nil {
-		log.WithError(err).Error("error_400: error parse")
+		log.WithError(err).Error("error_400: response parse")
 		return nil, ginext.NewError(http.StatusBadRequest, "Yêu cầu không hợp lệ")
 	}
 	req.ID = id
@@ -126,7 +127,7 @@ func (h *OrderHandlers) GetList(r *ginext.Request) (*ginext.Response, error) {
 
 	req := model.OrderParams{}
 	if err := r.GinCtx.BindQuery(&req); err != nil {
-		log.WithError(err).Error("error_400: error parse")
+		log.WithError(err).Error("error_400: response parse")
 		return nil, ginext.NewError(http.StatusBadRequest, "Yêu cầu không hợp lệ")
 	}
 

@@ -80,7 +80,7 @@ func (h *ShowHandlers) Update(r *ginext.Request) (*ginext.Response, error) {
 
 	req := model.ShowtimeRequest{}
 	if err := r.GinCtx.ShouldBind(&req); err != nil {
-		log.WithError(err).Error("error_400: error parse")
+		log.WithError(err).Error("error_400: response parse")
 		return nil, ginext.NewError(http.StatusBadRequest, "Yêu cầu không hợp lệ")
 	}
 	req.ID = id
@@ -148,7 +148,7 @@ func (h *ShowHandlers) GetList(r *ginext.Request) (*ginext.Response, error) {
 
 	req := model.ShowParams{}
 	if err := r.GinCtx.BindQuery(&req); err != nil {
-		log.WithError(err).Error("error_400: error parse")
+		log.WithError(err).Error("error_400: response parse")
 		return nil, ginext.NewError(http.StatusBadRequest, "Yêu cầu không hợp lệ")
 	}
 
@@ -174,7 +174,7 @@ func (h *ShowHandlers) GetListGroupDay(r *ginext.Request) (*ginext.Response, err
 
 	req := model.ShowParams{}
 	if err := r.GinCtx.BindQuery(&req); err != nil {
-		log.WithError(err).Error("error_400: error parse")
+		log.WithError(err).Error("error_400: response parse")
 		return nil, ginext.NewError(http.StatusBadRequest, "Yêu cầu không hợp lệ")
 	}
 
@@ -200,7 +200,7 @@ func (h *ShowHandlers) GetListGroupMovie(r *ginext.Request) (*ginext.Response, e
 
 	req := model.ShowParams{}
 	if err := r.GinCtx.BindQuery(&req); err != nil {
-		log.WithError(err).Error("error_400: error parse")
+		log.WithError(err).Error("error_400: response parse")
 		return nil, ginext.NewError(http.StatusBadRequest, "Yêu cầu không hợp lệ")
 	}
 
@@ -226,7 +226,7 @@ func (h *ShowHandlers) GetListGroupRoom(r *ginext.Request) (*ginext.Response, er
 
 	req := model.ShowParams{}
 	if err := r.GinCtx.BindQuery(&req); err != nil {
-		log.WithError(err).Error("error_400: error parse")
+		log.WithError(err).Error("error_400: response parse")
 		return nil, ginext.NewError(http.StatusBadRequest, "Yêu cầu không hợp lệ")
 	}
 
